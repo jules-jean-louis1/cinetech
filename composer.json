@@ -1,0 +1,6 @@
+{
+    "require": {
+        "composer/composer": "^2.5",
+        "altorouter/altorouter": "^2.0"
+    }
+}
