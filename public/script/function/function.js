@@ -1,3 +1,28 @@
+function updateField(data, fieldName, fieldInput, smallField) {
+    if (data[fieldName]) {
+        fieldInput.addEventListener('keyup', () => {
+            const fieldValue = fieldInput.value;
+            if (fieldValue === ''){
+                smallField.innerHTML = '';
+                smallField.innerHTML = `${data[fieldName]}`;
+                smallField.classList.add('text-red-500');
+                fieldInput.classList.remove('textField_border');
+                fieldInput.classList.add('textField_invalid');
+            } else {
+                smallField.innerHTML = '';
+                fieldInput.classList.remove('textField_invalid');
+                fieldInput.classList.add('textField_border');
+            }
+        });
+        smallField.innerHTML = '';
+        smallField.innerHTML = `${data[fieldName]}`;
+        fieldInput.classList.remove('textField_border');
+        smallField.classList.add('text-red-500');
+        fieldInput.classList.add('textField_invalid');
+    }
+}
+
+
 function createDialog() {
     const containerModal = document.querySelector('#containerModalDialog');
     const dialog = document.createElement("dialog");
@@ -109,6 +134,23 @@ async function LoginRegister(btnLogin) {
                                 .then(response => response.json())
                                 .then(data => {
                                     console.log(data);
+                                    let message = document.getElementById("errorMsg");
+                                    const loginInput = document.getElementById("login");
+                                    const emailInput = document.getElementById("email");
+                                    const passwordInput = document.getElementById("password");
+                                    const passwordConfirmInput = document.getElementById("passwordConfirm");
+                                    // Small
+                                    const smallLogin = document.getElementById("errorLogin");
+                                    const smallEmail = document.getElementById("errorEmail");
+                                    const smallPassword = document.getElementById("errorPassword");
+                                    const smallPasswordConfirm = document.getElementById("errorC_Password");
+                                    // Error
+                                    if (data.login || data.email || data.password || data.passwordConfirm) {
+                                        message.innerHTML = 'Veuillez remplir tous les champs';
+                                    }
+                                    if (data.success) {
+                                        message.innerHTML = 'Inscription réussie';
+                                    }
                                 });
                         });
                     });

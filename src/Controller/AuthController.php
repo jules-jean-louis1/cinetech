@@ -20,12 +20,12 @@ class AuthController
             return false;
         }
     }
-    public function register($email, $login, $password, $confirmPassword)
+    public function register()
     {
         $email = $this->verifyField('email');
         $login = $this->verifyField('login');
         $password = $this->verifyField('password');
-        $confirmPassword = $this->verifyField('confirmPassword');
+        $confirmPassword = $this->verifyField('passwordConfirm');
         $errors = [];
 
         if (!$email) {
@@ -49,7 +49,20 @@ class AuthController
             $errors['confirmPassword'] = 'La confirmation du mot de passe ne correspond pas';
         }
         if (empty($errors)) {
-
+            $userManager = new UserManager();
+            if ($userManager->verifyEmail($email)) {
+                $errors['email'] = 'Cet email est déjà utilisé';
+            }
+            if ($userManager->verifyLogin($login)) {
+                $errors['login'] = 'Ce login est déjà utilisé';
+            }
+            if (empty($errors)) {
+                $userManager->register($email, $login, $password);
+                $errors['success'] = 'Votre compte a bien été créé';
+            }
         }
+        header("Content-Type: application/json");
+        echo json_encode($errors);
+        exit();
     }
 }
