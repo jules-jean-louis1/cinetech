@@ -1,24 +1,33 @@
 <?php
 session_start();
 require './vendor/autoload.php';
-if (is_dir('./src/controller')) {
-    echo 'oui';
-} else {
-    echo 'non';
-}
-use App\Controller\AuthController;
+
+use App\Controller\{
+    AuthController,
+    HomeController,
+};
 
 $authController = new AuthController();
+$homeController = new HomeController();
 $router = new AltoRouter();
 
 $router->setBasePath('/cinetech');
 
-$router->map('GET', '/', function() {
-    echo 'Hello World';
-});
+$router->map('GET', '/', function() use ($homeController) {
+    $homeController->showHome();
+}, 'home');
 $router->map('GET', '/login', function() use ($authController) {
-    $authController->login();
+    $authController->showLoginForm();
 }, 'login');
+$router->map('POST', '/login/submit', function() use ($authController) {
+    $authController->login();
+}, 'login_post');
+$router->map('GET', '/register', function() use ($authController) {
+    $authController->showRegisterForm();
+}, 'register');
+$router->map('POST', '/register/submit', function() use ($authController) {
+    $authController->register();
+}, 'register_post');
 $router->map('GET', '/about[/]', function() {
     echo 'About';
 });
@@ -27,9 +36,7 @@ $router->map('GET', '/about[/]', function() {
 $match = $router->match();
 
 if( $match && is_callable( $match['target'] ) ) {
-    require_once './elements/header.php';
     call_user_func_array( $match['target'], $match['params'] );
-    require_once './elements/footer.php';
 } else {
     // no route was matched
     http_response_code(404);

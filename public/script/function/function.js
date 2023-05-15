@@ -2,7 +2,7 @@ function createDialog() {
     const containerModal = document.querySelector('#containerModalDialog');
     const dialog = document.createElement("dialog");
     dialog.setAttribute("id", "dialog");
-    dialog.setAttribute("class", "w-[26.25rem] h-[55%] bg-[#202225] border-[1px] border-[#a8b3cf33] rounded-[14px] shadow-lg");
+    dialog.setAttribute("class", "w-[26.25rem] h-[55%] bg-slate-200 border-[1px] border-[#a8b3cf33] rounded-[14px] shadow-lg");
     dialog.innerHTML = '';
 
     const divBottom = document.createElement("div");
@@ -56,8 +56,69 @@ async function LoginRegister(btnLogin) {
             .then(response => response.text())
             .then(data => {
                 containerDiv.innerHTML = data;
+                const formLogin = document.getElementById("login-form");
+                formLogin.addEventListener('submit', async (ev) => {
+                    ev.preventDefault();
+                    await fetch('./login/submit', {
+                        method: 'POST',
+                        body: new FormData(formLogin)
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data);
+                        });
+                });
             });
+        buttonLogin.addEventListener('click', async (ev) => {
+            if (buttonLogin.textContent === "Connexion") {
+                buttonLogin.textContent = "S'inscrire";
+                ParaModifyText.textContent = "Se connecter sur Game+";
+                await fetch('./login')
+                    .then(response => response.text())
+                    .then(data => {
+                        containerDiv.innerHTML = '';
+                        containerDiv.innerHTML = data;
+                        const formLogin = document.getElementById("login-form");
+                        formLogin.addEventListener('submit', async (ev) => {
+                            ev.preventDefault();
+                            await fetch('./login/submit', {
+                                method: 'POST',
+                                body: new FormData(formLogin)
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    console.log(data);
+                                });
+                        });
+                    });
+            } else {
+                buttonLogin.textContent = "Connexion";
+                ParaModifyText.textContent = "S'inscrire sur Game+";
+                await fetch('./register')
+                    .then(response => response.text())
+                    .then(data => {
+                        containerDiv.innerHTML = '';
+                        containerDiv.innerHTML = data;
+                        const formRegister = document.getElementById("register-form");
+                        formRegister.addEventListener('submit', async (ev) => {
+                            ev.preventDefault();
+                            await fetch('./register/submit', {
+                                method: 'POST',
+                                body: new FormData(formRegister)
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    console.log(data);
+                                });
+                        });
+                    });
+            }
+        });
+        const buttonClose = document.getElementById("buttonClose");
+        buttonClose.addEventListener("click", () => {
+            dialog.close();
+        });
     });
 }
 
-export { createDialog,}
+export { createDialog, LoginRegister};
