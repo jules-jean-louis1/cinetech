@@ -2,7 +2,7 @@
 
 namespace App\Model;
 
-class UserManager
+class UserManager extends AbstractDatabase
 {
 
 }
