@@ -4,7 +4,7 @@
             <div>
                 <ul class="flex space-x-4">
                     <li><a href="/">Accueil</a></li>
-                    <li><a href="/page1">Film</a></li>
+                    <li><a href="<?php __DIR__?>./movie">Film</a></li>
                     <li><a href="/page2">Series</a></li>
                 </ul>
             </div>

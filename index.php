@@ -5,10 +5,12 @@ require './vendor/autoload.php';
 use App\Controller\{
     AuthController,
     HomeController,
+    MovieController,
 };
 
 $authController = new AuthController();
 $homeController = new HomeController();
+$movieController = new MovieController();
 $router = new AltoRouter();
 
 $router->setBasePath('/cinetech');
@@ -32,11 +34,12 @@ $router->map('GET', '/profilHeader', function() use ($authController) {
     $authController->profilHeader();
 });
 // Page Film
-$router->map('GET', '/film', function() {
+$router->map('GET', '/movie', function() use ($movieController) {
+    $movieController->showMoviePage();
+}, 'movie');
 
-}, 'film');
 // Page Film Details
-$router->map('GET', '/film/[i:id]', function() {
+$router->map('GET', '/movie/[i:id]', function() {
 
 }, 'film_details');
 
