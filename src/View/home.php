@@ -16,7 +16,10 @@
 <?php require_once __DIR__ . '/elements/header.php'; ?>
 <div id="containerModalDialog"></div>
 <div class="containerIndex">
-    <div id="containerPopularMovies"></div>
+    <div id="containerPopularMovies">
+        <div id="containerMoviesIndex"></div>
+        <div id="containerSeriesIndex"></div>
+    </div>
 </div>
 <?php require_once __DIR__ . '/elements/footer.php'; ?>
 </body>
