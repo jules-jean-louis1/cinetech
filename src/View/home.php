@@ -17,7 +17,17 @@
 <div id="containerModalDialog"></div>
 <div class="containerIndex">
     <div id="containerPopularMovies">
+        <div>
+            <div class="flex space-x-4">
+                <p class="text-xl font-bold">Tendances</p>
+                <button id="btnTrendingWeek" type="button" class="p-2 border border-red-300 rounded">Semaines</button>
+                <button id="btnTrendingDay" type="button" class="p-2 border border-red-300 rounded">Jours</button>
+            </div>
+            <div id="containerMoviesWeekOrDay"></div>
+        </div>
+        <h2 class="text-2xl font-bold">Films populaires</h2>
         <div id="containerMoviesIndex"></div>
+        <h2 class="text-2xl font-bold">Séries populaires</h2>
         <div id="containerSeriesIndex"></div>
     </div>
 </div>

@@ -16,10 +16,61 @@ if (btnHeaderProfile) {
 // INDEX PAGE
 
 let containerPopularMovies = document.querySelector('#containerPopularMovies');
+let containerMoviesWeekOrDay = document.querySelector('#containerMoviesWeekOrDay');
+const btnTrendingWeek = document.querySelector('#btnTrendingWeek');
+const btnTrendingDay = document.querySelector('#btnTrendingDay');
 const getPosterPath = (posterPath) => {
     return `https://www.themoviedb.org/t/p/w220_and_h330_face${posterPath}`;
 };
 // Recupération des données de l'API Films populaires
+async function trendingWeek() {
+    await fetch('https://api.themoviedb.org/3/trending/all/week?api_key=336f5174afdbef18cdcc2f6d25e36288&language=fr-FR&page=1')
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.results) {
+                const displayCard = document.createElement('div');
+                displayCard.id = 'moviesCard';
+                displayCard.classList.add('flex', 'flex-row', 'gap-5', 'overflow-x-scroll', 'py-5', 'px-10', 'w-full', 'h-[350px]');
+                data.results.forEach((movie) => {
+                    displayCard.innerHTML += `
+                        <div class="flex flex-col pl-5 gap-2">
+                        <img src="${getPosterPath(movie.poster_path)}" class="w-[150px] h-[225px] shadow-sm rounded-md">
+                            <div class="flex flex-col px-3 w-[150px]">
+                                <h2 class="text-sm font-bold text-center">${movie.title}</h2>
+                                <p class="text-xs text-center">${formatDate(movie.release_date)}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+                containerMoviesWeekOrDay.appendChild(displayCard);
+            }
+        });
+}
+async function trendingDay() {
+    await fetch('https://api.themoviedb.org/3/trending/all/day?api_key=336f5174afdbef18cdcc2f6d25e36288&language=fr-FR&page=1')
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.results) {
+                const displayCard = document.createElement('div');
+                displayCard.id = 'moviesCard';
+                displayCard.classList.add('flex', 'flex-row', 'gap-5', 'overflow-x-scroll', 'py-5', 'px-10', 'w-full', 'h-[350px]');
+                data.results.forEach((movie) => {
+                    displayCard.innerHTML += `
+                        <div class="flex flex-col pl-5 gap-2">
+                        <img src="${getPosterPath(movie.poster_path)}" class="w-[150px] h-[225px] shadow-sm rounded-md">
+                            <div class="flex flex-col px-3 w-[150px]">
+                                <h2 class="text-sm font-bold text-center">${movie.title}</h2>
+                                <p class="text-xs text-center">${formatDate(movie.release_date)}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+                containerMoviesWeekOrDay.appendChild(displayCard);
+            }
+        });
+}
+
+
 const urlPopular = 'https://api.themoviedb.org/3/movie/popular?api_key=336f5174afdbef18cdcc2f6d25e36288&language=fr-FR&page=1';
 async function getPopularMovies () {
     await fetch(urlPopular)
@@ -71,5 +122,14 @@ async function getPopularSeries () {
             }
         });
 }
+trendingWeek();
+btnTrendingWeek.addEventListener('click', () => {
+    containerMoviesWeekOrDay.innerHTML = '';
+    trendingWeek();
+});
+btnTrendingDay.addEventListener('click', () => {
+    containerMoviesWeekOrDay.innerHTML = '';
+    trendingDay();
+});
 getPopularMovies();
 getPopularSeries();
