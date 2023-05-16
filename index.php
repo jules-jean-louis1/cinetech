@@ -31,6 +31,14 @@ $router->map('POST', '/register/submit', function() use ($authController) {
 $router->map('GET', '/profilHeader', function() use ($authController) {
     $authController->profilHeader();
 });
+// Page Film
+$router->map('GET', '/film', function() {
+
+}, 'film');
+// Page Film Details
+$router->map('GET', '/film/[i:id]', function() {
+
+}, 'film_details');
 
 
 $match = $router->match();

@@ -19,6 +19,8 @@ let containerPopularMovies = document.querySelector('#containerPopularMovies');
 let containerMoviesWeekOrDay = document.querySelector('#containerMoviesWeekOrDay');
 const btnTrendingWeek = document.querySelector('#btnTrendingWeek');
 const btnTrendingDay = document.querySelector('#btnTrendingDay');
+
+// Creation d'un barre de recherche
 const getPosterPath = (posterPath) => {
     return `https://www.themoviedb.org/t/p/w220_and_h330_face${posterPath}`;
 };
