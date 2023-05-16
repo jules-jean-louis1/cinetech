@@ -91,4 +91,19 @@ class AuthController
         echo json_encode($errors);
         exit();
     }
+    public function profilHeader()
+    {
+        if (isset($_SESSION['id'])) {
+            $userManager = new UserManager();
+            $user = $userManager->getUserById($_SESSION['id']);
+            echo json_encode($user);
+        } else {
+            header('Location: /');
+        }
+    }
+    public function logout()
+    {
+        session_destroy();
+        header('Location: /');
+    }
 }

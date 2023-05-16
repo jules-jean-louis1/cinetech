@@ -113,7 +113,17 @@ async function LoginRegister(btnLogin) {
                                 .then(response => response.json())
                                 .then(data => {
                                     let message = document.getElementById("errorMsg");
-                                    console.log(data);
+                                    //small
+                                    const smallEmail = document.getElementById("errorEmail");
+                                    const smallPassword = document.getElementById("errorPassword");
+                                    if (data.email) {
+                                        smallEmail.textContent = '';
+                                        smallEmail.textContent = data.email;
+                                    }
+                                    if (data.password) {
+                                        smallPassword.textContent = '';
+                                        smallPassword.textContent = data.password;
+                                    }
                                     if (data.email && data.password) {
                                         message.textContent ='';
                                         message.textContent = "Veuillez remplir tous les champs";
@@ -123,6 +133,8 @@ async function LoginRegister(btnLogin) {
                                         message.textContent = data.error;
                                     }
                                     if (data.success) {
+                                        smallPassword.textContent = '';
+                                        smallEmail.textContent = '';
                                         message.textContent ='';
                                         message.textContent = data.success;
                                     }
@@ -175,5 +187,14 @@ async function LoginRegister(btnLogin) {
         });
     });
 }
+async function profilHeader(container) {
+    await fetch('./profilHeader')
+        .then(response => response.json())
+        .then(data => {
+            if (data.login) {
+                container.innerHTML = data.login;
+            }
+        });
+}
 
-export { createDialog, LoginRegister};
+export { createDialog, LoginRegister, profilHeader};

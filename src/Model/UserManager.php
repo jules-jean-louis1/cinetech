@@ -56,4 +56,14 @@ class UserManager extends AbstractDatabase
             }
         }
     }
+    public function getUserById($id)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare('SELECT login FROM utilisateurs WHERE id = :id');
+        $req->execute([
+            ':id' => $id
+        ]);
+        $user = $req->fetch();
+        return $user;
+    }
 }

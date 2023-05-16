@@ -4,7 +4,7 @@
     <div class="relative">
         <input type="text" name="email" id="email" placeholder="Entrez votre login ou Email" class="px-2.5 pt-4 pb-1 text-white bg-[#31333a] hover:bg-[#21262D] rounded-[14px] textField_border focus:outline-none w-full">
         <label for="login" class="absolute top-0 left-2 px-1 py-px text-xs text-[#a8b3cf]">Nom d'utilisateur / Email</label>
-        <small id="errorLogin" class="flex items-center h-4 text-red-500 px-2 my-1 "></small>
+        <small id="errorEmail" class="flex items-center h-4 text-red-500 px-2 my-1 "></small>
     </div>
     <div class="relative">
         <input type="password" name="password" id="password" placeholder="Entrez votre mot de passe" class="px-2.5 pt-4 pb-1 text-white bg-[#31333a] hover:bg-[#21262D] rounded-[14px] textField_border focus:outline-none w-full">

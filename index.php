@@ -28,8 +28,8 @@ $router->map('GET', '/register', function() use ($authController) {
 $router->map('POST', '/register/submit', function() use ($authController) {
     $authController->register();
 }, 'register_post');
-$router->map('GET', '/about[/]', function() {
-    echo 'About';
+$router->map('GET', '/profilHeader', function() use ($authController) {
+    $authController->profilHeader();
 });
 
 
