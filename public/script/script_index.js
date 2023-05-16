@@ -1,6 +1,7 @@
 import { LoginRegister } from './function/function.js';
 import { profilHeader } from "./function/function.js";
 import { formatDate } from "./function/function.js";
+import { headerMenu} from "./function/function.js";
 
 const btnHeaderloginRegister = document.querySelector('#btnHeaderLoginRegister');
 const btnHeaderLogout = document.querySelector('#btnHeaderLogout');
@@ -11,6 +12,7 @@ if (btnHeaderloginRegister) {
 }
 if (btnHeaderProfile) {
     profilHeader(btnHeaderProfile);
+    headerMenu();
 }
 
 // INDEX PAGE

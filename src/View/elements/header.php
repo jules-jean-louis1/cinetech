@@ -1,5 +1,5 @@
-<header>
-    <div id="containerHeader">
+<header class="bg-[#1f0c19] text-white">
+    <div id="containerHeader" class="py-3">
         <nav class="flex justify-between px-4">
             <div>
                 <ul class="flex space-x-4">
@@ -10,9 +10,20 @@
             </div>
             <div>
                 <?php if (isset($_SESSION['id'])) :?>
-                    <div>
-                        <button id="btnHeaderProfile" type="button">Deconnexion</button>
-                        <button id="btnHeaderLogout" type="button">Deconnexion</button>
+                    <div class="relative">
+                        <button id="btnHeaderProfile" type="button" class="bg-[#fffe3e] text-black rounded-lg px-2">Profil</button>
+                        <ul id="menuProfilHeader" class="absolute right-0 w-36 mt-0.5  bg-[#1C1F26] rounded-lg border-[1px] border-[#a8b3cf33] shadow-lg z-10 hidden">
+                            <li>
+                                <button id="btnHeaderProfile" type="button" class="bg-[#fffe3e] text-black rounded-lg px-2">
+                                    Profil
+                                </button>
+                            </li>
+                            <li>
+                                <button id="btnHeaderLogou" type="button" class="bg-[#fffe3e] text-black rounded-lg px-2">
+                                    Deconnexion
+                                </button>
+                            </li>
+                        </ul>
                     </div>
                 <?php else :?>
                 <div>

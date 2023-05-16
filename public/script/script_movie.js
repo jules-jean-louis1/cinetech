@@ -1,6 +1,7 @@
 import { LoginRegister } from './function/function.js';
 import { profilHeader } from "./function/function.js";
 import { formatDate } from "./function/function.js";
+import { headerMenu} from "./function/function.js";
 
 const btnHeaderloginRegister = document.querySelector('#btnHeaderLoginRegister');
 const btnHeaderLogout = document.querySelector('#btnHeaderLogout');
@@ -11,6 +12,7 @@ if (btnHeaderloginRegister) {
 }
 if (btnHeaderProfile) {
     profilHeader(btnHeaderProfile);
+    headerMenu();
 }
 
 
@@ -71,7 +73,7 @@ function displayMovies(results) {
     containerMovies.innerHTML = '';
     const displayCard = document.createElement('div');
     displayCard.id = 'moviesCard';
-    displayCard.classList.add('flex', 'flex-wrap', 'gap-5', 'overflow-x-scroll', 'py-5', 'px-10', 'w-full', 'h-[350px]');
+    displayCard.classList.add('flex', 'flex-wrap', 'gap-5', 'overflow-x-scroll', 'py-5', 'px-10', 'w-full', 'h-[90vh]');
     results.forEach(movie => {
         displayCard.innerHTML += `
                 <div class="flex flex-col pl-5 gap-2">
@@ -91,10 +93,8 @@ async function getPopularMovies(page) {
     const apiKey = '336f5174afdbef18cdcc2f6d25e36288';
     const language = 'fr-FR';
     const url = `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=${language}&page=${page}`;
-
     const response = await fetch(url);
     const data = await response.json();
-
     return data.results;
 }
 let currentPage = 1;
@@ -123,4 +123,24 @@ nextPageButton.addEventListener('click', nextPage);
 previousPageButton.addEventListener('click', previousPage);
 
 getPopularMovies(currentPage).then(displayMovies);
+
+// Tri des films
+
+const sortForm = document.getElementById('sort-form');
+sortForm.addEventListener('submit', handleSortFormSubmit);
+
+function handleSortFormSubmit(event) {
+    event.preventDefault();
+    const sortBy = document.getElementById('sort-by').value;
+    const currentPage = 1; // Réinitialisez la page à 1 lors du tri
+    getMoviesBySort(sortBy, currentPage);
+}
+async function getMoviesBySort(sortBy, page) {
+    const url = `https://api.themoviedb.org/3/discover/movie?api_key=336f5174afdbef18cdcc2f6d25e36288&language=fr-FR&sort_by=${sortBy}&page=${page}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    // return data.results;
+    displayMovies(data.results);
+}
+
 

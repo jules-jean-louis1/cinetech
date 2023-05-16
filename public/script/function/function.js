@@ -204,5 +204,23 @@ function formatDate(timestamp) {
     const day = date.getDate();
     return `${day} ${month} ${year}`;
 }
+function headerMenu() {
+    const btnHeaderProfile = document.getElementById('btnHeaderProfile');
+    const menuProfilHeader = document.getElementById('menuProfilHeader');
 
-export { createDialog, LoginRegister, profilHeader, formatDate,};
+    btnHeaderProfile.addEventListener('click', () => {
+        menuProfilHeader.classList.toggle('hidden');
+    });
+
+// Fermer le menu lorsque l'utilisateur clique en dehors de celui-ci
+    document.addEventListener('click', (event) => {
+        const targetElement = event.target;
+        const isMenuOpen = !menuProfilHeader.classList.contains('hidden');
+
+        if (isMenuOpen && !targetElement.closest('#menuProfilHeader') && targetElement !== btnHeaderProfile) {
+            menuProfilHeader.classList.add('hidden');
+        }
+    });
+}
+
+export { createDialog, LoginRegister, profilHeader, formatDate, headerMenu};
