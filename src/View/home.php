@@ -1,3 +1,7 @@
+<?php
+var_dump($_SESSION['id']);
+?>
+
 <html lang="fr">
 <head>
     <meta charset="UTF-8">

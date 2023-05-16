@@ -38,4 +38,22 @@ class UserManager extends AbstractDatabase
             'password' => password_hash($password, PASSWORD_DEFAULT)
         ]);
     }
+    public function login(string $loginOrEmail, string $password)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare('SELECT login, email, password FROM utilisateurs WHERE login = :loginOrEmail OR email = :loginOrEmail');
+        $req->execute([
+            ':loginOrEmail' => $loginOrEmail
+        ]);
+        $user = $req->fetch(\PDO::FETCH_ASSOC);
+        if ($user === false) {
+            return false;
+        } else {
+            if (password_verify($password, $user['password'])) {
+                return $user;
+            } else {
+                return false;
+            }
+        }
+    }
 }

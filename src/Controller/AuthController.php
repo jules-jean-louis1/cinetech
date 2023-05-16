@@ -65,4 +65,30 @@ class AuthController
         echo json_encode($errors);
         exit();
     }
+    public function login()
+    {
+        $email = $this->verifyField('email');
+        $password = $this->verifyField('password');
+        $errors = [];
+        if (!$email) {
+            $errors['email'] = 'Le champ email / Login  est requis';
+        }
+        if (!$password) {
+            $errors['password'] = 'Le champ mot de passe est requis';
+        }
+        if (count($errors) === 0) {
+            $userManager = new UserManager();
+            $login = $userManager->login(htmlspecialchars($email), htmlspecialchars($password));
+            if ($login === false) {
+                $errors['error'] = 'L\'email / login ou le mot de passe est incorrect';
+            } else {
+                $_SESSION['id'] = $login['id'];
+                $_SESSION['email'] = $login;
+                $errors['success'] = 'Vous êtes connecté';
+            }
+        }
+        header('Content-Type: application/json');
+        echo json_encode($errors);
+        exit();
+    }
 }

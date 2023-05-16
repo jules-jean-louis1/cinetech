@@ -112,7 +112,20 @@ async function LoginRegister(btnLogin) {
                             })
                                 .then(response => response.json())
                                 .then(data => {
+                                    let message = document.getElementById("errorMsg");
                                     console.log(data);
+                                    if (data.email && data.password) {
+                                        message.textContent ='';
+                                        message.textContent = "Veuillez remplir tous les champs";
+                                    }
+                                    if (data.error) {
+                                        message.textContent ='';
+                                        message.textContent = data.error;
+                                    }
+                                    if (data.success) {
+                                        message.textContent ='';
+                                        message.textContent = data.success;
+                                    }
                                 });
                         });
                     });
