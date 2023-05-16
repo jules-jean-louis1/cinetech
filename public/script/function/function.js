@@ -196,5 +196,13 @@ async function profilHeader(container) {
             }
         });
 }
+function formatDate(timestamp) {
+    const months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+    const date = new Date(timestamp);
+    const year = date.getFullYear();
+    const month = months[date.getMonth()];
+    const day = date.getDate();
+    return `${day} ${month} ${year}`;
+}
 
-export { createDialog, LoginRegister, profilHeader};
+export { createDialog, LoginRegister, profilHeader, formatDate,};

@@ -15,7 +15,9 @@
 <body>
 <?php require_once __DIR__ . '/elements/header.php'; ?>
 <div id="containerModalDialog"></div>
-<div class="containerAllPagesH"></div>
+<div class="containerIndex">
+    <div id="containerPopularMovies"></div>
+</div>
 <?php require_once __DIR__ . '/elements/footer.php'; ?>
 </body>
 </html>
