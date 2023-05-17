@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Controller;
-
+use App\Model\CommentManager;
 class CommentController extends AbstractController
 {
     public function addComment()
@@ -35,5 +35,12 @@ class CommentController extends AbstractController
         }
         header("Content-Type: application/json");
         echo json_encode($errors);
+    }
+    public function getComment()
+    {
+        $commentManager = new CommentManager();
+        $comments = $commentManager->getComment();
+        header("Content-Type: application/json");
+        echo json_encode($comments);
     }
 }

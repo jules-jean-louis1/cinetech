@@ -183,6 +183,9 @@ async function addComment(UrlId){
             });
     });
 }
+async function getComment(UrlId){
+
+}
 getMovie(UrlId);
 /*getMovieCast(UrlId);
 getSimilarMovie(UrlId);*/

@@ -2,7 +2,7 @@
 
 namespace App\Model;
 
-class CommentModel extends AbstractDatabase
+class CommentManager extends AbstractDatabase
 {
     public function addComment(string $title, string $content, int $id_movie, int $id_user)
     {
@@ -15,5 +15,16 @@ class CommentModel extends AbstractDatabase
             'id_user' => $id_user,
             'id_movie' => $id_movie
         ]);
+    }
+    public function getComment(int $id_movie)
+    {
+        $bdd = $this->getBdd();
+        $sql = "SELECT * FROM comment WHERE movie_id = :id_movie";
+        $query = $bdd->prepare($sql);
+        $query->execute([
+            'id_movie' => $id_movie
+        ]);
+        $comments = $query->fetchAll();
+        return $comments;
     }
 }
