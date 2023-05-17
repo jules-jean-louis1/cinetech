@@ -39,9 +39,10 @@ $router->map('GET', '/movie', function() use ($movieController) {
 }, 'movie');
 
 // Page Film Details
-$router->map('GET', '/movie/[i:id]', function() {
+$router->map('GET', '/movie/[i:id]-[*:slug]', function($id, $slug) use ($movieController) {
+    $movieController->showMovieDetailPage($id, $slug);
+}, 'movie_details');
 
-}, 'film_details');
 
 
 $match = $router->match();

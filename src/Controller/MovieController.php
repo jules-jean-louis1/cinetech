@@ -8,4 +8,8 @@ class MovieController
     {
         require_once __DIR__ . '/../View/movie.php';
     }
+    public function showMovieDetailPage($id, $slug)
+    {
+        require_once __DIR__ . '/../View/movieDetail.php';
+    }
 }

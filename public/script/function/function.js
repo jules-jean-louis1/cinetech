@@ -187,8 +187,10 @@ async function LoginRegister(btnLogin) {
         });
     });
 }
+
+// Profil Header Utiliser l'URL Absolut pour le fetch
 async function profilHeader(container) {
-    await fetch('./profilHeader')
+    await fetch(`${window.location.origin}/cinetech/profilHeader`)
         .then(response => response.json())
         .then(data => {
             if (data.login) {

@@ -69,6 +69,13 @@ async function searchMoviesByGenre(genreId) {
         console.log('Une erreur s\'est produite lors de la récupération des films par genre:', error);
     }
 }
+function generateSlug(title) {
+    let slug = title.toLowerCase(); // Convertit le titre en minuscules
+    slug = slug.replace(/[^a-z0-9]+/g, '-'); // Remplace les caractères non alphabétiques et non numériques par des tirets
+    slug = slug.replace(/^-+|-+$/g, ''); // Supprime les tirets en début et en fin de chaîne
+    return slug;
+}
+
 function displayMovies(results) {
     containerMovies.innerHTML = '';
     const displayCard = document.createElement('div');
@@ -77,11 +84,13 @@ function displayMovies(results) {
     results.forEach(movie => {
         displayCard.innerHTML += `
                 <div class="flex flex-col pl-5 gap-2">
+                <a href="/cinetech/movie/${movie.id}-${generateSlug(movie.title)}">
                     <img src="${getPosterPath(movie.poster_path)}" class="w-[150px] h-[225px] shadow-sm rounded-md">
                     <div class="flex flex-col px-3 w-[150px]">
                         <h2 class="text-sm font-bold text-center">${movie.title}</h2>
                         <p class="text-xs text-center">${formatDate(movie.release_date)}</p>
                     </div>
+                </a>
                 </div>
             `;
     });
