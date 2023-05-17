@@ -214,7 +214,7 @@ async function addComment(UrlId){
             });
     });
 }
-async function getComment(UrlId){
+/*async function getComment(UrlId){
     await fetch(`${window.location.origin}/cinetech/getComment/${UrlId}`)
         .then((response) => response.json())
         .then((data) => {
@@ -244,6 +244,15 @@ async function getComment(UrlId){
                 `;
             }
 
+        });
+}*/
+async function getComment(UrlId){
+    fetch(`${window.location.origin}/cinetech/getComment/${UrlId}`)
+        .then((response) => response.text())
+        .then((data) => {
+            console.log(data);
+            const containerComment = document.querySelector('#containerCommentsList');
+            containerComment.innerHTML = data;
         });
 }
 getMovie(UrlId);

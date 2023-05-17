@@ -41,12 +41,7 @@ class CommentController extends AbstractController
     {
         $commentManager = new CommentManager();
         $comments = $commentManager->getComment($id_movie);
-        if (empty($comments)) {
-            header("Content-Type: application/json");
-            echo json_encode(['status' => 'errors', 'data' => 'Aucun commentaire pour ce film']);
-        } else {
-            header("Content-Type: application/json");
-            echo json_encode(['status' => 'success', 'comments' => $comments]);
-        }
+
+        require __DIR__ . '/../View/fetch/displayComment.php';
     }
 }
