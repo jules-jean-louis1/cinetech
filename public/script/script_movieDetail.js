@@ -79,7 +79,6 @@ async function getMovie(UrlId){
             `;
             detailMovie.appendChild(ContainerMovie);
             for (let i = 0; i < data.genres.length; i++) {
-                console.log(data.genres[i].name);
                 const displayGenres = document.querySelector('#containerGenres');
                 displayGenres.innerHTML += `
                     <p class="text-sm">${data.genres[i].name}</p>
@@ -158,10 +157,19 @@ async function addComment(UrlId){
         formComment.innerHTML = `
             <form id="formComment" class="flex flex-col gap-4" method="post">
                 <input type="hidden" name="id_movie" value="${UrlId}">
-                <label for="title" class="text-xl">Titre</label>
-                <input type="text" id="title" name="title" class="border border-slate-200 rounded">
-                <label for="comment" class="text-xl">Commentaire</label>
-                <textarea id="comment" name="comment" class="border border-slate-200 rounded"></textarea>
+                <div class="flex flex-col">
+                    <label for="title" class="text-xl">Titre</label>
+                    <input type="text" id="title" name="title" class="border border-slate-200 rounded">
+                    <small class="text-red-500 h-5" id="titleError"></small>
+                </div>
+                <div class="flex flex-col">
+                    <label for="comment" class="text-xl">Commentaire</label>
+                    <textarea id="comment" name="comment" class="border border-slate-200 rounded"></textarea>
+                    <small class="text-red-500 h-5" id="commentError"></small>
+                </div>
+                <div id="errorsMessage" class="h-[45px]">
+                    <div id="message"></div>
+                </div>
                 <div id="formCommentSubmit">
                     <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Envoyer</button>
                 </div>
@@ -180,13 +188,66 @@ async function addComment(UrlId){
             .then((response) => response.json())
             .then((data) => {
                 console.log(data);
+                const titleError = document.querySelector('#titleError');
+                const commentError = document.querySelector('#commentError');
+                const message = document.querySelector('#message');
+                if(data.title && data.comment){
+                    message.innerHTML = '';
+                    message.innerHTML = `<p class="text-red-500">Veuillez remplir tous les champs</p>`;
+                }
+                if(data.title){
+                    titleError.textContent = '';
+                    titleError.textContent = data.title;
+                }
+                if(data.comment){
+                    commentError.textContent = '';
+                    commentError.textContent = data.comment;
+                }
+                if(data.success){
+                    message.innerHTML = '';
+                    message.textContent = data.success;
+                }
+                if(data.logout){
+                    message.innerHTML = '';
+                    message.textContent = data.logout;
+                }
             });
     });
 }
 async function getComment(UrlId){
+    await fetch(`${window.location.origin}/cinetech/getComment/${UrlId}`)
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data);
+            const containerComment = document.querySelector('#containerCommentsList');
+            if (data.status === 'success') {
+                for (let comment of data.comments) {
+                    if (comment.parent_id === null) {
+                        containerComment.innerHTML += `
+                        <div id="comment_display">
+                            <div class="flex">
+                                <p>Titre:</p>
+                                <p>${comment.title_comment}</p>
+                            </div>
+                            <div class="flex">
+                                <p>Commentaire:</p>
+                                <p>${comment.content}</p>
+                            </div> 
+                            <div id="containerReplyComment_${comment.id}"></div>
+                        </div>
+                        `;
+                    }
+                }
+            } else {
+                containerComment.innerHTML = `
+                    <p class="text-red-500">${data.message}</p>
+                `;
+            }
 
+        });
 }
 getMovie(UrlId);
 /*getMovieCast(UrlId);
 getSimilarMovie(UrlId);*/
 addComment(UrlId);
+getComment(UrlId);

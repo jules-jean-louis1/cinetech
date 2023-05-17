@@ -55,8 +55,8 @@ $router->map('GET', '/movie/[i:id]-[*:slug]', function($id, $slug) use ($movieCo
 $router->map('POST', '/addComment', function() use ($commentController) {
     $commentController->addComment();
 });
-$router->map('GET', '/getComment', function() use ($commentController) {
-    $commentController->getComment();
+$router->map('GET', '/getComment/[i:id]', function($id) use ($commentController) {
+    $commentController->getComment($id);
 });
 
 $match = $router->match();

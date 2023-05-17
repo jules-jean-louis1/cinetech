@@ -29,6 +29,7 @@ class CommentController extends AbstractController
             if (empty($errors)) {
                 $commentManager = new CommentManager();
                 $commentManager->addComment($title, $comment, $id_movie, $id_user);
+                $errors['success'] = 'Votre commentaire a bien été ajouté';
             }
         } else {
             $errors['logout'] = 'Vous devez être connecté pour poster un commentaire';
@@ -36,11 +37,16 @@ class CommentController extends AbstractController
         header("Content-Type: application/json");
         echo json_encode($errors);
     }
-    public function getComment()
+    public function getComment($id_movie)
     {
         $commentManager = new CommentManager();
-        $comments = $commentManager->getComment();
-        header("Content-Type: application/json");
-        echo json_encode($comments);
+        $comments = $commentManager->getComment($id_movie);
+        if (empty($comments)) {
+            header("Content-Type: application/json");
+            echo json_encode(['status' => 'errors', 'data' => 'Aucun commentaire pour ce film']);
+        } else {
+            header("Content-Type: application/json");
+            echo json_encode(['status' => 'success', 'comments' => $comments]);
+        }
     }
 }
