@@ -15,9 +15,13 @@
 <div class="containerMoviesDetailPage">
     <div id="containerMovies">
         <div id="detailMovie"></div>
+        <div id="containerCast"></div>
         <div id="containerSimilarMovies"></div>
     </div>
-    <div id="containerComments"></div>
+    <div id="containerComments">
+        <div id="containerCommentsForm"></div>
+        <div id="containerCommentsList"></div>
+    </div>
 </div>
 <?php require_once __DIR__ . '/elements/footer.php'; ?>
 </body>

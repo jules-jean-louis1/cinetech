@@ -6,11 +6,13 @@ use App\Controller\{
     AuthController,
     HomeController,
     MovieController,
+    CommentController
 };
 
 $authController = new AuthController();
 $homeController = new HomeController();
 $movieController = new MovieController();
+$commentController = new CommentController();
 $router = new AltoRouter();
 
 $router->setBasePath('/cinetech');
@@ -43,7 +45,16 @@ $router->map('GET', '/movie/[i:id]-[*:slug]', function($id, $slug) use ($movieCo
     $movieController->showMovieDetailPage($id, $slug);
 }, 'movie_details');
 
+// Page Serie
 
+// Page Serie Details
+
+// Page Profil
+
+// Add Comment
+$router->map('POST', '/addComment', function() use ($commentController) {
+    $commentController->addComment();
+});
 
 $match = $router->match();
 
