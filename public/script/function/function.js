@@ -224,5 +224,8 @@ function headerMenu() {
         }
     });
 }
+const getPosterPath = (posterPath) => {
+    return `https://www.themoviedb.org/t/p/w220_and_h330_face${posterPath}`;
+};
 
-export { createDialog, LoginRegister, profilHeader, formatDate, headerMenu};
+export { createDialog, LoginRegister, profilHeader, formatDate, headerMenu, getPosterPath};
