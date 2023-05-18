@@ -50,14 +50,31 @@ $router->map('GET', '/movie/[i:id]-[*:slug]', function($id, $slug) use ($movieCo
 // Page Serie Details
 
 // Page Profil
-
+$router->map('GET', '/profil', function() use ($authController) {
+    $authController->showProfil();
+}, 'profil');
+// isLogged
+$router->map('GET', '/isLogged', function() use ($authController) {
+    $authController->isLogged();
+});
 // Add Comment
 $router->map('POST', '/addComment', function() use ($commentController) {
     $commentController->addComment();
 });
+// Add Reply
+$router->map('POST', '/addReplyComment/[i:id]', function($id) use ($commentController) {
+    $commentController->addReplyToComment($id);
+});
+// Get Comment
 $router->map('GET', '/getComment/[i:id]', function($id) use ($commentController) {
     $commentController->getComment($id);
 });
+// Logout
+$router->map('GET', '/logout', function() use ($authController) {
+    $authController->logout();
+}, 'logout');
+
+
 
 $match = $router->match();
 

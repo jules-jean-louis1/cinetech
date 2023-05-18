@@ -16,6 +16,18 @@ class CommentManager extends AbstractDatabase
             'id_movie' => $id_movie
         ]);
     }
+    public function addReplyComment(string $content, int $parent_comment_id,int $id_movie, int $id_user)
+    {
+        $bdd = $this->getBdd();
+        $sql = "INSERT INTO comments (content, created_at, utilisateur_id, movie_id, parent_comment_id) VALUES (:content, NOW(), :id_user, :id_movie, :parent_comment_id)";
+        $query = $bdd->prepare($sql);
+        $query->execute([
+            'content' => $content,
+            'id_user' => $id_user,
+            'id_movie' => $id_movie,
+            'parent_comment_id' => $parent_comment_id
+        ]);
+    }
     public function getComment(int $id_movie)
     {
         $bdd = $this->getBdd();

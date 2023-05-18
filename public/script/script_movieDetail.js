@@ -7,6 +7,7 @@ import { headerMenu } from "./function/function.js";
 const btnHeaderloginRegister = document.querySelector('#btnHeaderLoginRegister');
 const btnHeaderLogout = document.querySelector('#btnHeaderLogout');
 const btnHeaderProfile = document.querySelector('#btnHeaderProfile');
+const containerModalDialog = document.querySelector('#containerModalDialog');
 
 if (btnHeaderloginRegister) {
     LoginRegister(btnHeaderloginRegister);
@@ -214,46 +215,148 @@ async function addComment(UrlId){
             });
     });
 }
-/*async function getComment(UrlId){
-    await fetch(`${window.location.origin}/cinetech/getComment/${UrlId}`)
+async function getComment(UrlId){
+    await fetch(`${window.location.origin}/cinetech/isLogged`)
         .then((response) => response.json())
         .then((data) => {
-            console.log(data);
-            const containerComment = document.querySelector('#containerCommentsList');
-            if (data.status === 'success') {
-                for (let comment of data.comments) {
-                    if (comment.parent_id === null) {
-                        containerComment.innerHTML += `
-                        <div id="comment_display">
-                            <div class="flex">
-                                <p>Titre:</p>
-                                <p>${comment.title_comment}</p>
-                            </div>
-                            <div class="flex">
-                                <p>Commentaire:</p>
-                                <p>${comment.content}</p>
-                            </div> 
-                            <div id="containerReplyComment_${comment.id}"></div>
-                        </div>
-                        `;
-                    }
-                }
-            } else {
-                containerComment.innerHTML = `
+            if (data.isLogged === true) {
+                console.log(data);
+                let UserId = data.id;
+                fetch(`${window.location.origin}/cinetech/getComment/${UrlId}`)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        console.log(data);
+                        const containerComment = document.querySelector('#containerCommentsList');
+                        if (data.status === 'success') {
+                            for (let comment of data.comments) {
+                                if (comment.parent_id === null) {
+                                    containerComment.innerHTML += `
+                                    <div id="comment_display">
+                                        <div id="comment_header">
+                                            <div class="flex justify-between">
+                                                <p>${comment.login}</p>
+                                                <p>${formatDate(comment.created_at)}</p>
+                                            </div>
+                                        <div class="flex">
+                                            <p>Titre:</p>
+                                            <p>${comment.title_comment}</p>
+                                        </div>
+                                        <div class="flex">
+                                            <p>Commentaire:</p>
+                                            <p>${comment.content}</p>
+                                        </div>
+                                        <div id="callToActionComment" class="flex gape-2">
+                                            <button id="replyComment_${comment.id}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Répondre</button>
+                                            <div id="containerButton" class="pl-2"></div>
+                                        </div> 
+                                        <div id="containerReplyComment_${comment.id}"></div>
+                                    </div>
+                                    `;
+                                    const containerButton = document.querySelector(`#containerButton`);
+                                    if (comment.id === UserId) {
+                                        containerButton.innerHTML += `
+                                        <button id="updateComment_${comment.id}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Modifier</button>
+                                        <button id="deleteComment_${comment.id}" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Supprimer</button>
+                                        `;
+                                    }
+                                    // replyComment
+                                    const replyComment = document.querySelector(`#replyComment_${comment.id}`);
+                                    if (replyComment) {
+                                        replyComment.addEventListener('click', async (e) => {
+                                            const dialogAvis = document.createElement('dialog');
+                                            dialogAvis.setAttribute('id', 'dialog_fixed');
+                                            dialogAvis.className = 'dialog_modal w-6/12 h-6/12 bg-[#24272A] text-[#a8b3cf] rounded-[14px] shadow-lg';
+                                            containerModalDialog.appendChild(dialogAvis);
+                                            dialogAvis.innerHTML = `
+                                             <div class="border-[1px] rounded-[14px] border-[#a8b3cf]">
+                                                <div class="flex flex-row justify-between border-b border-[#a8b3cf] flex items-center py-4 px-6 w-full h-14">
+                                                        <h3>Votre réponse</h3>
+                                                        <button class="close" id="closeDialogAvis">
+                                                            <svg width="1em" height="1em" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 pointer-events-none"><path d="M16.804 6.147a.75.75 0 011.049 1.05l-.073.083L13.061 12l4.72 4.72a.75.75 0 01-.977 1.133l-.084-.073L12 13.061l-4.72 4.72-.084.072a.75.75 0 01-1.049-1.05l.073-.083L10.939 12l-4.72-4.72a.75.75 0 01.977-1.133l.084.073L12 10.939l4.72-4.72.084-.072z" fill="currentcolor" fill-rule="evenodd"></path></svg>
+                                                        </button>
+                                                    </div>
+                                                <div class="overflow-auto relative w-full h-full shrink max-h-full p-6 flex flex-col">
+                                                    <div class="flex space-x-2">
+                                                        <div class="flex flex-col">
+                                                            <p class="text-white font-regular">${comment.login}</p>
+                                                            <p class="text-[#a8b3cf] text-xs">
+                                                                <span>${formatDate(comment.created_at)}</span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="m-2 border-l border-white pl-6">
+                                                        <p class="text-white font-light text-lg">${comment.content}</p>
+                                                    </div>
+                                                    <div>
+                                                        <p class="text-xs text-white pl-8">Réponse à <b>${comment.login}</b></p>
+                                                    </div>
+                                                </div>
+                                                <div class="flex relative flex-1 pl-6 pr-2">
+                                                        <form action="" method="post" id="formAddReplyComment" class="flex flex-col items-center justify-center w-full">
+                                                        <input type="hidden" name="id_movie" value="${UrlId}">
+                                                        <input type="hidden" name="parent_comment" value="${comment.id}">
+                                                        <textarea name="content" id="content" cols="30" rows="5" placeholder="@${comment.login}" class="ml-3 flex-1 bg-[#24272A] focus:outline-none rounded-b-[14px] w-full h-full"></textarea>
+                                                        <div id="errorMsg" class="h-12"></div>
+                                                        <div class="flex flex-row justify-end w-full py-2">
+                                                            <button class="bg-[#39e58c] text-black font-bold px-5 py-2 rounded-[14px]" id="buttonAddAvis">Répondre</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        `;
+                                            dialogAvis.showModal();
+                                            const closeDialogAvis = document.getElementById('closeDialogAvis');
+                                            closeDialogAvis.addEventListener('click', (ev) => {
+                                                ev.preventDefault();
+                                                dialogAvis.close();
+                                                dialogAvis.remove();
+                                            });
+                                            const formAddReplyComment = document.querySelector('#formAddReplyComment');
+                                            formAddReplyComment.addEventListener('submit', async (e) => {
+                                                e.preventDefault();
+                                                await fetch(`${window.location.origin}/cinetech/addReplyComment/${UrlId}`, {
+                                                    method: 'POST',
+                                                    body: new FormData(formAddReplyComment)
+                                                })
+                                                .then((response) => response.json())
+                                                .then((data) => {
+                                                    console.log(data);
+                                                });
+                                            });
+                                        });
+                                    }
+                                }
+                                for (let replyComment of data.comments) {
+                                    if (replyComment.parent_id === comment.id) {
+                                        const containerReplyComment = document.querySelector(`#containerReplyComment_${comment.id}`);
+                                        containerReplyComment.innerHTML += `
+                                        <div id="replyComment_display">
+                                            <div class="flex">
+                                                <p>Titre:</p>
+                                                <p>${replyComment.title_comment}</p>
+                                            </div>
+                                            <div class="flex">
+                                                <p>Commentaire:</p>
+                                                <p>${replyComment.content}</p>
+                                            </div>
+                                        </div>
+                                        `;
+                                    }
+                                }
+                            }
+                        } else {
+                            containerComment.innerHTML = `
                     <p class="text-red-500">${data.message}</p>
                 `;
+                        }
+                    });
+            } else {
+                console.log("Vous n'êtes pas connecté");
             }
+        });
 
-        });
-}*/
-async function getComment(UrlId){
-    fetch(`${window.location.origin}/cinetech/getComment/${UrlId}`)
-        .then((response) => response.text())
-        .then((data) => {
-            const containerComment = document.querySelector('#containerCommentsList');
-            containerComment.innerHTML = data;
-        });
 }
+
 getMovie(UrlId);
 /*getMovieCast(UrlId);
 getSimilarMovie(UrlId);*/

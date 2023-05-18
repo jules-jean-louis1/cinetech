@@ -101,6 +101,14 @@ class AuthController
             header('Location: /');
         }
     }
+    public function isLogged()
+    {
+        if (isset($_SESSION['id'])) {
+            echo json_encode(['isLogged' => true, 'id' => $_SESSION['id']]);
+        } else {
+            echo json_encode(false);
+        }
+    }
     public function logout()
     {
         session_destroy();
