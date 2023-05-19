@@ -39,7 +39,6 @@ class CommentController extends AbstractController
     }
     public function addReplyToComment()
     {
-        var_dump($_POST);
         $errors =[];
         if (isset($_SESSION['id'])) {
             $id_movie = $this->verifyField('id_movie');
@@ -59,7 +58,7 @@ class CommentController extends AbstractController
             }
             if (empty($errors)) {
                 $commentManager = new CommentManager();
-                $commentManager->addReplyComment($content, $id_movie, $parent_id, $id_user);
+                $commentManager->addReplyComment($parent_id, $content, $id_user, $id_movie);
                 $errors['success'] = 'Votre commentaire a bien été ajouté';
             } else {
                 $errors['fail'] = 'Votre commentaire n\'a pas été ajouté';
@@ -67,6 +66,8 @@ class CommentController extends AbstractController
         } else {
             $errors['logout'] = 'Vous devez être connecté pour poster un commentaire';
         }
+        header("Content-Type: application/json");
+        echo json_encode($errors);
     }
     public function getComment($id_movie)
     {

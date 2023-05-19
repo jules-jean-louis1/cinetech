@@ -18,9 +18,13 @@
         <div id="containerCast"></div>
         <div id="containerSimilarMovies"></div>
     </div>
-    <div id="containerComments">
-        <div id="containerCommentsForm"></div>
-        <div id="containerCommentsList"></div>
+    <div class="flex flex-col items-center">
+        <div id="containerComments" class="w-10/12">
+            <div id="containerCommentsForm" class="w-full"></div>
+            <div id="containerCommentsList" class="w-full">
+                <div id="commentsContainer"></div>
+            </div>
+        </div>
     </div>
 </div>
 <?php require_once __DIR__ . '/elements/footer.php'; ?>

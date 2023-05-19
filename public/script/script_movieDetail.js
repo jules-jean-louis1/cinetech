@@ -215,6 +215,7 @@ async function addComment(UrlId){
             });
     });
 }
+let containerComment = document.querySelector('#containerCommentsList');
 async function getComment(UrlId){
     await fetch(`${window.location.origin}/cinetech/isLogged`)
         .then((response) => response.json())
@@ -226,49 +227,16 @@ async function getComment(UrlId){
                     .then((response) => response.json())
                     .then((data) => {
                         console.log(data);
-                        const containerComment = document.querySelector('#containerCommentsList');
+
                         if (data.status === 'success') {
-                            for (let comment of data.comments) {
-                                if (comment.parent_id === null) {
-                                    containerComment.innerHTML += `
-                                    <div id="comment_display">
-                                        <div id="comment_header">
-                                            <div class="flex justify-between">
-                                                <p>${comment.login}</p>
-                                                <p>${formatDate(comment.created_at)}</p>
-                                            </div>
-                                        <div class="flex">
-                                            <p>Titre:</p>
-                                            <p>${comment.title_comment}</p>
-                                        </div>
-                                        <div class="flex">
-                                            <p>Commentaire:</p>
-                                            <p>${comment.content}</p>
-                                        </div>
-                                        <div id="callToActionComment" class="flex gape-2">
-                                            <button id="replyComment_${comment.id}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Répondre</button>
-                                            <div id="containerButton" class="pl-2"></div>
-                                        </div> 
-                                        <div id="containerReplyComment_${comment.id}"></div>
-                                    </div>
-                                    `;
-                                    const containerButton = document.querySelector(`#containerButton`);
-                                    if (comment.id === UserId) {
-                                        containerButton.innerHTML += `
-                                        <button id="updateComment_${comment.id}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Modifier</button>
-                                        <button id="deleteComment_${comment.id}" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Supprimer</button>
-                                        `;
-                                    }
-                                    // replyComment
-                                    const replyComment = document.querySelector(`#replyComment_${comment.id}`);
-                                    if (replyComment) {
-                                        replyComment.addEventListener('click', async (e) => {
-                                            const dialogAvis = document.createElement('dialog');
-                                            dialogAvis.setAttribute('id', 'dialog_fixed');
-                                            dialogAvis.className = 'dialog_modal w-6/12 h-6/12 bg-[#24272A] text-[#a8b3cf] rounded-[14px] shadow-lg';
-                                            containerModalDialog.appendChild(dialogAvis);
-                                            dialogAvis.innerHTML = `
-                                             <div class="border-[1px] rounded-[14px] border-[#a8b3cf]">
+                            let commentsData = data.comments;
+                            function addReplyToComment(comment) {
+                                const dialogAvis = document.createElement('dialog');
+                                dialogAvis.setAttribute('id', 'dialog_fixed');
+                                dialogAvis.className = 'dialog_modal w-6/12 h-6/12 bg-[#24272A] text-[#a8b3cf] rounded-[14px] shadow-lg';
+                                containerModalDialog.appendChild(dialogAvis);
+                                dialogAvis.innerHTML = `
+                                <div class="border-[1px] rounded-[14px] border-[#a8b3cf]">
                                                 <div class="flex flex-row justify-between border-b border-[#a8b3cf] flex items-center py-4 px-6 w-full h-14">
                                                         <h3>Votre réponse</h3>
                                                         <button class="close" id="closeDialogAvis">
@@ -304,46 +272,119 @@ async function getComment(UrlId){
                                                 </div>
                                             </div>
                                         `;
-                                            dialogAvis.showModal();
-                                            const closeDialogAvis = document.getElementById('closeDialogAvis');
-                                            closeDialogAvis.addEventListener('click', (ev) => {
-                                                ev.preventDefault();
+                                dialogAvis.showModal();
+                                const closeDialogAvis = document.getElementById('closeDialogAvis');
+                                closeDialogAvis.addEventListener('click', (ev) => {
+                                    ev.preventDefault();
+                                    dialogAvis.close();
+                                    dialogAvis.remove();
+                                });
+                                const formAddReplyComment = document.querySelector('#formAddReplyComment');
+                                formAddReplyComment.addEventListener('submit', async (e) => {
+                                    e.preventDefault();
+                                    await fetch(`${window.location.origin}/cinetech/addReplyComment/${UrlId}`, {
+                                        method: 'POST',
+                                        body: new FormData(formAddReplyComment)
+                                    })
+                                        .then((response) => response.json())
+                                        .then((data) => {
+                                            console.log(data);
+                                            if (data.success) {
                                                 dialogAvis.close();
-                                                dialogAvis.remove();
-                                            });
-                                            const formAddReplyComment = document.querySelector('#formAddReplyComment');
-                                            formAddReplyComment.addEventListener('submit', async (e) => {
-                                                e.preventDefault();
-                                                await fetch(`${window.location.origin}/cinetech/addReplyComment/${UrlId}`, {
-                                                    method: 'POST',
-                                                    body: new FormData(formAddReplyComment)
-                                                })
-                                                .then((response) => response.json())
-                                                .then((data) => {
-                                                    console.log(data);
-                                                });
-                                            });
+                                            }
                                         });
-                                    }
+                                });
+                            }
+                            function generateCommentHTML(comment) {
+                                const commentId = `comment_${comment.id}`;
+                                let commentHTML = '';
+                                let callToActionHTML = '';
+                                if (comment.utilisateur_id === UserId) {
+                                    callToActionHTML = `
+                                    <button class="border-2 border-black" id="delete_${comment.id}">Supprimer</button>
+                                    <button class="border-2 border-black" id="edit_${comment.id}">Modifier</button>
+                                `;
                                 }
-                                for (let replyComment of data.comments) {
-                                    if (replyComment.parent_id === comment.id) {
-                                        const containerReplyComment = document.querySelector(`#containerReplyComment_${comment.id}`);
-                                        containerReplyComment.innerHTML += `
-                                        <div id="replyComment_display">
-                                            <div class="flex">
-                                                <p>Titre:</p>
-                                                <p>${replyComment.title_comment}</p>
-                                            </div>
-                                            <div class="flex">
-                                                <p>Commentaire:</p>
-                                                <p>${replyComment.content}</p>
+                                commentHTML = `
+                                    <div class="comment" id="${commentId}">
+                                        <h3>${comment.title_comment}</h3>
+                                        <div class="flex space-x-2">
+                                            <p>${comment.login}</p>
+                                            <p>${formatDate(comment.created_at)}</p>
+                                        </div>
+                                        <p>${comment.content}</p>
+                                        <div class="flex space-x-2">
+                                            <button class="border-2 border-black" id="reply_${comment.id}">Répondre</button>
+                                            <div id="callToAction_${comment.id}">${callToActionHTML}</div>
+                                        </div>
+                                    </div>
+                                `;
+                                return commentHTML;
+                            }
+                            // Fonction récursive pour générer le HTML des réponses imbriquées
+                            function generateNestedRepliesHTML(comments, parentId) {
+                                const replies = comments.filter(comment => comment.parent_id === parentId);
+
+                                if (replies.length === 0) {
+                                    return '';
+                                }
+                                let repliesHTML = '';
+                                replies.forEach(reply => {
+                                    const replyId = `${reply.id}`;
+                                    const callToActionId = `callToAction_${reply.id}`;
+
+                                    let callToActionHTML = '';
+
+                                    if (reply.utilisateur_id === UserId) {
+                                        callToActionHTML = `
+                                        <button class="border-2 border-black" id="delete_${reply.id}">Supprimer</button>
+                                        <button class="border-2 border-black" id="edit_${reply.id}">Modifier</button>
+                                    `;
+                                    }
+                                    repliesHTML += `
+                                    <div class="reply" id="container_${replyId}">
+                                        <div class="flex space-x-2">
+                                            <p>${reply.login}</p>
+                                            <p>${formatDate(reply.created_at)}</p>
+                                        </div>
+                                        <h3>${reply.content}</h3>
+                                        <div class="flex space-x-2">
+                                            <button class="border-2 border-black" id="reply_${replyId}">Répondre</button>
+                                            <div id="${callToActionId}">${callToActionHTML}</div>
+                                        </div>
+                                        ${generateNestedRepliesHTML(comments, reply.id)}
+                                    </div>
+                                `;
+                                });
+                                return repliesHTML;
+                            }
+                            function displayComments(comments) {
+                                const commentsContainer = document.getElementById('commentsContainer');
+                                comments.forEach(comment => {
+                                    if (comment.parent_id === null) {
+                                        const commentHTML = generateCommentHTML(comment);
+                                        const repliesHTML = generateNestedRepliesHTML(comments, comment.id);
+
+                                        commentsContainer.innerHTML += `
+                                        <div class="comment-container p-2 bg-slate-100 m-2">
+                                            ${commentHTML}
+                                            <div id="replies-container" class="pl-2">
+                                            ${repliesHTML}
                                             </div>
                                         </div>
                                         `;
                                     }
-                                }
+                                });
+                                comments.forEach(comment => {
+                                    const repliesButton = commentsContainer.querySelector(`#reply_${comment.id}`);
+                                    repliesButton.addEventListener('click', (e) => {
+                                        e.preventDefault();
+                                        addReplyToComment(comment);
+                                    });
+                                });
                             }
+                            // Appel de la fonction pour afficher les commentaires
+                            displayComments(commentsData);
                         } else {
                             containerComment.innerHTML = `
                     <p class="text-red-500">${data.message}</p>

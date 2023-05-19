@@ -16,24 +16,25 @@ class CommentManager extends AbstractDatabase
             'id_movie' => $id_movie
         ]);
     }
-    public function addReplyComment(string $content, int $parent_comment_id,int $id_movie, int $id_user)
+    public function addReplyComment(int $parent_id, string $content,int $id_user, int $id_movie)
     {
         $bdd = $this->getBdd();
-        $sql = "INSERT INTO comments (content, created_at, utilisateur_id, movie_id, parent_comment_id) VALUES (:content, NOW(), :id_user, :id_movie, :parent_comment_id)";
+        $sql = "INSERT INTO comments (parent_id, content, created_at, utilisateur_id, movie_id) VALUES (:parent_id, :content, NOW(), :id_user, :id_movie)";
         $query = $bdd->prepare($sql);
         $query->execute([
+            'parent_id' => $parent_id,
             'content' => $content,
             'id_user' => $id_user,
-            'id_movie' => $id_movie,
-            'parent_comment_id' => $parent_comment_id
+            'id_movie' => $id_movie
         ]);
     }
     public function getComment(int $id_movie)
     {
         $bdd = $this->getBdd();
-        $sql = "SELECT comments.*, utilisateurs.login, utilisateurs.id 
-                FROM comments 
-                INNER JOIN utilisateurs ON comments.utilisateur_id = utilisateurs.id WHERE movie_id = :id_movie";
+        $sql = "SELECT comments.*, utilisateurs.login
+        FROM comments 
+        LEFT JOIN utilisateurs ON comments.utilisateur_id = utilisateurs.id 
+        WHERE movie_id = :id_movie";
         $query = $bdd->prepare($sql);
         $query->execute([
             'id_movie' => $id_movie

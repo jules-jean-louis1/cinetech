@@ -61,7 +61,7 @@ $router->map('GET', '/isLogged', function() use ($authController) {
 $router->map('POST', '/addComment', function() use ($commentController) {
     $commentController->addComment();
 });
-// Add Reply
+// Add Reply of original comment
 $router->map('POST', '/addReplyComment/[i:id]', function($id) use ($commentController) {
     $commentController->addReplyToComment($id);
 });
