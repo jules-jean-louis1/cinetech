@@ -227,51 +227,57 @@ async function getComment(UrlId){
                     .then((response) => response.json())
                     .then((data) => {
                         console.log(data);
-
                         if (data.status === 'success') {
                             let commentsData = data.comments;
-                            function addReplyToComment(comment) {
+                            function addReplyToComment(comment, action, UrlId) {
                                 const dialogAvis = document.createElement('dialog');
                                 dialogAvis.setAttribute('id', 'dialog_fixed');
                                 dialogAvis.className = 'dialog_modal w-6/12 h-6/12 bg-[#24272A] text-[#a8b3cf] rounded-[14px] shadow-lg';
                                 containerModalDialog.appendChild(dialogAvis);
                                 dialogAvis.innerHTML = `
                                 <div class="border-[1px] rounded-[14px] border-[#a8b3cf]">
-                                                <div class="flex flex-row justify-between border-b border-[#a8b3cf] flex items-center py-4 px-6 w-full h-14">
-                                                        <h3>Votre réponse</h3>
-                                                        <button class="close" id="closeDialogAvis">
-                                                            <svg width="1em" height="1em" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 pointer-events-none"><path d="M16.804 6.147a.75.75 0 011.049 1.05l-.073.083L13.061 12l4.72 4.72a.75.75 0 01-.977 1.133l-.084-.073L12 13.061l-4.72 4.72-.084.072a.75.75 0 01-1.049-1.05l.073-.083L10.939 12l-4.72-4.72a.75.75 0 01.977-1.133l.084.073L12 10.939l4.72-4.72.084-.072z" fill="currentcolor" fill-rule="evenodd"></path></svg>
-                                                        </button>
-                                                    </div>
-                                                <div class="overflow-auto relative w-full h-full shrink max-h-full p-6 flex flex-col">
-                                                    <div class="flex space-x-2">
-                                                        <div class="flex flex-col">
-                                                            <p class="text-white font-regular">${comment.login}</p>
-                                                            <p class="text-[#a8b3cf] text-xs">
-                                                                <span>${formatDate(comment.created_at)}</span>
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="m-2 border-l border-white pl-6">
-                                                        <p class="text-white font-light text-lg">${comment.content}</p>
-                                                    </div>
-                                                    <div>
-                                                        <p class="text-xs text-white pl-8">Réponse à <b>${comment.login}</b></p>
-                                                    </div>
-                                                </div>
-                                                <div class="flex relative flex-1 pl-6 pr-2">
-                                                        <form action="" method="post" id="formAddReplyComment" class="flex flex-col items-center justify-center w-full">
-                                                        <input type="hidden" name="id_movie" value="${UrlId}">
-                                                        <input type="hidden" name="parent_comment" value="${comment.id}">
-                                                        <textarea name="content" id="content" cols="30" rows="5" placeholder="@${comment.login}" class="ml-3 flex-1 bg-[#24272A] focus:outline-none rounded-b-[14px] w-full h-full"></textarea>
-                                                        <div id="errorMsg" class="h-12"></div>
-                                                        <div class="flex flex-row justify-end w-full py-2">
-                                                            <button class="bg-[#39e58c] text-black font-bold px-5 py-2 rounded-[14px]" id="buttonAddAvis">Répondre</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
+                                    <div class="flex flex-row justify-between border-b border-[#a8b3cf] flex items-center py-4 px-6 w-full h-14">
+                                        <h3>Votre réponse</h3>
+                                        <button class="close" id="closeDialogAvis">
+                                            <svg width="1em" height="1em" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 pointer-events-none"><path d="M16.804 6.147a.75.75 0 011.049 1.05l-.073.083L13.061 12l4.72 4.72a.75.75 0 01-.977 1.133l-.084-.073L12 13.061l-4.72 4.72-.084.072a.75.75 0 01-1.049-1.05l.073-.083L10.939 12l-4.72-4.72a.75.75 0 01.977-1.133l.084.073L12 10.939l4.72-4.72.084-.072z" fill="currentcolor" fill-rule="evenodd"></path></svg>
+                                        </button>
+                                    </div>
+                                    <div class="overflow-auto relative w-full h-full shrink max-h-full p-6 flex flex-col">
+                                        <div class="flex space-x-2">
+                                            <div class="flex flex-col">
+                                                <p class="text-white font-regular">${comment.login}</p>
+                                                <p class="text-[#a8b3cf] text-xs">
+                                                    <span>${formatDate(comment.created_at)}</span>
+                                                </p>
                                             </div>
+                                        </div>
+                                        <div class="m-2 border-l border-white pl-6">
+                                            <p class="text-white font-light text-lg">${comment.content}</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-white pl-8">Réponse à <b>${comment.login}</b></p>
+                                        </div>
+                                    </div>
+                                    <div class="flex relative flex-1 pl-6 pr-2">
+                                            <form action="" method="post" id="formAddReplyComment" class="flex flex-col items-center justify-center w-full text-white">
+                                            <input type="hidden" name="id_movie" value="${UrlId}">
+                                            <input type="hidden" name="parent_comment" value="${comment.id}">
+                                            <textarea name="content" id="content" cols="30" rows="5" placeholder="@${comment.login}" class="ml-3 flex-1 bg-[#24272A] focus:outline-none rounded-b-[14px] w-full h-full text-white"></textarea>
+                                            <div id="errorMsg" class="h-12"></div>
+                                            <div class="flex flex-row justify-end w-full py-2">
+                                                <button class="bg-[#39e58c] text-black font-bold px-5 py-2 rounded-[14px]" id="buttonAddAvis">Répondre</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
                                         `;
+                                const textArea = document.querySelector('#content');
+                                if (action === 'reply') {
+                                    textArea.placeholder = `@${comment.login}`;
+                                } else if (action === 'edit') {
+                                    textArea.placeholder = '';
+                                    textArea.value = comment.content;
+                                }
                                 dialogAvis.showModal();
                                 const closeDialogAvis = document.getElementById('closeDialogAvis');
                                 closeDialogAvis.addEventListener('click', (ev) => {
@@ -280,6 +286,7 @@ async function getComment(UrlId){
                                     dialogAvis.remove();
                                 });
                                 const formAddReplyComment = document.querySelector('#formAddReplyComment');
+                                if (action === 'reply') {
                                 formAddReplyComment.addEventListener('submit', async (e) => {
                                     e.preventDefault();
                                     await fetch(`${window.location.origin}/cinetech/addReplyComment/${UrlId}`, {
@@ -294,6 +301,22 @@ async function getComment(UrlId){
                                             }
                                         });
                                 });
+                                } else if (action === 'edit') {
+                                    formAddReplyComment.addEventListener('submit', async (e) => {
+                                        e.preventDefault();
+                                        await fetch(`${window.location.origin}/cinetech/editComment/${UrlId}`, {
+                                            method: 'POST',
+                                            body: new FormData(formAddReplyComment)
+                                        })
+                                            .then((response) => response.json())
+                                            .then((data) => {
+                                                console.log(data);
+                                                if (data.success) {
+                                                    dialogAvis.close();
+                                                }
+                                            });
+                                    });
+                                }
                             }
                             function generateCommentHTML(comment) {
                                 const commentId = `comment_${comment.id}`;
@@ -307,11 +330,11 @@ async function getComment(UrlId){
                                 }
                                 commentHTML = `
                                     <div class="comment" id="${commentId}">
-                                        <h3>${comment.title_comment}</h3>
-                                        <div class="flex space-x-2">
+                                    <div class="flex space-x-2">
                                             <p>${comment.login}</p>
                                             <p>${formatDate(comment.created_at)}</p>
                                         </div>
+                                        <h3>${comment.title_comment}</h3>
                                         <p>${comment.content}</p>
                                         <div class="flex space-x-2">
                                             <button class="border-2 border-black" id="reply_${comment.id}">Répondre</button>
@@ -379,8 +402,15 @@ async function getComment(UrlId){
                                     const repliesButton = commentsContainer.querySelector(`#reply_${comment.id}`);
                                     repliesButton.addEventListener('click', (e) => {
                                         e.preventDefault();
-                                        addReplyToComment(comment);
+                                        addReplyToComment(comment, 'reply', UrlId);
                                     });
+                                    const editButton = commentsContainer.querySelector(`#edit_${comment.id}`);
+                                    if (editButton) {
+                                        editButton.addEventListener('click', (e) => {
+                                            e.preventDefault();
+                                            addReplyToComment(comment, 'edit', UrlId);
+                                        });
+                                    }
                                 });
                             }
                             // Appel de la fonction pour afficher les commentaires

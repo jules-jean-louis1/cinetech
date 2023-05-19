@@ -28,6 +28,40 @@ class CommentManager extends AbstractDatabase
             'id_movie' => $id_movie
         ]);
     }
+    public function editComment(string $content, int $id_comment)
+    {
+        $bdd = $this->getBdd();
+        $sql = "UPDATE comments SET content = :content WHERE id = :id_comment";
+        $query = $bdd->prepare($sql);
+        $query->execute([
+            'content' => $content,
+            'id_comment' => $id_comment
+        ]);
+    }
+    public function verifyIfCommentAsReply(int $id_comment) : bool
+    {
+        $bdd = $this->getBdd();
+        $sql = "SELECT COUNT(id) FROM comments WHERE parent_id = :id_comment";
+        $query = $bdd->prepare($sql);
+        $query->execute([
+            'id_comment' => $id_comment
+        ]);
+        $reply = $query->fetch(\PDO::FETCH_ASSOC);
+        if ($reply['COUNT(id)'] > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function deleteComment(int $id_comment)
+    {
+        $bdd = $this->getBdd();
+        $sql = "DELETE FROM comments WHERE id = :id_comment";
+        $query = $bdd->prepare($sql);
+        $query->execute([
+            'id_comment' => $id_comment
+        ]);
+    }
     public function getComment(int $id_movie)
     {
         $bdd = $this->getBdd();

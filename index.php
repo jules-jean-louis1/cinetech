@@ -65,6 +65,14 @@ $router->map('POST', '/addComment', function() use ($commentController) {
 $router->map('POST', '/addReplyComment/[i:id]', function($id) use ($commentController) {
     $commentController->addReplyToComment($id);
 });
+// Edit Comment
+$router->map('POST', '/editComment/[i:id]', function($id) use ($commentController) {
+    $commentController->editComment($id);
+});
+// Delete Comment
+$router->map('POST', '/deleteComment/[i:id]', function($id) use ($commentController) {
+    $commentController->deleteComment($id);
+});
 // Get Comment
 $router->map('GET', '/getComment/[i:id]', function($id) use ($commentController) {
     $commentController->getComment($id);

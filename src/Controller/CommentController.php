@@ -69,6 +69,53 @@ class CommentController extends AbstractController
         header("Content-Type: application/json");
         echo json_encode($errors);
     }
+    public function editComment()
+    {
+        $errors = [];
+        if (isset($_SESSION['id'])) {
+            $id_comment = $this->verifyField('id_comment');
+            $comment = $this->verifyField('comment');
+            $id_user = $_SESSION['id'];
+            if (!$id_comment) {
+                $errors['id_comment'] = 'Le commentaire n\'est pas valide';
+            }
+            if (!$comment) {
+                $errors['comment'] = 'Le commentaire est requis';
+            } elseif (strlen($comment) < 3) {
+                $errors['comment'] = 'Le commentaire doit contenir au moins 3 caractères';
+            }
+            if (empty($errors)) {
+                $commentManager = new CommentManager();
+                $commentManager->editComment($comment, $id_comment);
+                $errors['success'] = 'Votre commentaire a bien été modifié';
+            }
+        } else {
+            $errors['logout'] = 'Vous devez être connecté pour modifier un commentaire';
+        }
+        header("Content-Type: application/json");
+        echo json_encode($errors);
+    }
+    public function deleteComment()
+    {
+        $errors = [];
+        if (isset($_SESSION['id'])) {
+            $id_comment = $this->verifyField('id_comment');
+            $commentManager = new CommentManager();
+            $verify = $commentManager->verifyIfCommentAsReply($id_comment);
+            if ($verify) {
+                $editContent = '<i>Commentaire supprimé</i>';
+                $update = $commentManager->editComment($editContent, $id_comment);
+                $errors['success'] = 'Votre commentaire a bien été supprimé';
+            } else {
+                $commentManager->deleteComment($id_comment);
+                $errors['success'] = 'Votre commentaire a bien été supprimé';
+            }
+        } else {
+            $errors['logout'] = 'Vous devez être connecté pour supprimer un commentaire';
+        }
+        header("Content-Type: application/json");
+        echo json_encode($errors);
+    }
     public function getComment($id_movie)
     {
         $commentManager = new CommentManager();
