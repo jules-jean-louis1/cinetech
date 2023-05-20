@@ -41,7 +41,7 @@ class UserManager extends AbstractDatabase
     public function login(string $loginOrEmail, string $password)
     {
         $bdd = $this->getBdd();
-        $req = $bdd->prepare('SELECT login, email, password FROM utilisateurs WHERE login = :loginOrEmail OR email = :loginOrEmail');
+        $req = $bdd->prepare('SELECT id, login, email, password FROM utilisateurs WHERE login = :loginOrEmail OR email = :loginOrEmail');
         $req->execute([
             ':loginOrEmail' => $loginOrEmail
         ]);

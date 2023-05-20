@@ -5,6 +5,12 @@
     box-sizing: border-box;
     font-family: 'Inter', sans-serif;
 }
+#dialog {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
 #dialog_fixed {
     position: fixed;
     left: 50%;

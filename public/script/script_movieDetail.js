@@ -411,6 +411,26 @@ async function getComment(UrlId){
                                             addReplyToComment(comment, 'edit', UrlId);
                                         });
                                     }
+                                    const deleteButton = commentsContainer.querySelector(`#delete_${comment.id}`);
+                                    if (deleteButton) {
+                                        deleteButton.addEventListener('click', async (e) => {
+                                            e.preventDefault();
+                                            await fetch(`${window.location.origin}/cinetech/deleteComment/${UrlId}`, {
+                                                method: 'POST',
+                                                body: new FormData(),
+                                                headers: {
+                                                    'Content-Type': 'application/json'
+                                                }
+                                            })
+                                                .then((response) => response.json())
+                                                .then((data) => {
+                                                    console.log(data);
+                                                    if (data.success) {
+
+                                                    }
+                                                });
+                                        });
+                                    }
                                 });
                             }
                             // Appel de la fonction pour afficher les commentaires

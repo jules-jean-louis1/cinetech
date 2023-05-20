@@ -83,7 +83,8 @@ class AuthController
                 $errors['error'] = 'L\'email / login ou le mot de passe est incorrect';
             } else {
                 $_SESSION['id'] = $login['id'];
-                $_SESSION['email'] = $login;
+                $_SESSION['login'] = $login['login'];
+                $_SESSION['email'] = $login['email'];
                 $errors['success'] = 'Vous êtes connecté';
             }
         }
@@ -112,6 +113,6 @@ class AuthController
     public function logout()
     {
         session_destroy();
-        header('Location: /');
+        header('Location: http://' . $_SERVER['HTTP_HOST'] . '/cinetech/');
     }
 }

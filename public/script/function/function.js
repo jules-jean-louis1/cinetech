@@ -77,14 +77,14 @@ async function LoginRegister(btnLogin) {
         dialog.showModal();
         const buttonLogin = document.getElementById("buttonLogin");
         const ParaModifyText = document.getElementById("ParaModifyText");
-        await fetch('./login')
+        await fetch(`${window.location.origin}/cinetech/login`)
             .then(response => response.text())
             .then(data => {
                 containerDiv.innerHTML = data;
                 const formLogin = document.getElementById("login-form");
                 formLogin.addEventListener('submit', async (ev) => {
                     ev.preventDefault();
-                    await fetch('./login/submit', {
+                    await fetch(`${window.location.origin}/cinetech/login/submit`, {
                         method: 'POST',
                         body: new FormData(formLogin)
                     })
@@ -98,7 +98,7 @@ async function LoginRegister(btnLogin) {
             if (buttonLogin.textContent === "Connexion") {
                 buttonLogin.textContent = "S'inscrire";
                 ParaModifyText.textContent = "Se connecter sur Game+";
-                await fetch('./login')
+                await fetch(`${window.location.origin}/cinetech/login`)
                     .then(response => response.text())
                     .then(data => {
                         containerDiv.innerHTML = '';
@@ -106,7 +106,7 @@ async function LoginRegister(btnLogin) {
                         const formLogin = document.getElementById("login-form");
                         formLogin.addEventListener('submit', async (ev) => {
                             ev.preventDefault();
-                            await fetch('./login/submit', {
+                            await fetch(`${window.location.origin}/cinetech/login/submit`, {
                                 method: 'POST',
                                 body: new FormData(formLogin)
                             })
@@ -144,7 +144,7 @@ async function LoginRegister(btnLogin) {
             } else {
                 buttonLogin.textContent = "Connexion";
                 ParaModifyText.textContent = "S'inscrire sur Game+";
-                await fetch('./register')
+                await fetch(`${window.location.origin}/cinetech/register`)
                     .then(response => response.text())
                     .then(data => {
                         containerDiv.innerHTML = '';
@@ -152,7 +152,7 @@ async function LoginRegister(btnLogin) {
                         const formRegister = document.getElementById("register-form");
                         formRegister.addEventListener('submit', async (ev) => {
                             ev.preventDefault();
-                            await fetch('./register/submit', {
+                            await fetch(`${window.location.origin}/cinetech/register/submit`, {
                                 method: 'POST',
                                 body: new FormData(formRegister)
                             })

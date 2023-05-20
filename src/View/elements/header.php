@@ -20,7 +20,9 @@
                             </li>
                             <li>
                                 <button id="btnHeaderLogou" type="button" class="bg-[#fffe3e] text-black rounded-lg px-2">
+                                    <a href="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . '/cinetech/logout';?>">
                                     Deconnexion
+                                    </a>
                                 </button>
                             </li>
                         </ul>
