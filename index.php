@@ -8,6 +8,7 @@ use App\Controller\{
     MovieController,
     CommentController,
     ProfilController,
+    BookmarkController,
 };
 
 $authController = new AuthController();
@@ -15,6 +16,7 @@ $homeController = new HomeController();
 $movieController = new MovieController();
 $commentController = new CommentController();
 $profilController = new ProfilController();
+$bookmarkController = new BookmarkController();
 $router = new AltoRouter();
 
 $router->setBasePath('/cinetech');
@@ -83,6 +85,25 @@ $router->map('GET', '/getComment/[i:id]', function($id) use ($commentController)
 // Add Like
 $router->map('POST', '/addLike/[i:id]', function($id) use ($commentController) {
     $commentController->addLike($id);
+});
+// Remove Like
+$router->map('POST', '/removeLike/[i:id]', function($id) use ($commentController) {
+    $commentController->removeLike($id);
+});
+// Add Dislike
+$router->map('POST', '/addDislike/[i:id]', function($id) use ($commentController) {
+    $commentController->addDislike($id);
+});
+// Remove Dislike
+$router->map('POST', '/removeDislike/[i:id]', function($id) use ($commentController) {
+    $commentController->removeDislike($id);
+});
+
+
+// Gestionnaires des favoris
+// Add Favorite
+$router->map('POST', '/addFavorite/[i:id]', function($id) use ($bookmarkController) {
+    $bookmarkController->addBookmark($id);
 });
 // Logout
 $router->map('GET', '/logout', function() use ($authController) {
