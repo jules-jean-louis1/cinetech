@@ -34,6 +34,7 @@ const containerSimilarMovies = document.querySelector('#containerSimilarMovies')
 
 const apiKey = '336f5174afdbef18cdcc2f6d25e36288';
 const language = 'fr-FR';
+let genreMovie = '';
 async function getMovie(UrlId){
     await fetch(`https://api.themoviedb.org/3/movie/${UrlId}?api_key=${apiKey}&language=${language}`)
         .then((response) => response.json())
@@ -85,9 +86,16 @@ async function getMovie(UrlId){
                     <p class="text-sm">${data.genres[i].name}</p>
                 `;
             }
-            console.log(data);
+            for (let i = 0; i < data.genres.length; i++) {
+                genreMovie += data.genres[i].id;
+                console.log(genreMovie);
+                if (i < data.genres.length - 1) {
+                    genreMovie += ',';
+                }
+            }
         });
 }
+console.log(genreMovie);
 async function getMovieCast(UrlId){
     await fetch(`https://api.themoviedb.org/3/movie/${UrlId}/credits?api_key=${apiKey}&language=${language}`)
         .then((response) => response.json())
@@ -100,7 +108,6 @@ async function getMovieCast(UrlId){
             `;
             containerCast.appendChild(ContainerMovieCast);
             for (let i = 0; i < 10; i++) {
-                console.log(data.cast[i].name);
                 const displayMovieCast = document.querySelector('#containerMovieCast');
                 displayMovieCast.innerHTML += `
                     <div class="flex flex-col gap-2 border border-slate-200 rounded">
@@ -112,8 +119,9 @@ async function getMovieCast(UrlId){
             console.log(data);
         });
 }
+
 async function getSimilarMovie(UrlId){
-    await fetch(`https://api.themoviedb.org/3/movie/${UrlId}/similar?api_key=${apiKey}&language=${language}&page=1`)
+    await fetch(`https://api.themoviedb.org/3/movie/${UrlId}/recommendations?api_key=${apiKey}&language=${language}&page=1&sort_by=popularity.asc&with_genres=${genreMovie}`)
         .then((response) => response.json())
         .then((data) => {
             const ContainerSimilarMovie = document.createElement('div');
@@ -124,7 +132,6 @@ async function getSimilarMovie(UrlId){
             `;
             containerSimilarMovies.appendChild(ContainerSimilarMovie);
             for (let i = 0; i < 10; i++) {
-                console.log(data.results[i].title);
                 const displaySimilarMovie = document.querySelector('#containerSimilarMovie');
                 displaySimilarMovie.innerHTML += `
                     <div class="flex flex-col gap-2 border border-slate-200 rounded">
@@ -458,8 +465,14 @@ async function getComment(UrlId){
 
 }
 
-getMovie(UrlId);
-/*getMovieCast(UrlId);
-getSimilarMovie(UrlId);*/
+//getMovie(UrlId);
+//getMovieCast(UrlId);
+//getSimilarMovie(UrlId);
+async function main(){
+    await getMovie(UrlId);
+    //await getMovieCast(UrlId);
+    await getSimilarMovie(UrlId);
+}
+main();
 addComment(UrlId);
 getComment(UrlId);
