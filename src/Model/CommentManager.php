@@ -68,7 +68,8 @@ class CommentManager extends AbstractDatabase
         $sql = "SELECT comments.*, utilisateurs.login
         FROM comments 
         LEFT JOIN utilisateurs ON comments.utilisateur_id = utilisateurs.id 
-        WHERE movie_id = :id_movie";
+        WHERE movie_id = :id_movie
+        ORDER BY `comments`.`parent_id` ASC, `comments`.`created_at` DESC";
         $query = $bdd->prepare($sql);
         $query->execute([
             'id_movie' => $id_movie

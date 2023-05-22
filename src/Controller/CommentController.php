@@ -116,34 +116,16 @@ class CommentController extends AbstractController
         header("Content-Type: application/json");
         echo json_encode($errors);
     }
-    public function getComment($id_movie)
+    public function getComment(int $id_movie)
     {
         $commentManager = new CommentManager();
-        $comments = $commentManager->getComment($id_movie);
-        function groupComments($comments) {
-            $groupedComments = [];
-            foreach ($comments as $comment) {
-                $parentId = $comment['parent_id'];
-                if ($parentId === null) {
-                    // Commentaire principal, créer un nouveau groupe
-                    $groupedComments[$comment['id']] = $comment;
-                    $groupedComments[$comment['id']]['replies'] = [];
-                } else {
-                    // Commentaire de réponse, ajouter au groupe correspondant
-                    $parentComment = &$groupedComments[$parentId];
-                    $parentComment['replies'][] = $comment;
-                }
-            }
-            return $groupedComments;
-        }
-        $groupedComments = groupComments($comments);
-
-        if (empty($groupedComments)) {
+        $commentsData = $commentManager->getComment($id_movie);
+        if (empty($commentsData)) {
             header("Content-Type: application/json");
             echo json_encode(['status' => 'errors', 'data' => 'Aucun commentaire pour ce film']);
         } else {
             header("Content-Type: application/json");
-            echo json_encode(['status' => 'success', 'comments' => $groupedComments]);
+            echo json_encode(['status' => 'success', 'comments' => $commentsData]);
         }
     }
 }
