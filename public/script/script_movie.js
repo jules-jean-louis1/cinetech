@@ -49,7 +49,10 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     const genreButtons = document.querySelectorAll('.genre_button');
     genreButtons.forEach(button => {
-        button.addEventListener('click', handleGenreClick);
+        button.addEventListener('click', () => {
+            handleGenreClick
+            button.classList.toggle('bg-red-300');
+        });
     });
 });
 
