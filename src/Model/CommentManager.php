@@ -75,7 +75,7 @@ class CommentManager extends AbstractDatabase
     public function getComment(int $id_movie)
     {
         $bdd = $this->getBdd();
-        $sql = "SELECT comments.*, utilisateurs.login
+        $sql = "SELECT comments.*, utilisateurs.login, utilisateurs.avatar
         FROM comments 
         LEFT JOIN utilisateurs ON comments.utilisateur_id = utilisateurs.id 
         WHERE movie_id = :id_movie

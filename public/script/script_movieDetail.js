@@ -330,9 +330,14 @@ async function getComment(UrlId){
                                 }
                                 commentHTML = `
                                     <div class="comment" id="${commentId}">
-                                    <div class="flex space-x-2">
-                                            <p>${comment.login}</p>
-                                            <p>${formatDate(comment.created_at)}</p>
+                                        <div class="flex space-x-2">
+                                            <div class="flex justify-between items-center w-full"> 
+                                                <div class="flex items-center gap-2">   
+                                                    <img src="${window.location.origin}/cinetech/public/images/avatars/${comment.avatar}" alt="avatar" class="w-8 h-8 rounded-full">
+                                                    <p>${comment.login}</p>
+                                                </div>
+                                                <p>${formatDate(comment.created_at)}</p>
+                                            </div>
                                         </div>
                                         <h3>${comment.title_comment}</h3>
                                         <p>${comment.content}</p>
@@ -367,8 +372,13 @@ async function getComment(UrlId){
                                     repliesHTML += `
                                     <div class="reply" id="container_${replyId}">
                                         <div class="flex space-x-2">
-                                            <p>${reply.login}</p>
-                                            <p>${formatDate(reply.created_at)}</p>
+                                            <div class="flex justify-between items-center w-full"> 
+                                                <div class="flex items-center gap-2">   
+                                                    <img src="${window.location.origin}/cinetech/public/images/avatars/${reply.avatar}" alt="avatar" class="w-8 h-8 rounded-full">
+                                                    <p>${reply.login}</p>
+                                                </div>
+                                                <p>${formatDate(reply.created_at)}</p>
+                                            </div>
                                         </div>
                                         <h3>${reply.content}</h3>
                                         <div class="flex space-x-2">
