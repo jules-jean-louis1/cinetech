@@ -66,6 +66,16 @@ class UserManager extends AbstractDatabase
         $user = $req->fetch();
         return $user;
     }
+    public function infoUserHeader(int $id)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare('SELECT login, avatar FROM utilisateurs WHERE id = :id');
+        $req->execute([
+            ':id' => $id
+        ]);
+        $user = $req->fetch(\PDO::FETCH_ASSOC);
+        return $user;
+    }
     public function getUserByLogin($login)
     {
         $bdd = $this->getBdd();

@@ -63,9 +63,7 @@ class AuthController
                 $firstLetter = strtoupper(substr($login, 0, 1));
                 $backgroundColor = sprintf('#%06X', mt_rand(0, 0xFFFFFF)); // Générer une couleur d'arrière-plan aléatoire
                 $avatar = $this->generateAvatarImage($firstLetter, $backgroundColor, $login);
-                $randomString = bin2hex(random_bytes(3)); // Génère une chaîne hexadécimale de 6 caractères
-                $avatarName = $randomString . '-' . $login . '.png';
-                $userManager->addAvatar($avatarName, $id);
+                $userManager->addAvatar($avatar, $id);
                 $errors['success'] = 'Votre compte a bien été créé';
             }
         }
@@ -104,7 +102,7 @@ class AuthController
     {
         if (isset($_SESSION['id'])) {
             $userManager = new UserManager();
-            $user = $userManager->getUserById($_SESSION['id']);
+            $user = $userManager->infoUserHeader($_SESSION['id']);
             echo json_encode($user);
         } else {
             header('Location: /');
@@ -142,11 +140,13 @@ class AuthController
         imagefttext($canvas, $fontSize, 0, $textX, $textY, $foregroundColor, $fontPath, $text);
 
         // Enregistrer l'image dans un fichier PNG
-        $filename = 'public/images/avatars/' . $login . '.png'; // Chemin vers le dossier et nom du fichier d'avatar
+        $randomString = bin2hex(random_bytes(3)); // Génère une chaîne hexadécimale de 6 caractères
+        $avatarName = $randomString . '-' . $login.'.png';
+        $filename = 'public/images/avatars/' . $avatarName; // Chemin vers le dossier et nom du fichier d'avatar
         imagepng($canvas, $filename);
         imagedestroy($canvas);
 
-        return $filename;
+        return $avatarName;
     }
     public function isLogged()
     {

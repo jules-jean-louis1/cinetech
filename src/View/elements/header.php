@@ -11,7 +11,7 @@
             <div>
                 <?php if (isset($_SESSION['id'])) :?>
                     <div class="relative">
-                        <button id="btnHeaderProfile" type="button" class="bg-[#fffe3e] text-black rounded-lg px-2">Profil</button>
+                        <button id="btnHeaderProfile" type="button" class="bg-[#fffe3e] text-black rounded-lg px-2 py-1">Profil</button>
                         <ul id="menuProfilHeader" class="absolute right-0 w-36 mt-0.5  bg-[#1C1F26] rounded-lg border-[1px] border-[#a8b3cf33] shadow-lg z-10 hidden">
                             <li>
                                 <button id="btnHeaderProfile" type="button" class="bg-[#fffe3e] text-black rounded-lg px-2">

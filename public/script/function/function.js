@@ -194,7 +194,12 @@ async function profilHeader(container) {
         .then(response => response.json())
         .then(data => {
             if (data.login) {
-                container.innerHTML = data.login;
+                container.innerHTML =
+                    `<div class="flex items-center justify-center w-full h-full">
+                        <img src="${window.location.origin}/cinetech/public/images/avatars/${data.avatar}" alt="${data.avatar}" class="h-6 w-6 rounded-full">
+                        <p class="ml-2 font-bold text-black">${data.login}</p>
+                    </div>
+                    `;
             }
         });
 }
