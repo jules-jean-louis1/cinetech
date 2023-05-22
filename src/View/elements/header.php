@@ -3,7 +3,7 @@
         <nav class="flex justify-between px-4">
             <div>
                 <ul class="flex space-x-4">
-                    <li><a href="/">Accueil</a></li>
+                    <li><a href="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . '/cinetech/';?>">Accueil</a></li>
                     <li><a href="<?php __DIR__?>./movie">Film</a></li>
                     <li><a href="/page2">Series</a></li>
                 </ul>
