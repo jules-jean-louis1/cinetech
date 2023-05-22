@@ -95,7 +95,6 @@ async function getMovie(UrlId){
             }
         });
 }
-console.log(genreMovie);
 async function getMovieCast(UrlId){
     await fetch(`https://api.themoviedb.org/3/movie/${UrlId}/credits?api_key=${apiKey}&language=${language}`)
         .then((response) => response.json())
@@ -113,6 +112,7 @@ async function getMovieCast(UrlId){
                     <div class="flex flex-col gap-2 border border-slate-200 rounded">
                         <img src="${getPosterPath(data.cast[i].profile_path)}" alt="${data.cast[i].name}" class="w-36 h-fit">
                         <p class="text-sm">${data.cast[i].name}</p>
+                        <p class="text-sm text-slate-500">${data.cast[i].character}</p>
                     </div>
                 `;
             }
@@ -140,7 +140,6 @@ async function getSimilarMovie(UrlId){
                     </div>
                 `;
             }
-            console.log(data);
         });
 }
 async function getMovieTrailer(UrlId){
@@ -159,7 +158,7 @@ async function getMovieImages(UrlId){
         });
 }
 async function addComment(UrlId){
-    const containerSimilarMovies = document.querySelector('#containerSimilarMovies');
+    const containerCommentsForm = document.querySelector('#containerCommentsForm');
     function createFormComment() {
         const formComment = document.createElement('div');
         formComment.innerHTML = `
@@ -183,7 +182,7 @@ async function addComment(UrlId){
                 </div>
             </form>
             `;
-        containerSimilarMovies.appendChild(formComment);
+        containerCommentsForm.appendChild(formComment);
     }
     createFormComment();
     const formComment = document.querySelector('#formComment');
@@ -228,7 +227,6 @@ async function getComment(UrlId){
         .then((response) => response.json())
         .then((data) => {
             if (data.isLogged === true) {
-                console.log(data);
                 let UserId = data.id;
                 fetch(`${window.location.origin}/cinetech/getComment/${UrlId}`)
                     .then((response) => response.json())
@@ -470,7 +468,7 @@ async function getComment(UrlId){
 //getSimilarMovie(UrlId);
 async function main(){
     await getMovie(UrlId);
-    //await getMovieCast(UrlId);
+    await getMovieCast(UrlId);
     await getSimilarMovie(UrlId);
 }
 main();
