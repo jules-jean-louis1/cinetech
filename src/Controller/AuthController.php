@@ -130,14 +130,14 @@ class AuthController
         $foregroundColor = imagecolorallocate($canvas, 255, 255, 255); // Blanc
 
         // Centrer le texte dans le canvas
-        $fontSize = 100;
+        $fontSize = 100.0;
         $fontPath = 'public/font/Rajdhani-SemiBold.ttf'; // Chemin vers le dossier des polices de caractères
         $textBoundingBox = imageftbbox($fontSize, 0, $fontPath, $text);
         $textWidth = $textBoundingBox[2] - $textBoundingBox[0];
         $textHeight = $textBoundingBox[1] - $textBoundingBox[7];
         $textX = ($canvasWidth - $textWidth) / 2;
         $textY = ($canvasHeight - $textHeight) / 2 + $textHeight;
-        $fontSize = intval($fontSize);
+
         // Dessiner le texte sur le canvas avec la police de caractères par défaut
         imagefttext($canvas, $fontSize, 0, $textX, $textY, $foregroundColor, $fontPath, $text);
 
@@ -148,8 +148,6 @@ class AuthController
 
         return $filename;
     }
-
-
     public function isLogged()
     {
         if (isset($_SESSION['id'])) {
