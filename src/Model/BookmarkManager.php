@@ -20,7 +20,7 @@ class BookmarkManager extends AbstractDatabase
             return false;
         }
     }
-    public function addBookmark($id_user, $id_movie)
+    public function addBookmark(int $id_user, int $id_movie)
     {
         $sql = "INSERT INTO bookmark (id_user, id_movie) VALUES (:id_user, :id_movie)";
         $this->pdo->prepare($sql)->execute([
@@ -28,7 +28,7 @@ class BookmarkManager extends AbstractDatabase
             'id_movie' => $id_movie,
         ]);
     }
-    public function deleteBookmark($id_user, $id_movie)
+    public function deleteBookmark(int $id_user, int $id_movie)
     {
         $sql = "DELETE FROM bookmark WHERE id_user = :id_user AND id_movie = :id_movie";
         $this->pdo->prepare($sql)->execute([

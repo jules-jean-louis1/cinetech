@@ -77,6 +77,9 @@ async function getMovie(UrlId){
                             <p class="text-sm">${data.overview}</p>
                         </div>
                     </div>
+                    <div id="containerBtnAddBookmarks">
+                        <button id="btnAddBookmarks" class="w-36 h-12 bg-slate-500 text-white rounded">Ajouter aux favoris</button>
+                    </div>
                 </div>
             `;
             detailMovie.appendChild(ContainerMovie);
@@ -93,6 +96,16 @@ async function getMovie(UrlId){
                     genreMovie += ',';
                 }
             }
+        });
+}
+// recupere les bookmarks lors du chargement de la page puis les affiches est appel la fonction pour ajouter un bookmark
+async function bookmarksHandler(){
+    await fetch(`${window.origin.location}/cineteck/Bookmarks`,{
+        method: 'POST',
+    })
+        .then((response) => response.json())
+        .then((data) => {
+
         });
 }
 async function getMovieCast(UrlId){
