@@ -63,7 +63,8 @@ class AuthController
                 $firstLetter = strtoupper(substr($login, 0, 1));
                 $backgroundColor = sprintf('#%06X', mt_rand(0, 0xFFFFFF)); // Générer une couleur d'arrière-plan aléatoire
                 $avatar = $this->generateAvatarImage($firstLetter, $backgroundColor, $login);
-                $avatarName = $login . '.png';
+                $randomString = bin2hex(random_bytes(3)); // Génère une chaîne hexadécimale de 6 caractères
+                $avatarName = $randomString . '-' . $login . '.png';
                 $userManager->addAvatar($avatarName, $id);
                 $errors['success'] = 'Votre compte a bien été créé';
             }
