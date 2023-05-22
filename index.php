@@ -6,13 +6,15 @@ use App\Controller\{
     AuthController,
     HomeController,
     MovieController,
-    CommentController
+    CommentController,
+    ProfilController,
 };
 
 $authController = new AuthController();
 $homeController = new HomeController();
 $movieController = new MovieController();
 $commentController = new CommentController();
+$profilController = new ProfilController();
 $router = new AltoRouter();
 
 $router->setBasePath('/cinetech');
@@ -50,13 +52,14 @@ $router->map('GET', '/movie/[i:id]-[*:slug]', function($id, $slug) use ($movieCo
 // Page Serie Details
 
 // Page Profil
-$router->map('GET', '/profil', function() use ($authController) {
-    $authController->showProfil();
+$router->map('GET', '/profil', function() use ($profilController) {
+    $profilController->showProfil();
 }, 'profil');
 // isLogged
 $router->map('GET', '/isLogged', function() use ($authController) {
     $authController->isLogged();
 });
+// Gestions des commentaires
 // Add Comment
 $router->map('POST', '/addComment', function() use ($commentController) {
     $commentController->addComment();
@@ -76,6 +79,10 @@ $router->map('POST', '/deleteComment/[i:id]', function($id) use ($commentControl
 // Get Comment
 $router->map('GET', '/getComment/[i:id]', function($id) use ($commentController) {
     $commentController->getComment($id);
+});
+// Add Like
+$router->map('POST', '/addLike/[i:id]', function($id) use ($commentController) {
+    $commentController->addLike($id);
 });
 // Logout
 $router->map('GET', '/logout', function() use ($authController) {

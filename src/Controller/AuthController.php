@@ -102,6 +102,45 @@ class AuthController
             header('Location: /');
         }
     }
+    public function generateAvatar()
+    {
+        $userManager = new UserManager();
+        $login = $_SESSION['login'];
+        $id = $_SESSION['id'];
+        $firstLetter = strtoupper(substr($login, 0, 1));
+        $backgroundColor = sprintf('#%06X', mt_rand(0, 0xFFFFFF)); // Générer une couleur d'arrière-plan aléatoire
+
+        $avatar = $this->generateAvatarImage($firstLetter, $backgroundColor, $login);
+        $userManager->addAvatar($avatar, $id);
+    }
+    private function generateAvatarImage($text, $backgroundColor, $login)
+    {
+        $canvasWidth = 200;
+        $canvasHeight = 200;
+
+        $canvas = imagecreatetruecolor($canvasWidth, $canvasHeight);
+        // Convertir la couleur d'arrière-plan en composantes RGB
+        $backgroundR = hexdec(substr($backgroundColor, 1, 2));
+        $backgroundG = hexdec(substr($backgroundColor, 3, 2));
+        $backgroundB = hexdec(substr($backgroundColor, 5, 2));
+        // Remplir le canvas avec la couleur d'arrière-plan
+        $backgroundColor = imagecolorallocate($canvas, $backgroundR, $backgroundG, $backgroundB);
+        imagefill($canvas, 0, 0, $backgroundColor);
+        // Définir la couleur du texte
+        $foregroundColor = imagecolorallocate($canvas, 255, 255, 255); // Blanc
+        // Centrer le texte dans le canvas
+        $textWidth = imagettfbbox(100, 0, '', $text)[2] - imagettfbbox(100, 0, '', $text)[0];
+        $textHeight = imagettfbbox(100, 0, '', $text)[1] - imagettfbbox(100, 0, '', $text)[7];
+        $textX = ($canvasWidth - $textWidth) / 2;
+        $textY = ($canvasHeight - $textHeight) / 2 + $textHeight;
+        // Dessiner le texte sur le canvas avec la police de caractères par défaut
+        imagettftext($canvas, 100, 0, $textX, $textY, $foregroundColor, '', $text);
+        // Enregistrer l'image dans un fichier PNG
+        $filename = 'public/images/avatars/' . $login . '.png'; // Chemin vers le dossier et nom du fichier d'avatar
+        imagepng($canvas, $filename);
+        imagedestroy($canvas);
+        return $filename;
+    }
     public function isLogged()
     {
         if (isset($_SESSION['id'])) {

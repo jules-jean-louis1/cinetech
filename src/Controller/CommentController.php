@@ -116,6 +116,18 @@ class CommentController extends AbstractController
         header("Content-Type: application/json");
         echo json_encode($errors);
     }
+    public function addLike()
+    {
+        $commentManager = new CommentManager();
+        if (isset($_SESSION['id'])) {
+            $id_comment = $this->verifyField('id_comment');
+            $id_user = $_SESSION['id'];
+            $commentManager->addLike($id_comment, $id_user);
+            $errors['success'] = 'Votre like a bien été ajouté';
+        } else {
+            $errors['logout'] = 'Vous devez être connecté pour ajouter un like';
+        }
+    }
     public function getComment(int $id_movie)
     {
         $commentManager = new CommentManager();

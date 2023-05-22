@@ -66,4 +66,13 @@ class UserManager extends AbstractDatabase
         $user = $req->fetch();
         return $user;
     }
+    public function addAvatar($avatar, $id)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare('UPDATE utilisateurs SET avatar = :avatar WHERE id = :id');
+        $req->execute([
+            ':avatar' => $avatar,
+            ':id' => $id
+        ]);
+    }
 }

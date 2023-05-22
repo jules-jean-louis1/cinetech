@@ -62,6 +62,16 @@ class CommentManager extends AbstractDatabase
             'id_comment' => $id_comment
         ]);
     }
+    public function addLike(int $id_comment, int $id_user)
+    {
+        $bdd = $this->getBdd();
+        $sql = "INSERT INTO likes (comment_id, utilisateur_id) VALUES (:id_comment, :id_user)";
+        $query = $bdd->prepare($sql);
+        $query->execute([
+            'id_comment' => $id_comment,
+            'id_user' => $id_user
+        ]);
+    }
     public function getComment(int $id_movie)
     {
         $bdd = $this->getBdd();
