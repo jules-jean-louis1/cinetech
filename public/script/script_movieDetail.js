@@ -124,10 +124,11 @@ async function checkBookmarkMovie(UrlId) {
                 const btnAddBookmarks = document.querySelector('#btnAddBookmarks');
                 btnAddBookmarks.addEventListener('click', async (e) => {
                     e.preventDefault();
-                    await fetch(`${window.location.origin}/cinetech/deleteBookmarks/${UrlId}`)
+                    await fetch(`${window.location.origin}/cinetech/removeBookmarks/${UrlId}`)
                         .then((response) => response.json())
                         .then((data) => {
                             console.log(data);
+                            checkBookmarkMovie(UrlId);
                         });
                 });
             } else {
