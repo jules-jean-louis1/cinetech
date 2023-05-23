@@ -212,14 +212,12 @@ function formatDate(timestamp) {
     return `${day} ${month} ${year}`;
 }
 function headerMenu() {
-    const btnHeaderProfile = document.getElementById('btnHeaderProfile');
-    const menuProfilHeader = document.getElementById('menuProfilHeader');
+    const btnHeaderProfile = document.querySelector('#btnHeaderProfile');
+    const menuProfilHeader = document.querySelector('#menuProfilHeader');
 
     btnHeaderProfile.addEventListener('click', () => {
         menuProfilHeader.classList.toggle('hidden');
     });
-
-// Fermer le menu lorsque l'utilisateur clique en dehors de celui-ci
     document.addEventListener('click', (event) => {
         const targetElement = event.target;
         const isMenuOpen = !menuProfilHeader.classList.contains('hidden');
