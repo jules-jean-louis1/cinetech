@@ -101,8 +101,12 @@ $router->map('POST', '/removeDislike/[i:id]', function($id) use ($commentControl
 
 
 // Gestionnaires des favoris
+// Get Favorite
+$router->map('GET', '/getBookmarks/[i:id]', function($id) use ($bookmarkController) {
+    $bookmarkController->getBookmarks($id);
+});
 // Add Favorite
-$router->map('POST', '/addFavorite/[i:id]', function($id) use ($bookmarkController) {
+$router->map('POST', '/addBookmarks/[i:id]', function($id) use ($bookmarkController) {
     $bookmarkController->addBookmark($id);
 });
 // Logout

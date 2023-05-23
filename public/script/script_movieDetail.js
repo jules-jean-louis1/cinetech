@@ -78,7 +78,6 @@ async function getMovie(UrlId){
                         </div>
                     </div>
                     <div id="containerBtnAddBookmarks">
-                        <button id="btnAddBookmarks" class="w-36 h-12 bg-slate-500 text-white rounded">Ajouter aux favoris</button>
                     </div>
                 </div>
             `;
@@ -99,15 +98,53 @@ async function getMovie(UrlId){
         });
 }
 // recupere les bookmarks lors du chargement de la page puis les affiches est appel la fonction pour ajouter un bookmark
-async function bookmarksHandler(){
-    await fetch(`${window.origin.location}/cineteck/Bookmarks`,{
-        method: 'POST',
-    })
-        .then((response) => response.json())
-        .then((data) => {
-
-        });
+async function movieType(UrlId){
+    const movieResponse = await fetch(`https://api.themoviedb.org/3/movie/${UrlId}?api_key=${apiKey}`);
+    const movieData = await movieResponse.json();
+    if (movieData.id) {
+        return 'movie';
+    } else {
+        const tvResponse = await fetch(`https://api.themoviedb.org/3/tv/${UrlId}?api_key=${apiKey}`);
+        const tvData = await tvResponse.json();
+        if (tvData.id) {
+            return 'tv';
+        } else {
+            return 'error';
+        }
+    }
 }
+
+async function checkBookmarkMovie(UrlId) {
+    const containerBookmarks = document.querySelector('#containerBtnAddBookmarks');
+    await fetch(`${window.location.origin}/cinetech/getBookmarks/${UrlId}`)
+        .then((response) => response.json())
+        .then(async (data) => {
+            if (data) {
+                containerBookmarks.innerHTML = `
+                    <button id="btnAddBookmarks" class="w-36 h-12 bg-slate-500 text-white rounded">Retirer des favoris</button>
+                `;
+                const btnAddBookmarks = document.querySelector('#btnAddBookmarks');
+                btnAddBookmarks.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    await fetch(`${window.location.origin}/cinetech/deleteBookmarks/${UrlId}`)
+                });
+            } else {
+                containerBookmarks.innerHTML = `
+                    <button id="btnAddBookmarks" class="w-36 h-12 bg-slate-500 text-white rounded">Ajouter aux favoris</button>
+                `;
+                const contentType = await movieType(UrlId);
+                if (contentType === 'movie' || contentType === 'tv') {
+                    const btnAddBookmarks = document.querySelector('#btnAddBookmarks');
+                    btnAddBookmarks.addEventListener('click', async (e) => {
+                        e.preventDefault();
+                        await fetch(`${window.location.origin}/cinetech/addBookmarks/${UrlId}/${contentType}`)
+                    });
+                }
+            }
+        });
+
+}
+
 async function getMovieCast(UrlId){
     await fetch(`https://api.themoviedb.org/3/movie/${UrlId}/credits?api_key=${apiKey}&language=${language}`)
         .then((response) => response.json())
@@ -481,6 +518,7 @@ async function getComment(UrlId){
 //getSimilarMovie(UrlId);
 async function main(){
     await getMovie(UrlId);
+    await checkBookmarkMovie(UrlId);
     await getMovieCast(UrlId);
     await getSimilarMovie(UrlId);
 }
