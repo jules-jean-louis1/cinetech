@@ -229,8 +229,46 @@ function headerMenu() {
         }
     });
 }
+const successMessageToast = (modalAppend, message) => {
+    const dialogElement = document.createElement('div');
+    dialogElement.setAttribute('class', 'fixed z-10 inset-0 bg-[#05a763] rounded-lg open h-fit w-fit');
+    dialogElement.setAttribute('id', 'ToastSuccess');
+    const container = document.createElement('div');
+    container.innerHTML = `
+    <div class="p-2">
+        <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-check" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#fff" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/>
+                    <path d="M9 12l2 2l4 -4"/>
+                </svg>
+            </div>
+            <div class="flex items-center">
+                <p class=" text-white">${message}</p>
+            </div>
+            <div class="border-l border-white">
+                <button id="closeToast" class="text-white hover:text-gray-400 focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#fff" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M18 6l-12 12"/>
+                        <path d="M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>`;
+    dialogElement.appendChild(container);
+    modalAppend.appendChild(dialogElement);
+    dialogElement.classList.add('open');
+    const closeToast = document.getElementById('closeToast');
+    closeToast.addEventListener('click', () => {
+        dialogElement.classList.remove('open');
+        dialogElement.remove();
+    });
+}
 const getPosterPath = (posterPath) => {
     return `https://www.themoviedb.org/t/p/w220_and_h330_face${posterPath}`;
 };
 
-export { createDialog, LoginRegister, profilHeader, formatDate, headerMenu, getPosterPath};
+export { createDialog, LoginRegister, profilHeader, formatDate, headerMenu, getPosterPath, successMessageToast};

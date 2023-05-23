@@ -29,3 +29,12 @@
     z-index: 10;
     background-color: #6637e93d;
 }
+#ToastSuccess {
+    position: fixed;
+    left: 50%;
+    top: 8%;
+    transform: translate(-50%, -50%);
+}
+.open {
+    display: block;
+}
