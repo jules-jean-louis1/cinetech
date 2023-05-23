@@ -51,4 +51,18 @@ class BookmarkController
             echo json_encode(['error' => 'Vous devez être connecté pour supprimer un film de vos favoris']);
         }
     }
+
+    public function getAllBookmarks()
+    {
+        if (isset($_SESSION['id'])) {
+            $bookmarkManager = new BookmarkManager();
+            $bookmarks = $bookmarkManager->getAllBookmarks($_SESSION['id']);
+            header("Content-Type: application/json");
+            echo json_encode($bookmarks);
+        } else {
+            header("Content-Type: application/json");
+            echo json_encode(['error' => 'Vous devez être connecté pour voir vos favoris']);
+        }
+    }
+
 }

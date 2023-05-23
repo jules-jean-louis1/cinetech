@@ -38,4 +38,26 @@ class BookmarkManager extends AbstractDatabase
             return false;
         }
     }
+    // Manage Bookmark of the user
+    public function getLast6(int $id_user)
+    {
+        $bdd = $this->getBdd();
+        $query = $bdd->prepare("SELECT * FROM bookmark WHERE utilisateurs_id = :id_user ORDER BY created_at DESC LIMIT 6");
+        $query->execute([
+            'id_user' => $id_user
+        ]);
+        $bookmarks = $query->fetchAll(\PDO::FETCH_ASSOC);
+        return $bookmarks;
+    }
+
+    public function getAllBookmarks(int $id)
+    {
+        $bdd = $this->getBdd();
+        $query = $bdd->prepare("SELECT * FROM bookmark WHERE utilisateurs_id = :id_user ORDER BY created_at DESC");
+        $query->execute([
+            'id_user' => $id
+        ]);
+        $bookmarks = $query->fetchAll(\PDO::FETCH_ASSOC);
+        return $bookmarks;
+    }
 }

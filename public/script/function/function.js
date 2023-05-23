@@ -211,22 +211,7 @@ function formatDate(timestamp) {
     const day = date.getDate();
     return `${day} ${month} ${year}`;
 }
-function headerMenu() {
-    const btnHeaderProfile = document.querySelector('#btnHeaderProfile');
-    const menuProfilHeader = document.querySelector('#menuProfilHeader');
 
-    btnHeaderProfile.addEventListener('click', () => {
-        menuProfilHeader.classList.toggle('hidden');
-    });
-    document.addEventListener('click', (event) => {
-        const targetElement = event.target;
-        const isMenuOpen = !menuProfilHeader.classList.contains('hidden');
-
-        if (isMenuOpen && !targetElement.closest('#menuProfilHeader') && targetElement !== btnHeaderProfile) {
-            menuProfilHeader.classList.add('hidden');
-        }
-    });
-}
 const successMessageToast = (modalAppend, message) => {
     const dialogElement = document.createElement('div');
     dialogElement.setAttribute('class', 'fixed z-10 inset-0 bg-[#05a763] rounded-lg open h-fit w-fit');
@@ -263,6 +248,24 @@ const successMessageToast = (modalAppend, message) => {
     closeToast.addEventListener('click', () => {
         dialogElement.classList.remove('open');
         dialogElement.remove();
+    });
+}
+function headerMenu() {
+    const btnHeaderProfile = document.getElementById('btnHeaderProfile');
+    const menuProfilHeader = document.getElementById('menuProfilHeader');
+
+    btnHeaderProfile.addEventListener('click', () => {
+        menuProfilHeader.classList.toggle('hidden');
+    });
+
+// Fermer le menu lorsque l'utilisateur clique en dehors de celui-ci
+    document.addEventListener('click', (event) => {
+        const targetElement = event.target;
+        const isMenuOpen = !menuProfilHeader.classList.contains('hidden');
+
+        if (isMenuOpen && !targetElement.closest('#menuProfilHeader') && targetElement !== btnHeaderProfile) {
+            menuProfilHeader.classList.add('hidden');
+        }
     });
 }
 const getPosterPath = (posterPath) => {

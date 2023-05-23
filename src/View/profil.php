@@ -13,6 +13,11 @@
 <?php require_once __DIR__ . '/elements/header.php'; ?>
 <div id="containerModalDialog"></div>
 <div class="containerProfilPage">
+    <div id="btnProfilAction">
+        <button id="btnProfilBookmark" type="button">Vos favoris</button>
+        <button id="btnProfilEdit" type="button">Modifier Votre Profil</button>
+    </div>
+    <div id="containerLast6"></div>
 </div>
 <?php require_once __DIR__ . '/elements/footer.php'; ?>
 </body>

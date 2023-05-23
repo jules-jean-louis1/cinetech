@@ -87,4 +87,5 @@ class CommentManager extends AbstractDatabase
         $comments = $query->fetchAll(\PDO::FETCH_ASSOC);
         return $comments;
     }
+
 }

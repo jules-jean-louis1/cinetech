@@ -38,3 +38,6 @@
 .open {
     display: block;
 }
+.hidden-toast {
+    display: none;
+}

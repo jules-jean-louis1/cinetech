@@ -43,7 +43,6 @@ $router->map('GET', '/profilHeader', function() use ($authController) {
 $router->map('GET', '/movie', function() use ($movieController) {
     $movieController->showMoviePage();
 }, 'movie');
-
 // Page Film Details
 $router->map('GET', '/movie/[i:id]-[*:slug]', function($id, $slug) use ($movieController) {
     $movieController->showMovieDetailPage($id, $slug);
@@ -57,6 +56,14 @@ $router->map('GET', '/movie/[i:id]-[*:slug]', function($id, $slug) use ($movieCo
 $router->map('GET', '/profil', function() use ($profilController) {
     $profilController->showProfil();
 }, 'profil');
+// Favorites of user
+$router->map('GET', '/getLast6', function() use ($profilController) {
+    $profilController->getLast6();
+});
+// All bookmarks of user
+$router->map('GET', '/getAllBookmarks', function() use ($bookmarkController) {
+    $bookmarkController->getAllBookmarks();
+});
 // isLogged
 $router->map('GET', '/isLogged', function() use ($authController) {
     $authController->isLogged();
