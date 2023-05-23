@@ -120,29 +120,33 @@ async function checkBookmarkMovie(UrlId) {
         .then((response) => response.json())
         .then(async (data) => {
             if (data) {
-                containerBookmarks.innerHTML = `
-                    <button id="btnAddBookmarks" class="w-36 h-12 bg-slate-500 text-white rounded">Retirer des favoris</button>
-                `;
+                containerBookmarks.innerHTML = `<button id="btnAddBookmarks" class="w-36 h-12 bg-slate-500 text-white rounded">Retirer des favoris</button>`;
                 const btnAddBookmarks = document.querySelector('#btnAddBookmarks');
                 btnAddBookmarks.addEventListener('click', async (e) => {
                     e.preventDefault();
                     await fetch(`${window.location.origin}/cinetech/deleteBookmarks/${UrlId}`)
+                        .then((response) => response.json())
+                        .then((data) => {
+                            console.log(data);
+                        });
                 });
             } else {
-                containerBookmarks.innerHTML = `
-                    <button id="btnAddBookmarks" class="w-36 h-12 bg-slate-500 text-white rounded">Ajouter aux favoris</button>
-                `;
+                containerBookmarks.innerHTML = `<button id="btnAddBookmarks" class="w-36 h-12 bg-slate-500 text-white rounded">Ajouter aux favoris</button>`;
                 const contentType = await movieType(UrlId);
                 if (contentType === 'movie' || contentType === 'tv') {
                     const btnAddBookmarks = document.querySelector('#btnAddBookmarks');
                     btnAddBookmarks.addEventListener('click', async (e) => {
                         e.preventDefault();
                         await fetch(`${window.location.origin}/cinetech/addBookmarks/${UrlId}/${contentType}`)
+                            .then((response) => response.json())
+                            .then((data) => {
+                                console.log(data);
+                                checkBookmarkMovie(UrlId);
+                            });
                     });
                 }
             }
         });
-
 }
 
 async function getMovieCast(UrlId){

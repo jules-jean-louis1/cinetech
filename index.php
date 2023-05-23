@@ -106,8 +106,12 @@ $router->map('GET', '/getBookmarks/[i:id]', function($id) use ($bookmarkControll
     $bookmarkController->getBookmarks($id);
 });
 // Add Favorite
-$router->map('POST', '/addBookmarks/[i:id]', function($id) use ($bookmarkController) {
-    $bookmarkController->addBookmark($id);
+$router->map('GET', '/addBookmarks/[i:id]/[a:type]', function($id, $type) use ($bookmarkController) {
+    $bookmarkController->addBookmark($id, $type);
+});
+// Remove Favorite
+$router->map('GET', '/removeBookmarks/[i:id]', function($id) use ($bookmarkController) {
+    $bookmarkController->removeBookmark($id);
 });
 // Logout
 $router->map('GET', '/logout', function() use ($authController) {

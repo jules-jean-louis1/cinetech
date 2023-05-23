@@ -8,7 +8,7 @@ class BookmarkController
     {
         if (isset($_SESSION['id']) && !empty(trim($id))){
             $bookmarkManager = new BookmarkManager();
-            $bookmarks = $bookmarkManager->getBookmarkByMovie($_SESSION['id'], $id);
+            $bookmarks = $bookmarkManager->verifyBookmark($_SESSION['id'], $id);
             if ($bookmarks) {
                 header("Content-Type: application/json");
                 echo json_encode(true);
@@ -21,20 +21,34 @@ class BookmarkController
             echo json_encode(['error' => 'Vous devez être connecté pour ajouter un film à vos favoris']);
         }
     }
-    public function addBookmark()
+    public function addBookmark(int $id, string $type)
     {
-        if (isset($_SESSION['id'])){
+        if (isset($_SESSION['id']) && !empty(trim($id)) && !empty(trim($type))) {
             $bookmarkManager = new BookmarkManager();
-            $verfiyBookmark = $bookmarkManager->verifyBookmark($_SESSION['id'], $_POST['id_movie']);
-            if ($verfiyBookmark) {
-                // Supprimer le bookmark
-                $bookmarkManager->deleteBookmark($_SESSION['id'], $_POST['id_movie']);
-            } else {
-                // Ajouter le bookmark
-                $bookmarkManager->addBookmark($_SESSION['id'], $_POST['id_movie']);
+            $bookmark = $bookmarkManager->verifyBookmark($_SESSION['id'], $id);
+            if (!$bookmark) {
+                $bookmarkManager->addBookmark($_SESSION['id'], $id, $type);
+                header("Content-Type: application/json");
+                echo json_encode(['success' => 'Le film a bien été ajouté à vos favoris']);
             }
         } else {
-            echo 'Vous devez être connecté pour ajouter un film à vos favoris';
+            header("Content-Type: application/json");
+            echo json_encode(['error' => 'Vous devez être connecté pour ajouter un film à vos favoris']);
+        }
+    }
+    public function removeBookmark(int $id)
+    {
+        if (isset($_SESSION['id']) && !empty(trim($id))) {
+            $bookmarkManager = new BookmarkManager();
+            $bookmark = $bookmarkManager->verifyBookmark($_SESSION['id'], $id);
+            if ($bookmark) {
+                $bookmarkManager->deleteBookmark($_SESSION['id'], $id);
+                header("Content-Type: application/json");
+                echo json_encode(['success' => 'Le film a bien été supprimé de vos favoris']);
+            }
+        } else {
+            header("Content-Type: application/json");
+            echo json_encode(['error' => 'Vous devez être connecté pour supprimer un film de vos favoris']);
         }
     }
 }
