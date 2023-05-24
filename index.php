@@ -64,6 +64,10 @@ $router->map('GET', '/getLast6', function() use ($profilController) {
 $router->map('GET', '/getAllBookmarks', function() use ($bookmarkController) {
     $bookmarkController->getAllBookmarks();
 });
+// Modification bookmark
+$router->map('POST', '/updateBookmark/[i:id]', function($id) use ($bookmarkController) {
+    $bookmarkController->editBookmark($id);
+});
 // isLogged
 $router->map('GET', '/isLogged', function() use ($authController) {
     $authController->isLogged();

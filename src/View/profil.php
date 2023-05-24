@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . '/cinetech/public/style/style_index.css';?>">
     <title>Profil</title>
 </head>
-<body>
+<body class="bg-[#1f0c19]">
 <?php require_once __DIR__ . '/elements/header.php'; ?>
 <div id="containerModalDialog"></div>
 <div class="containerProfilPage">
@@ -18,7 +18,17 @@
         <button id="btnProfilEdit" type="button">Modifier Votre Profil</button>
     </div>
     <div id="containerLast6"></div>
-    <div id="displayFavorite"></div>
+    <div id="displayFavorite">
+        <h2 class="text-white">Vos favoris</h2>
+        <div>
+            <h2 class="text-white" id="title_movie">Vos films favoris</h2>
+            <div id="containerFavoriteMovie" class="flex flex-wrap gap-2"></div>
+        </div>
+        <div id="containerFavoriteSeries">
+            <h2 class="text-white" id="title_series">Vos series favorites</h2>
+            <div id="containerFavoriteSerie"></div>
+        </div>
+    </div>
 </div>
 <?php require_once __DIR__ . '/elements/footer.php'; ?>
 </body>
