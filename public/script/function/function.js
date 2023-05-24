@@ -21,7 +21,70 @@ function updateField(data, fieldName, fieldInput, smallField) {
         fieldInput.classList.add('textField_invalid');
     }
 }
-
+const MessageToast = (modalAppend, message, state) => {
+    const dialogElement = document.createElement('div');
+    dialogElement.setAttribute('class', 'fixed z-10 inset-0 bg-[#05a763] rounded-lg open h-fit w-fit');
+    dialogElement.setAttribute('id', 'ToastSuccess');
+    const container = document.createElement('div');
+    if (state === 'success') {
+        container.setAttribute('class', 'flex items-center justify-between gap-2 bg-[#05a763] rounded-lg');
+    } else if (state === 'error') {
+        container.setAttribute('class', 'flex items-center justify-between gap-2 bg-[#ff003d] rounded-lg');
+    } else if (state === 'warning') {
+        container.setAttribute('class', 'flex items-center justify-between gap-2 bg-[#ffd53d] rounded-lg');
+    } else if (state === 'info') {
+        container.setAttribute('class', 'flex items-center justify-between gap-2 bg-[#ffd53d] rounded-lg');
+    } else if (state === 'default') {
+        container.setAttribute('class', 'flex items-center justify-between gap-2 bg-[#3d3d3d] rounded-lg');
+    }
+    container.innerHTML = `
+    <div class="p-2">
+        <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center" id="svg_container">
+                
+            </div>
+            <div class="flex items-center">
+                <p class=" text-white">${message}</p>
+            </div>
+            <div class="border-l border-white">
+                <button id="closeToast" class="text-white hover:text-gray-400 focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#fff" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M18 6l-12 12"/>
+                        <path d="M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>`;
+    const svgContainer = document.getElementById('svg_container');
+    if (state === 'success') {
+        svgContainer.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-check" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#fff" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/>
+            <path d="M9 12l2 2l4 -4"/>
+        </svg>
+        `;
+    } else if (state === 'error') {
+        svgContainer.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-alert-triangle" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#fff" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z"/>
+            <path d="M12 9v4"/>
+            <path d="M12 17h.01"/>
+        </svg>
+        `;
+    }
+    dialogElement.appendChild(container);
+    modalAppend.appendChild(dialogElement);
+    dialogElement.classList.add('open');
+    const closeToast = document.getElementById('closeToast');
+    closeToast.addEventListener('click', () => {
+        dialogElement.classList.remove('open');
+        dialogElement.remove();
+    });
+}
 
 function createDialog() {
     const containerModal = document.querySelector('#containerModalDialog');
