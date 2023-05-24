@@ -65,7 +65,7 @@ $router->map('GET', '/getAllBookmarks', function() use ($bookmarkController) {
     $bookmarkController->getAllBookmarks();
 });
 // Modification bookmark
-$router->map('POST', '/updateBookmark/[i:id]', function($id) use ($bookmarkController) {
+$router->map('POST', '/editBookmark/[i:id]', function($id) use ($bookmarkController) {
     $bookmarkController->editBookmark($id);
 });
 // isLogged

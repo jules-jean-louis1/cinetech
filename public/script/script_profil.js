@@ -49,12 +49,9 @@ async function matchFavorite() {
     try {
         const favoriteData = await getFavorite();
         console.log(favoriteData);
-
         if (favoriteData.length !== 0) {
-
             let optionHTML = '';
             for (const element of favoriteData) {
-                console.log(element.status);
                 if (element.status === 0) {
                     optionHTML = `
                         <option value="0" selected>Non vu</option>
@@ -84,12 +81,11 @@ async function matchFavorite() {
                             <img src="${getPosterPath(data.poster_path)}" alt="${data.poster_path}" class="h-fit w-36">
                             <p class="text-white">${data.title}</p>
                             <p class="text-white text-sm">Sortie : ${formatDate(data.release_date)}</p>
-                            <p class="text-white text-sm"">Ajouter : ${formatDate(element.created_at)}</p>
+                            <p class="text-white text-sm">Ajouter : ${formatDate(element.created_at)}</p>
                             <form action="" method="post" id="formView_${element.id}">
                                 <select name="status" id="status" class="bg-[#4c3d47] text-white rounded-lg p-1">
                                     ${optionHTML}
                                 </select>
-                                <button type="submit" id="btnEditBookmark_${element.id}" data-id="${element.id}" class="text-white">Modifier</button>
                             </form>
                             <button id="btnDeleteBookmark_${element.id}" data-id="${element.id}" class="text-white">Supprimer</button>
                         </div>
@@ -106,12 +102,26 @@ async function matchFavorite() {
                                 <select name="status" id="status" class="bg-[#0e1217] text-white rounded-[14px]">
                                     ${optionHTML}
                                 </select>
-                                <button type="submit" id="btnEditBookmark_${element.id}" data-id="${element.id}">Modifier</button>
                             </form>
                             <button id="btnDeleteBookmark_${element.id}" data-id="${element.id}">Supprimer</button>
                         </div>
                     `;
                 }
+
+            }
+            for (const element of favoriteData) {
+                const btnEditBookmark = document.querySelector(`#formView_${element.id}`);
+                btnEditBookmark.addEventListener('change', async (e) => {
+                    e.preventDefault();
+                    console.log(e.target.value);
+                    await fetch(`${window.location.origin}/cinetech/editBookmark/${element.id}`, {
+                        method: 'POST',
+                        body: new FormData(btnEditBookmark)
+                    }) .then(response => response.json())
+                        .then(data => {
+                            console.log(data);
+                        });
+                })
             }
         } else {
             displayFavorite.innerHTML = '<p class="text-center">Vous n\'avez pas de favoris</p>';

@@ -60,4 +60,15 @@ class BookmarkManager extends AbstractDatabase
         $bookmarks = $query->fetchAll(\PDO::FETCH_ASSOC);
         return $bookmarks;
     }
+
+    public function editBookmark(int $id_user, int $id_movie, int $status)
+    {
+        $bdd = $this->getBdd();
+        $query = $bdd->prepare('UPDATE bookmark SET status = :status WHERE utilisateurs_id = :id_user AND movie_id = :id_movie');
+        $query->execute([
+            'status' => $status,
+            'id_user' => $id_user,
+            'id_movie' => $id_movie
+        ]);
+    }
 }

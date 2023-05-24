@@ -66,9 +66,19 @@ class BookmarkController
     }
 
     public function editBookmark(int $id)
-    {
-        var_dump($_POST);
-        var_dump($id);
+    {;
+        if (isset($_SESSION['id']) && !empty(trim($id)) && !empty(trim($_POST['status']))) {
+            $bookmarkManager = new BookmarkManager();
+            $bookmark = $bookmarkManager->verifyBookmark($_SESSION['id'], $id);
+            if ($bookmark) {
+                $bookmarkManager->editBookmark($_SESSION['id'], $id, $_POST['status']);
+                header("Content-Type: application/json");
+                echo json_encode(['success' => 'Le film a bien été modifié']);
+            }
+        } else {
+            header("Content-Type: application/json");
+            echo json_encode(['error' => 'Vous devez être connecté pour modifier un film de vos favoris']);
+        }
     }
 
 }
