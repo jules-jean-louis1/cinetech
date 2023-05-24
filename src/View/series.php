@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer type="module" src="<?php __DIR__?>./public/script/script_series.js"></script>
     <link rel="stylesheet" href="<?php __DIR__ ?>./public/style/style_index.css">
-    <title>Home</title>
+    <title>Series TV</title>
 </head>
 <body>
 <?php require_once __DIR__ . '/elements/header.php'; ?>
@@ -34,7 +34,7 @@
             <div id="containerGenres"></div>
         </div>
         <div class="w-11/12">
-            <div id="containerSeries"></div>
+            <div id="containerSeries" class="flex flex-wrap gap-5 overflow-x-scroll py-5 px-10 w-full h-[90vh]"></div>
             <div id="paginationMovies" class="flex justify-center gap-5">
                 <button id="previousPageButton" type="button" class="p-2 border border-red-300 rounded">Précédent</button>
                 <button id="nextPageButton" type="button" class="p-2 border border-red-300 rounded">Suivant</button>
