@@ -22,6 +22,39 @@ if (btnHeaderProfile) {
 const apiKey = '336f5174afdbef18cdcc2f6d25e36288';
 const language = 'fr-FR';
 let getGenreIn = [];
+
+function getPopularTVShows(page, sortOption, genreIds) {
+    const genreQueryString = genreIds.join(',');
+    const url = `https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&language=${language}&sort_by=${sortOption}&with_genres=${genreQueryString}&page=${page}`;
+
+    if (!sortOption) {
+        sortOption = defaultSortOption;
+    }
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            displayMovies(data.results);
+        })
+        .catch(error => console.log(error));
+}
+
+const previousPageButton = document.getElementById('previousPageButton');
+const nextPageButton = document.getElementById('nextPageButton');
+let currentPage = 1;
+
+previousPageButton.addEventListener('click', () => {
+    if (currentPage > 1) {
+        currentPage--;
+        getPopularTVShows(currentPage, sortOption, selectedGenres);
+    }
+});
+
+nextPageButton.addEventListener('click', () => {
+    currentPage++;
+    getPopularTVShows(currentPage, sortOption, selectedGenres);
+});
+
 async function getGenre() {
     const response = await fetch(`https://api.themoviedb.org/3/genre/tv/list?api_key=${apiKey}&language=${language}`);
     const data = await response.json();
@@ -32,6 +65,8 @@ function displayGenre() {
     const displayGenre = document.querySelector('#containerGenres');
     const genreData = getGenre();
     const selectedGenres = []; // Tableau des genres sélectionnés
+    let currentPage = 1;
+
     genreData.then(data => {
         let optionHTML = '';
         for (const element of data.genres) {
@@ -44,6 +79,29 @@ function displayGenre() {
             `;
         }
         displayGenre.innerHTML = optionHTML;
+
+        const previousPageButton = document.getElementById('previousPageButton');
+        const nextPageButton = document.getElementById('nextPageButton');
+        const sortForm = document.getElementById('sort-form');
+        const sortBySelect = document.getElementById('sort-by');
+
+        previousPageButton.addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                getMoviesByGenres(selectedGenres, currentPage, sortBySelect.value);
+            }
+        });
+
+        nextPageButton.addEventListener('click', () => {
+            currentPage++;
+            getMoviesByGenres(selectedGenres, currentPage, sortBySelect.value);
+        });
+
+        sortForm.addEventListener('change', (event) => {
+            event.preventDefault();
+            getMoviesByGenres(selectedGenres, currentPage, sortBySelect.value);
+        });
+
         for (const element of data.genres) {
             const btnGenre = document.querySelector(`#btnGenre_${element.id}`);
             btnGenre.addEventListener('click', (event) => {
@@ -59,16 +117,15 @@ function displayGenre() {
                         selectedGenres.splice(index, 1); // Supprimer le genre sélectionné du tableau
                     }
                 }
-                getMoviesByGenres(selectedGenres); // Appeler la fonction avec les genres sélectionnés
+                getMoviesByGenres(selectedGenres, currentPage, sortBySelect.value); // Appeler la fonction avec les genres sélectionnés, la page actuelle et l'option de tri sélectionnée
             });
         }
     });
 }
 
-
-async function getMoviesByGenres(genreIds) {
+async function getMoviesByGenres(genreIds, page, sortOption) {
     const genreQueryString = genreIds.join(',');
-    const response = await fetch(`https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&language=${language}&with_genres=${genreQueryString}`);
+    const response = await fetch(`https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&language=${language}&with_genres=${genreQueryString}&page=${page}&sort_by=${sortOption}`);
     const data = await response.json();
     displayMovies(data.results);
 }
@@ -79,6 +136,7 @@ function generateSlug(title) {
     slug = slug.replace(/^-+|-+$/g, ''); // Supprime les tirets en début et en fin de chaîne
     return slug;
 }
+
 function displayMovies(movies) {
     const containerSeries = document.querySelector('#containerSeries');
     let movieHTML = '';
@@ -111,7 +169,10 @@ function removeMoviesByGenres(genreIds) {
 }
 
 
+
 // Appel de la fonction pour afficher les genres
 displayGenre();
+const defaultSortOption = 'popularity.desc';
+const defaultGenreIds = []; // Ajoutez ici les identifiants des genres par défaut que vous souhaitez utiliser
 
-displayGenre();
+getPopularTVShows(currentPage, defaultSortOption, defaultGenreIds);
