@@ -124,6 +124,10 @@ $router->map('GET', '/addBookmarks/[i:id]/[a:type]', function($id, $type) use ($
 $router->map('GET', '/removeBookmarks/[i:id]', function($id) use ($bookmarkController) {
     $bookmarkController->removeBookmark($id);
 });
+// Delete Favorite from profil
+$router->map('DELETE', '/deleteBookmarks/[i:id]', function($id) use ($bookmarkController) {
+    $bookmarkController->deleteBookmark($id);
+});
 // Logout
 $router->map('GET', '/logout', function() use ($authController) {
     $authController->logout();

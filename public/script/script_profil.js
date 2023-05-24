@@ -71,8 +71,6 @@ async function matchFavorite() {
                         <option value="2" selected>Vu</option>
                     `;
                 }
-            }
-            for (const element of favoriteData) {
                 let data;
                 if (element.type === 'movie') {
                     data = await getMovie(element.movie_id);
@@ -83,11 +81,12 @@ async function matchFavorite() {
                             <p class="text-white text-sm">Sortie : ${formatDate(data.release_date)}</p>
                             <p class="text-white text-sm">Ajouter : ${formatDate(element.created_at)}</p>
                             <form action="" method="post" id="formView_${element.id}">
+                                <input type="hidden" id="movie_form" name="movie_form" value="${data.id}">
                                 <select name="status" id="status" class="bg-[#4c3d47] text-white rounded-lg p-1">
                                     ${optionHTML}
                                 </select>
                             </form>
-                            <button id="btnDeleteBookmark_${element.id}" data-id="${element.id}" class="text-white">Supprimer</button>
+                            <button id="btnDeleteBookmark_${data.id}" data-id="${data.id}" class="text-white">Supprimer</button>
                         </div>
                     `;
                 } else if (element.type === 'tv') {
@@ -99,27 +98,41 @@ async function matchFavorite() {
                             <p class="text-white">${formatDate(data.first_air_date)}</p>
                             <p class="text-white">${formatDate(element.created_at)}</p>
                             <form action="" method="post" id="formView_${element.id}">
-                                <select name="status" id="status" class="bg-[#0e1217] text-white rounded-[14px]">
+                                <input type="hidden" id="movie_form" name="movie_form" value="${data.id}">
+                                <select name="status" id="status" class="bg-[#4c3d47] text-white rounded-lg p-1">
                                     ${optionHTML}
                                 </select>
                             </form>
-                            <button id="btnDeleteBookmark_${element.id}" data-id="${element.id}">Supprimer</button>
+                            <button id="btnDeleteBookmark_${element.id}" data-id="${element.id}" class="text-white">Supprimer</button>
                         </div>
                     `;
                 }
 
             }
             for (const element of favoriteData) {
-                const btnEditBookmark = document.querySelector(`#formView_${element.id}`);
-                btnEditBookmark.addEventListener('change', async (e) => {
+                const FormEditBook = document.querySelector(`#formView_${element.id}`);
+                FormEditBook.addEventListener('change', async (e) => {
                     e.preventDefault();
                     console.log(e.target.value);
                     await fetch(`${window.location.origin}/cinetech/editBookmark/${element.id}`, {
                         method: 'POST',
-                        body: new FormData(btnEditBookmark)
+                        body: new FormData(FormEditBook)
                     }) .then(response => response.json())
                         .then(data => {
                             console.log(data);
+                        });
+                })
+                const btnDeleteBookmark = document.querySelector(`#btnDeleteBookmark_${element.id}`);
+                btnDeleteBookmark.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    await fetch(`${window.location.origin}/cinetech/removeBookmarks/${element.id}`, {
+                        method: 'DELETE',
+                        body: new FormData(FormEditBook)
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data);
+                            successMessageToast(data.message);
                         });
                 })
             }

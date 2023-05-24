@@ -66,10 +66,10 @@ class BookmarkController
     }
 
     public function editBookmark(int $id)
-    {;
-        if (isset($_SESSION['id']) && !empty(trim($id)) && !empty(trim($_POST['status']))) {
+    {
+        if (isset($_SESSION['id']) && !empty(trim($id)) && !empty(trim($_POST['status'])) && !empty(trim($_POST['movie_form']))) {
             $bookmarkManager = new BookmarkManager();
-            $bookmark = $bookmarkManager->verifyBookmark($_SESSION['id'], $id);
+            $bookmark = $bookmarkManager->verifyBookmark($_SESSION['id'], htmlspecialchars($_POST['movie_form']));
             if ($bookmark) {
                 $bookmarkManager->editBookmark($_SESSION['id'], $id, $_POST['status']);
                 header("Content-Type: application/json");
@@ -78,6 +78,22 @@ class BookmarkController
         } else {
             header("Content-Type: application/json");
             echo json_encode(['error' => 'Vous devez être connecté pour modifier un film de vos favoris']);
+        }
+    }
+
+    public function deleteBookmark($id)
+    {
+        if (isset($_SESSION['id']) && !empty(trim($id))) {
+            $bookmarkManager = new BookmarkManager();
+            $bookmark = $bookmarkManager->ExistBookmark($_SESSION['id'], $id);
+            if ($bookmark) {
+                $bookmarkManager->supprBookmark($_SESSION['id'], $id);
+                header("Content-Type: application/json");
+                echo json_encode(['success' => 'Le film a bien été supprimé de vos favoris']);
+            }
+        } else {
+            header("Content-Type: application/json");
+            echo json_encode(['error' => 'Vous devez être connecté pour supprimer un film de vos favoris']);
         }
     }
 

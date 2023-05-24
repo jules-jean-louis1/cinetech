@@ -38,6 +38,21 @@ class BookmarkManager extends AbstractDatabase
             return false;
         }
     }
+    public function ExistBookmark(int $id_user, int $id) : bool
+    {
+        $bdd = $this->getBdd();
+        $query = $bdd->prepare('SELECT COUNT(id) FROM bookmark WHERE utilisateurs_id = :id_user AND id = :id');
+        $query->execute([
+            'id_user' => $id_user,
+            'id' => $id
+        ]);
+        $bookmark = $query->fetch(\PDO::FETCH_ASSOC);
+        if ($bookmark['COUNT(id)'] > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     // Manage Bookmark of the user
     public function getLast6(int $id_user)
     {
@@ -61,14 +76,23 @@ class BookmarkManager extends AbstractDatabase
         return $bookmarks;
     }
 
-    public function editBookmark(int $id_user, int $id_movie, int $status)
+    public function editBookmark(int $id_user, int $id, int $status)
     {
         $bdd = $this->getBdd();
-        $query = $bdd->prepare('UPDATE bookmark SET status = :status WHERE utilisateurs_id = :id_user AND movie_id = :id_movie');
+        $query = $bdd->prepare('UPDATE bookmark SET status = :status WHERE utilisateurs_id = :id_user AND id = :id');
         $query->execute([
             'status' => $status,
             'id_user' => $id_user,
-            'id_movie' => $id_movie
+            'id' => $id
+        ]);
+    }
+    public function supprBookmark(int $id_user, int $id)
+    {
+        $bdd = $this->getBdd();
+        $query = $bdd->prepare('DELETE FROM bookmark WHERE utilisateurs_id = :id_user AND id = :id');
+        $query->execute([
+            'id_user' => $id_user,
+            'id' => $id
         ]);
     }
 }
