@@ -14,9 +14,10 @@ if (btnHeaderloginRegister) {
     LoginRegister(btnHeaderloginRegister);
 }
 if (btnHeaderProfile) {
-    await profilHeader(btnHeaderProfile);
     await headerMenu();
+    await profilHeader(btnHeaderProfile);
 }
+
 
 // TV SHOW PAGE
 const apiKey = '336f5174afdbef18cdcc2f6d25e36288';
