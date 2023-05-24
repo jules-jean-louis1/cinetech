@@ -6,6 +6,7 @@ use App\Controller\{
     AuthController,
     HomeController,
     MovieController,
+    SeriesController,
     CommentController,
     ProfilController,
     BookmarkController,
@@ -14,6 +15,7 @@ use App\Controller\{
 $authController = new AuthController();
 $homeController = new HomeController();
 $movieController = new MovieController();
+$seriesController = new SeriesController();
 $commentController = new CommentController();
 $profilController = new ProfilController();
 $bookmarkController = new BookmarkController();
@@ -49,7 +51,9 @@ $router->map('GET', '/movie/[i:id]-[*:slug]', function($id, $slug) use ($movieCo
 }, 'movie_details');
 
 // Page Serie
-
+$router->map('GET', '/series', function() use ($seriesController) {
+    $seriesController->showSeriesPage();
+}, 'series');
 // Page Serie Details
 
 // Page Profil
