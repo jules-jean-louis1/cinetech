@@ -14,19 +14,21 @@
 <div id="containerModalDialog"></div>
 <div class="containerProfilPage">
     <div id="btnProfilAction">
-        <button id="btnProfilBookmark" type="button">Vos favoris</button>
-        <button id="btnProfilEdit" type="button">Modifier Votre Profil</button>
+        <button id="btnProfilBookmark" type="button" class="text-black font-bold bg-[#fffe3e] p-2">Vos favoris</button>
+        <button id="btnProfilEdit" type="button" class="text-black font-bold bg-[#fffe3e] p-2">Modifier Votre Profil</button>
     </div>
     <div id="containerLast6"></div>
-    <div id="displayFavorite">
-        <h2 class="text-white">Vos favoris</h2>
-        <div>
-            <h2 class="text-white" id="title_movie">Vos films favoris</h2>
-            <div id="containerFavoriteMovie" class="flex flex-wrap gap-2"></div>
-        </div>
-        <div id="containerFavoriteSeries">
-            <h2 class="text-white" id="title_series">Vos series favorites</h2>
-            <div id="containerFavoriteSerie"></div>
+    <div class="flex justify-center items-center">
+        <div id="displayFavorite" class="w-10/12">
+            <h2 class="text-white">Vos favoris</h2>
+            <div>
+                <h2 class="text-white" id="title_movie">Vos films favoris</h2>
+                <div id="containerFavoriteMovie" class="flex flex-wrap gap-2"></div>
+            </div>
+            <div>
+                <h2 class="text-white" id="title_series">Vos series favorites</h2>
+                <div id="containerFavoriteSeries"></div>
+            </div>
         </div>
     </div>
 </div>

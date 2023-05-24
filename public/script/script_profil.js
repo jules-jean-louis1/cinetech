@@ -49,8 +49,9 @@ async function matchFavorite() {
     try {
         const favoriteData = await getFavorite();
         console.log(favoriteData);
+        favoriteMovie.innerHTML = '';
+        favoriteTv.innerHTML = '';
         if (favoriteData.length !== 0) {
-            displayFavorite.innerHTML = '';
             let optionHTML = '';
             for (const element of favoriteData) {
                 if (element.status === 0) {
@@ -76,7 +77,7 @@ async function matchFavorite() {
                 if (element.type === 'movie') {
                     data = await getMovie(element.movie_id);
                     favoriteMovie.innerHTML += `
-                        <div class="bg-[#251821] rounded-lg p-2 w-1/5 flex flex-col items-center">
+                        <div class="bg-[#251821] hover:bg-[#362431] rounded-lg p-2 w-1/5 flex flex-col items-center">
                             <img src="${getPosterPath(data.poster_path)}" alt="${data.poster_path}" class="h-fit w-36">
                             <p class="text-white">${data.title}</p>
                             <p class="text-white text-sm">Sortie : ${formatDate(data.release_date)}</p>
@@ -93,7 +94,7 @@ async function matchFavorite() {
                 } else if (element.type === 'tv') {
                     data = await getTv(element.movie_id);
                     favoriteTv.innerHTML += `
-                        <div class="bg-[#251821] rounded-lg p-2 w-1/5 flex flex-col items-center">
+                        <div class="bg-[#251821] hover:bg-[#362431] rounded-lg p-2 w-1/5 flex flex-col items-center">
                             <img src="${getPosterPath(data.poster_path)}" alt="${data.poster_path}" class="h-fit w-36">
                             <p class="text-white">${data.name}</p>
                             <p class="text-white">${formatDate(data.first_air_date)}</p>
@@ -108,7 +109,6 @@ async function matchFavorite() {
                         </div>
                     `;
                 }
-
             }
             for (const element of favoriteData) {
                 const FormEditBook = document.querySelector(`#formView_${element.id}`);
