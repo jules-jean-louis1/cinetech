@@ -55,7 +55,9 @@ $router->map('GET', '/series', function() use ($seriesController) {
     $seriesController->showSeriesPage();
 }, 'series');
 // Page Serie Details
-
+$router->map('GET', '/series/[i:id]-[*:slug]', function($id, $slug) use ($seriesController) {
+    $seriesController->showSeriesDetailPage($id, $slug);
+}, 'series_details');
 // Page Profil
 $router->map('GET', '/profil', function() use ($profilController) {
     $profilController->showProfil();
