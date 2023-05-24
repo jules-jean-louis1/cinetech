@@ -50,6 +50,7 @@ async function matchFavorite() {
         const favoriteData = await getFavorite();
         console.log(favoriteData);
         if (favoriteData.length !== 0) {
+            displayFavorite.innerHTML = '';
             let optionHTML = '';
             for (const element of favoriteData) {
                 if (element.status === 0) {
@@ -86,7 +87,7 @@ async function matchFavorite() {
                                     ${optionHTML}
                                 </select>
                             </form>
-                            <button id="btnDeleteBookmark_${data.id}" data-id="${data.id}" class="text-white">Supprimer</button>
+                            <button id="btnDeleteBookmark_${element.id}" data-id="${element.id}" class="text-white">Supprimer</button>
                         </div>
                     `;
                 } else if (element.type === 'tv') {
@@ -119,20 +120,21 @@ async function matchFavorite() {
                         body: new FormData(FormEditBook)
                     }) .then(response => response.json())
                         .then(data => {
-                            console.log(data);
+                            successMessageToast(containerModalDialog, data.success);
+                            matchFavorite();
                         });
                 })
                 const btnDeleteBookmark = document.querySelector(`#btnDeleteBookmark_${element.id}`);
                 btnDeleteBookmark.addEventListener('click', async (e) => {
                     e.preventDefault();
-                    await fetch(`${window.location.origin}/cinetech/removeBookmarks/${element.id}`, {
+                    await fetch(`${window.location.origin}/cinetech/deleteBookmarks/${element.id}`, {
                         method: 'DELETE',
                         body: new FormData(FormEditBook)
                     })
                         .then(response => response.json())
                         .then(data => {
-                            console.log(data);
-                            successMessageToast(data.message);
+                            successMessageToast(containerModalDialog, data.success);
+                            matchFavorite();
                         });
                 })
             }
