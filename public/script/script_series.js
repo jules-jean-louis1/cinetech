@@ -1,9 +1,4 @@
-import { LoginRegister } from './function/function.js';
-import { profilHeader } from "./function/function.js";
-import { formatDate } from "./function/function.js";
-import { getPosterPath } from "./function/function.js";
-import { successMessageToast } from './function/function.js';
-import { headerMenu} from "./function/function.js";
+import {formatDate, getPosterPath, headerMenu, LoginRegister, profilHeader} from './function/function.js';
 
 const btnHeaderloginRegister = document.querySelector('#btnHeaderLoginRegister');
 const btnHeaderLogout = document.querySelector('#btnHeaderLogout');
@@ -138,26 +133,75 @@ function generateSlug(title) {
     return slug;
 }
 
-function displayMovies(movies) {
+/*function displayMovies(movies) {
     const containerSeries = document.querySelector('#containerSeries');
     let movieHTML = '';
     for (const movie of movies) {
         movieHTML += `
             <div data-genre="${movie.genre_ids.join(',')}">
                 <div class="flex flex-col pl-5 gap-2">
-                <a href="/cinetech/movie/${movie.id}-${generateSlug(movie.name)}">
-                    <img src="${getPosterPath(movie.poster_path)}" class="w-[150px] h-[225px] shadow-sm rounded-md">
-                    <div class="flex flex-col px-3 w-[150px]">
-                        <h2 class="text-sm font-bold text-center">${movie.name}</h2>
-                        <p class="text-xs text-center">${formatDate(movie.first_air_date)}</p>
-                    </div>
-                </a>
+                    <a href="/cinetech/series/${movie.id}-${generateSlug(movie.name)}">
+                        <img src="${getPosterPath(movie.poster_path)}" class="w-[150px] h-[225px] shadow-sm rounded-md" alt="${movie.name}">
+                        <div class="flex flex-col px-3 w-[150px]">
+                            <h2 class="text-sm font-bold text-center">${movie.name}</h2>
+                            <p class="text-xs text-center">${formatDate(movie.first_air_date)}</p>
+                        </div>
+                    </a>
+                    <div id="containerBtnBookmark"></div>
+                    <button type="button" class="btnAddToWatchlist" data-id="${movie.id}">Ajouter à ma watchlist</button>
                 </div>
             </div>
         `;
     }
     containerSeries.innerHTML = movieHTML;
+}*/
+function displayMovies(movies) {
+    const bookmarkedMovies = getBookmarkedMovies();
+    bookmarkedMovies.then(data => {
+        const bookmarkedMovieIds = data.map(movie => movie.movie_id);
+
+        const containerBtnBookmark = document.getElementById('containerBtnBookmark');
+        for (const movie of movies) {
+            const isBookmarked = bookmarkedMovieIds.includes(movie.id);
+            const bookmarkButton = document.createElement('button');
+            bookmarkButton.type = 'button';
+            bookmarkButton.classList.add('btnBookmark');
+            bookmarkButton.dataset.id = movie.id;
+
+            if (isBookmarked) {
+                bookmarkButton.textContent = 'Retirer des favoris';
+                bookmarkButton.addEventListener('click', removeFromBookmarks);
+            } else {
+                bookmarkButton.textContent = 'Ajouter aux favoris';
+                bookmarkButton.addEventListener('click', addToBookmarks);
+            }
+
+            containerBtnBookmark.appendChild(bookmarkButton);
+        }
+    });
+
+    const containerSeries = document.querySelector('#containerSeries');
+    let movieHTML = '';
+    for (const movie of movies) {
+        movieHTML += `
+      <div data-genre="${movie.genre_ids.join(',')}">
+        <div class="flex flex-col pl-5 gap-2">
+          <a href="/cinetech/series/${movie.id}-${generateSlug(movie.name)}">
+            <img src="${getPosterPath(movie.poster_path)}" class="w-[150px] h-[225px] shadow-sm rounded-md" alt="${movie.name}">
+            <div class="flex flex-col px-3 w-[150px]">
+              <h2 class="text-sm font-bold text-center">${movie.name}</h2>
+              <p class="text-xs text-center">${formatDate(movie.first_air_date)}</p>
+            </div>
+          </a>
+          <div id="containerBtnBookmark"></div>
+          <button type="button" class="btnAddToWatchlist" data-id="${movie.id}">Ajouter à ma watchlist</button>
+        </div>
+      </div>
+    `;
+    }
+    containerSeries.innerHTML = movieHTML;
 }
+
 
 function removeMoviesByGenres(genreIds) {
     const containerSeries = document.querySelector('#containerSeries');
@@ -168,7 +212,10 @@ function removeMoviesByGenres(genreIds) {
         }
     }
 }
-
+async function getBookmarkedMovies() {
+    const response = await fetch(`${window.location.origin}/cinetech/getBookmarksTV`);
+    return await response.json();
+}
 
 
 // Appel de la fonction pour afficher les genres

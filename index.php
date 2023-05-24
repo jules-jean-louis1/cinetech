@@ -70,6 +70,10 @@ $router->map('GET', '/getLast6', function() use ($profilController) {
 $router->map('GET', '/getAllBookmarks', function() use ($bookmarkController) {
     $bookmarkController->getAllBookmarks();
 });
+// Bookmarks TV Shows of user
+$router->map('GET', '/getBookmarksTV', function() use ($bookmarkController) {
+    $bookmarkController->getBookmarksTV();
+});
 // Modification bookmark
 $router->map('POST', '/editBookmark/[i:id]', function($id) use ($bookmarkController) {
     $bookmarkController->editBookmark($id);

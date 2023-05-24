@@ -97,4 +97,17 @@ class BookmarkController
         }
     }
 
+    public function getBookmarksTV()
+    {
+        if (isset($_SESSION['id'])) {
+            $bookmarkManager = new BookmarkManager();
+            $bookmarks = $bookmarkManager->getAllBookmarksTV($_SESSION['id']);
+            header("Content-Type: application/json");
+            echo json_encode($bookmarks);
+        } else {
+            header("Content-Type: application/json");
+            echo json_encode(['error' => 'Vous devez être connecté pour voir vos favoris']);
+        }
+    }
+
 }
