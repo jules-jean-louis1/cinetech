@@ -43,19 +43,98 @@ async function getTv(id) {
     return data;
 }
 async function matchFavorite() {
-    getFavorite().then(data => {
-        data.forEach(element => {
-            if (element.type === 'movie') {
-                getMovie(element.movie_id).then(data => {
-                    console.log(data);
-                })
+    const displayFavorite = document.querySelector('#displayFavorite');
+    displayFavorite.innerHTML = '';
+
+    try {
+        const favoriteData = await getFavorite();
+        console.log(favoriteData);
+
+        if (favoriteData.length !== 0) {
+            let tableHTML = `
+                <table class="text-white border border-[#a8b3cf33] rounded-[14px]">
+                    <thead class="bg-[#0e1217]">
+                        <tr class="border border-[#a8b3cf33]">
+                            <th class="p-2 border border-[#a8b3cf33]">Titre</th>
+                            <th class="p-2 border border-[#a8b3cf33]">Sortie</th>
+                            <th class="p-2 border border-[#a8b3cf33]">Ajouter le :</th>
+                            <th class="p-2 border border-[#a8b3cf33]">Statut</th>
+                            <th class="p-2 border border-[#a8b3cf33]">Modifier</th>
+                            <th class="p-2 border border-[#a8b3cf33]">Suppression</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            let optionHTML = '';
+            for (const element of favoriteData) {
+                console.log(element.status);
+                if (element.status === 0) {
+                    optionHTML = `
+                        <option value="0" selected>Non vu</option>
+                        <option value="1">En cours</option>
+                        <option value="2">Vu</option>
+                    `;
+                } else if (element.status === 1) {
+                    optionHTML = `
+                        <option value="0">Non vu</option>
+                        <option value="1" selected>En cours</option>
+                        <option value="2">Vu</option>
+                    `;
+                } else if (element.status === 2) {
+                    optionHTML = `
+                        <option value="0">Non vu</option>
+                        <option value="1">En cours</option>
+                        <option value="2" selected>Vu</option>
+                    `;
+                }
             }
-            if (element.type === 'tv') {
-                getTv(element.movie_id).then(data => {
-                    console.log(data);
-                })
+            for (const element of favoriteData) {
+                let data;
+                if (element.type === 'movie') {
+                    data = await getMovie(element.movie_id);
+                    tableHTML += `
+                        <tr class="border border-[#a8b3cf33]">
+                            <td class="p-2 border border-[#a8b3cf33] text-black">${data.title}</td>
+                            <td class="p-2 border border-[#a8b3cf33] text-black">${formatDate(data.release_date)}</td>
+                            <td class="p-2 border border-[#a8b3cf33] text-black">${formatDate(element.created_at)}</td>
+                            <td class="p-2 border border-[#a8b3cf33] text-black">
+                                <form action="" method="post">
+                                    <select name="status" id="status" class="bg-[#0e1217] text-white rounded-[14px]">
+                                        ${optionHTML}
+                                </form>
+                            </td>
+                            <td class="p-2 border border-[#a8b3cf33] text-black"><button class="btn btn-primary btnEditBookmark" data-id="${element.id}">Modifier</button></td>
+                            <td class="p-2 border border-[#a8b3cf33] text-black"><button class="btn btn-danger btnDeleteBookmark" data-id="${element.id}">Supprimer</button></td>
+                        </tr>
+                    `;
+                } else if (element.type === 'tv') {
+                    data = await getTv(element.movie_id);
+                    tableHTML += `
+                        <tr class="border border-[#a8b3cf33]">
+                            <td class="p-2 border border-[#a8b3cf33] text-black">${data.name}</td>
+                            <td class="p-2 border border-[#a8b3cf33] text-black">${formatDate(data.first_air_date)}</td>
+                            <td class="p-2 border border-[#a8b3cf33] text-black">${formatDate(element.created_at)}</td>
+                            <td class="p-2 border border-[#a8b3cf33] text-black">${element.status}</td>
+                            <td class="p-2 border border-[#a8b3cf33] text-black"><button class="btn btn-primary btnEditBookmark" data-id="${element.id}">Modifier</button></td>
+                            <td class="p-2 border border-[#a8b3cf33] text-black"><button class="btn btn-danger btnDeleteBookmark" data-id="${element.id}">Supprimer</button></td>
+                        </tr>
+                    `;
+                }
             }
-        })
-    });
+
+            tableHTML += `
+                </tbody>
+                </table>
+            `;
+
+            displayFavorite.innerHTML = tableHTML;
+        } else {
+            displayFavorite.innerHTML = '<p class="text-center">Vous n\'avez pas de favoris</p>';
+        }
+    } catch (error) {
+        console.error(error);
+    }
 }
+
+
 matchFavorite();

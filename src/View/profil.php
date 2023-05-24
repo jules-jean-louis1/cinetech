@@ -18,6 +18,7 @@
         <button id="btnProfilEdit" type="button">Modifier Votre Profil</button>
     </div>
     <div id="containerLast6"></div>
+    <div id="displayFavorite"></div>
 </div>
 <?php require_once __DIR__ . '/elements/footer.php'; ?>
 </body>
