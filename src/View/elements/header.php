@@ -5,7 +5,7 @@
                 <ul class="flex space-x-4">
                     <li><a href="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . '/cinetech/';?>">Accueil</a></li>
                     <li><a href="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . '/cinetech/movie';?>">Film</a></li>
-                    <li><a href="/page2">Series</a></li>
+                    <li><a href="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . '/cinetech/series';?>">Series</a></li>
                 </ul>
             </div>
             <div>

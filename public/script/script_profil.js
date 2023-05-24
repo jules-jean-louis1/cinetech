@@ -145,5 +145,7 @@ async function matchFavorite() {
         console.error(error);
     }
 }
+async function editProfil(){
 
+}
 matchFavorite();

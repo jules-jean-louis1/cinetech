@@ -21,12 +21,12 @@
     <div class="flex justify-center items-center">
         <div id="displayFavorite" class="w-10/12">
             <h2 class="text-white">Vos favoris</h2>
-            <div>
-                <h2 class="text-white" id="title_movie">Vos films favoris</h2>
+            <div class="p-2">
+                <h2 class="font-bold text-2xl text-white" id="title_movie">Vos films favoris</h2>
                 <div id="containerFavoriteMovie" class="flex flex-wrap gap-2"></div>
             </div>
-            <div>
-                <h2 class="text-white" id="title_series">Vos series favorites</h2>
+            <div class="p-2">
+                <h2 class="font-bold text-2xl text-white" id="title_series">Vos series favorites</h2>
                 <div id="containerFavoriteSeries"></div>
             </div>
         </div>
