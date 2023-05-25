@@ -9,16 +9,19 @@
     <link rel="stylesheet" href="<?php __DIR__ ?>./public/style/style_index.css">
     <title>Series TV</title>
 </head>
-<body>
+<body class="bg-[#1f0c19]">
 <?php require_once __DIR__ . '/elements/header.php'; ?>
 <div id="containerModalDialog"></div>
 <div class="containerMoviesPage">
+    <div id="titlePage">
+        <h2 class="text-white text-2xl font-bold">Séries TV</h2>
+    </div>
     <div class="flex">
-        <div id="containerFilterSeries" class="w-60">
-            <div id="filterPlusMinus">
+        <div id="containerFilterSeries" class="flex flex-col gap-4 w-60">
+            <div id="filterPlusMinus" class="rounded text-white p-2 bg-[#2a1825] border border-[#362431]">
                 <form id="sort-form">
                     <label for="sort-by">Trier par :</label>
-                    <select name="sort-by" id="sort-by">
+                    <select name="sort-by" id="sort-by" class="bg-transparent p-2 rounded  border border-[#362431]">
                         <option value="popularity.desc">Plus populaire</option>
                         <option value="popularity.asc">Moins populaire</option>
                         <option value="vote_average.desc">Mieux noté</option>
@@ -28,16 +31,15 @@
                         <option value="release_date.desc">Date de sortie récente</option>
                         <option value="release_date.asc">Date de sortie ancienne</option>
                     </select>
-                    <button type="submit">Trier</button>
                 </form>
             </div>
-            <div id="containerGenres"></div>
+            <div id="containerGenres" class="flex flex-wrap gap-2 rounded text-white p-2 bg-[#2a1825] border border-[#362431]"></div>
         </div>
         <div class="w-11/12">
             <div id="containerSeries" class="flex flex-wrap gap-5 overflow-x-scroll py-5 px-10 w-full h-[90vh]"></div>
             <div id="paginationMovies" class="flex justify-center gap-5">
-                <button id="previousPageButton" type="button" class="p-2 border border-red-300 rounded">Précédent</button>
-                <button id="nextPageButton" type="button" class="p-2 border border-red-300 rounded">Suivant</button>
+                <button id="previousPageButton" type="button" class="rounded text-white p-2 bg-[#2a1825] border border-[#362431] font-semibold p-2">Précédent</button>
+                <button id="nextPageButton" type="button" class="rounded text-white p-2 bg-[#2a1825] border border-[#362431] font-semibold p-2">Suivant</button>
             </div>
         </div>
     </div>

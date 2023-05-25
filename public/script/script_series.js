@@ -68,8 +68,8 @@ function displayGenre() {
         let optionHTML = '';
         for (const element of data.genres) {
             optionHTML += `
-                <div data-id="${element.id}">
-                    <button type="button" name="genre" id="btnGenre_${element.id}" class="border-2 border-black rounded-lg">
+                <div data-id="${element.id}" class="w-fit">
+                    <button type="button" name="genre" id="btnGenre_${element.id}" class="border border-white/50 rounded p-1 w-fit">
                         ${element.name}
                     </button>
                 </div>
@@ -102,13 +102,13 @@ function displayGenre() {
         for (const element of data.genres) {
             const btnGenre = document.querySelector(`#btnGenre_${element.id}`);
             btnGenre.addEventListener('click', (event) => {
-                if (event.target.classList.contains('border-black')) {
-                    event.target.classList.remove('border-black');
-                    event.target.classList.add('bg-red-500', 'border-2', 'border-red-500');
+                if (event.target.classList.contains('border-white/50')) {
+                    event.target.classList.remove('border-white/50');
+                    event.target.classList.add('bg-[#fffe3e]', 'border', 'border-[#fffe3e]', 'text-black', 'font-bold');
                     selectedGenres.push(element.id); // Ajouter le genre sélectionné au tableau
                 } else {
-                    event.target.classList.remove('bg-red-500', 'border-2', 'border-red-500');
-                    event.target.classList.add('border-black', 'border-2');
+                    event.target.classList.remove('bg-[#fffe3e]', 'border-[#fffe3e]', 'text-black', 'font-bold');
+                    event.target.classList.add('border-white/50');
                     const index = selectedGenres.indexOf(element.id);
                     if (index !== -1) {
                         selectedGenres.splice(index, 1); // Supprimer le genre sélectionné du tableau
@@ -140,7 +140,7 @@ function displayMovies(movies) {
     for (const movie of movies) {
         movieHTML += `
       <div data-genre="${movie.genre_ids.join(',')}">
-        <div class="flex flex-col pl-5 gap-2">
+        <div class="flex flex-col items-center gap-2 rounded text-white p-2 bg-[#2a1825] border border-[#362431]">
           <a href="/cinetech/series/${movie.id}-${generateSlug(movie.name)}">
             <img src="${getPosterPath(movie.poster_path)}" class="w-[150px] h-[225px] shadow-sm rounded-md" alt="${movie.name}">
             <div class="flex flex-col px-3 w-[150px]">
@@ -149,7 +149,13 @@ function displayMovies(movies) {
             </div>
           </a>
           <div id="containerBtnBookmark">
-            <button type="button" id="btnAddToWatchlist" data-id="${movie.id}">Ajouter à ma watchlist</button>
+            <button type="button" id="btnAddToWatchlist" class="flex items-center gap-2" data-id="${movie.id}">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-star" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#fffe3e" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z"/>
+                </svg>
+                Favoris
+            </button>
           </div>
         </div>
       </div>
@@ -170,7 +176,13 @@ function displayMovies(movies) {
                         const containerBtnBookmark = containerBtnBookmarkList[i];
                         if (btnAddToWatchlist.dataset.id === show.movie_id.toString()) {
                             containerBtnBookmark.innerHTML = `
-                <button type="button" id="btnRemoveFromWatchlist" data-id="${show.movie_id}">Retirer de ma watchlist</button>
+                <button type="button" id="btnRemoveFromWatchlist" class="flex items-center gap-2" data-id="${show.movie_id}">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-star-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#fffe3e" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M8.243 7.34l-6.38 .925l-.113 .023a1 1 0 0 0 -.44 1.684l4.622 4.499l-1.09 6.355l-.013 .11a1 1 0 0 0 1.464 .944l5.706 -3l5.693 3l.1 .046a1 1 0 0 0 1.352 -1.1l-1.091 -6.355l4.624 -4.5l.078 -.085a1 1 0 0 0 -.633 -1.62l-6.38 -.926l-2.852 -5.78a1 1 0 0 0 -1.794 0l-2.853 5.78z" stroke-width="0" fill="currentColor"/>
+                    </svg>
+                    Favoris
+                </button>
             `;
                         }
                     }
@@ -187,8 +199,14 @@ function displayMovies(movies) {
                             if (data.success) {
                                 const containerBtnBookmark = btnAddToWatchlist.parentElement;
                                 containerBtnBookmark.innerHTML = `
-                    <button type="button" id="btnRemoveFromWatchlist" data-id="${movie.id}">Retirer de ma watchlist</button>
-                `;
+                    <button type="button" id="btnRemoveFromWatchlist" class="flex items-center gap-2" data-id="${show.movie_id}">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-star-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#fffe3e" fill="#fffe3e" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M8.243 7.34l-6.38 .925l-.113 .023a1 1 0 0 0 -.44 1.684l4.622 4.499l-1.09 6.355l-.013 .11a1 1 0 0 0 1.464 .944l5.706 -3l5.693 3l.1 .046a1 1 0 0 0 1.352 -1.1l-1.091 -6.355l4.624 -4.5l.078 -.085a1 1 0 0 0 -.633 -1.62l-6.38 -.926l-2.852 -5.78a1 1 0 0 0 -1.794 0l-2.853 5.78z" stroke-width="0" fill="currentColor"/>
+                    </svg>
+                    Favoris
+                </button>
+                            `;
                                 displayMessageToast(containerModalDialog,'Série ajoutée à votre watchlist', 'success');
                                 bookmarkedTVshow();
                             }
