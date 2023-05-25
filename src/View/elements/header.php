@@ -8,9 +8,9 @@
                     <li><a href="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . '/cinetech/series';?>">Series</a></li>
                 </ul>
             </div>
-            <div class="flex items-center" id="containerSearchBar">
+            <div class="flex flex-col" id="containerSearchBar">
                 <form action="" method="post" id="searchBarHeader" class="flex items-center">
-                    <input type="text" name="search" id="search" placeholder="Rechercher un film ou une serie" class="rounded-lg px-2 py-1">
+                    <input type="text" name="search" id="search" placeholder="Rechercher un film ou une serie" class="rounded-lg px-2 py-1 bg-[#362431]">
                     <button type="submit" class="bg-[#fffe3e] text-black rounded-lg px-2 py-1">
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
@@ -18,7 +18,11 @@
                             <path d="M21 21l-6 -6"/>
                         </svg>
                     </button>
+
                 </form>
+                <div id="containerResultSearch" class="absolute bg-[#362431] mt-2 rounded-lg shadow-lg">
+                    <ul id="displayResultSearch"></ul>
+                </div>
             </div>
             <div>
                 <?php if (isset($_SESSION['id'])) :?>

@@ -27,7 +27,7 @@
             </div>
             <div class="p-2">
                 <h2 class="font-bold text-2xl text-white" id="title_series">Vos series favorites</h2>
-                <div id="containerFavoriteSeries"></div>
+                <div id="containerFavoriteSeries" class="flex flex-wrap gap-2"></div>
             </div>
         </div>
     </div>
