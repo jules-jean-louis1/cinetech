@@ -1,12 +1,24 @@
 <header class="bg-[#1f0c19] text-white">
     <div id="containerHeader" class="py-3">
-        <nav class="flex justify-between px-4">
+        <nav class="flex justify-between items-center px-4">
             <div>
                 <ul class="flex space-x-4">
                     <li><a href="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . '/cinetech/';?>">Accueil</a></li>
                     <li><a href="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . '/cinetech/movie';?>">Film</a></li>
                     <li><a href="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . '/cinetech/series';?>">Series</a></li>
                 </ul>
+            </div>
+            <div class="flex items-center" id="containerSearchBar">
+                <form action="" method="post" id="searchBarHeader" class="flex items-center">
+                    <input type="text" name="search" id="search" placeholder="Rechercher un film ou une serie" class="rounded-lg px-2 py-1">
+                    <button type="submit" class="bg-[#fffe3e] text-black rounded-lg px-2 py-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"/>
+                            <path d="M21 21l-6 -6"/>
+                        </svg>
+                    </button>
+                </form>
             </div>
             <div>
                 <?php if (isset($_SESSION['id'])) :?>

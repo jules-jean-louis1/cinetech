@@ -9,6 +9,7 @@ const btnHeaderloginRegister = document.querySelector('#btnHeaderLoginRegister')
 const btnHeaderLogout = document.querySelector('#btnHeaderLogout');
 const btnHeaderProfile = document.querySelector('#btnHeaderProfile');
 const containerModalDialog = document.querySelector('#containerModalDialog');
+const containerSearchBar = document.querySelector('#containerSearchBar');
 
 if (btnHeaderloginRegister) {
     LoginRegister(btnHeaderloginRegister);
@@ -17,7 +18,15 @@ if (btnHeaderProfile) {
     await profilHeader(btnHeaderProfile);
     await headerMenu();
 }
-
+if (containerSearchBar) {
+    const searchBar = document.querySelector('#search');
+    const query = searchBar.value;
+    if (query.length > 0) {
+        searchBar.addEventListener('keyup', async (e) => {
+            e.preventDefault();
+        });
+    }
+}
 
 // PROFILE PAGE
 
