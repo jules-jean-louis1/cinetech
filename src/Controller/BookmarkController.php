@@ -110,4 +110,41 @@ class BookmarkController
         }
     }
 
+    public function addBookmarkTV($id)
+    {
+        if (isset($_SESSION['id'])){
+            $bookmarkManager = new BookmarkManager();
+            if (!empty(trim($id))) {
+                $bookmark = $bookmarkManager->verifyBookmark($_SESSION['id'], $id);
+                if (!$bookmark) {
+                    $bookmarkManager->addBookmarkTV($_SESSION['id'], $id);
+                    header("Content-Type: application/json");
+                    echo json_encode(['success' => 'La série a bien été ajoutée à vos favoris']);
+                } else {
+                    header("Content-Type: application/json");
+                    echo json_encode(['error' => 'La série est déjà dans vos favoris']);
+                }
+            }
+        } else {
+            header("Content-Type: application/json");
+            echo json_encode(['error' => 'Vous devez être connecté pour ajouter un film à vos favoris']);
+        }
+    }
+
+    public function removeBookmarkTV($id)
+    {
+        if (isset($_SESSION['id']) && !empty(trim($id))) {
+            $bookmarkManager = new BookmarkManager();
+            $bookmark = $bookmarkManager->verifyBookmark($_SESSION['id'], $id);
+            if ($bookmark) {
+                $bookmarkManager->deleteBookmark($_SESSION['id'], $id);
+                header("Content-Type: application/json");
+                echo json_encode(['success' => 'La série a bien été supprimée de vos favoris']);
+            }
+        } else {
+            header("Content-Type: application/json");
+            echo json_encode(['error' => 'Vous devez être connecté pour supprimer une série de vos favoris']);
+        }
+    }
+
 }

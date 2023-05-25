@@ -21,7 +21,7 @@ function updateField(data, fieldName, fieldInput, smallField) {
         fieldInput.classList.add('textField_invalid');
     }
 }
-const MessageToast = (modalAppend, message, state) => {
+const displayMessageToast = (modalAppend, message, state) => {
     const dialogElement = document.createElement('div');
     dialogElement.setAttribute('class', 'fixed z-10 inset-0 bg-[#05a763] rounded-lg open h-fit w-fit');
     dialogElement.setAttribute('id', 'ToastSuccess');
@@ -40,9 +40,7 @@ const MessageToast = (modalAppend, message, state) => {
     container.innerHTML = `
     <div class="p-2">
         <div class="flex items-center justify-between gap-2">
-            <div class="flex items-center" id="svg_container">
-                
-            </div>
+            <div class="flex items-center" id="svg_container"></div>
             <div class="flex items-center">
                 <p class=" text-white">${message}</p>
             </div>
@@ -57,6 +55,10 @@ const MessageToast = (modalAppend, message, state) => {
             </div>
         </div>
     </div>`;
+
+    dialogElement.appendChild(container);
+    modalAppend.appendChild(dialogElement);
+    dialogElement.classList.add('open');
     const svgContainer = document.getElementById('svg_container');
     if (state === 'success') {
         svgContainer.innerHTML = `
@@ -94,9 +96,6 @@ const MessageToast = (modalAppend, message, state) => {
         </svg>
         `;
     }
-    dialogElement.appendChild(container);
-    modalAppend.appendChild(dialogElement);
-    dialogElement.classList.add('open');
     const closeToast = document.getElementById('closeToast');
     closeToast.addEventListener('click', () => {
         dialogElement.classList.remove('open');
@@ -353,4 +352,4 @@ const getPosterPath = (posterPath) => {
     return `https://www.themoviedb.org/t/p/w220_and_h330_face${posterPath}`;
 };
 
-export { createDialog, LoginRegister, profilHeader, formatDate, headerMenu, getPosterPath, successMessageToast};
+export { createDialog, LoginRegister, profilHeader, formatDate, headerMenu, getPosterPath, successMessageToast, displayMessageToast};

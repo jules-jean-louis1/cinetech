@@ -106,4 +106,13 @@ class BookmarkManager extends AbstractDatabase
         $bookmarks = $query->fetchAll(\PDO::FETCH_ASSOC);
         return $bookmarks;
     }
+    public function addBookmarkTV(int $id_user, int $id_movie)
+    {
+        $bdd = $this->getBdd();
+        $query = $bdd->prepare('INSERT INTO bookmark (type, utilisateurs_id, movie_id, created_at) VALUES ("tv", :id_user, :id_movie, NOW())');
+        $query->execute([
+            'id_user' => $id_user,
+            'id_movie' => $id_movie
+        ]);
+    }
 }

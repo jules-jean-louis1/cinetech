@@ -74,6 +74,14 @@ $router->map('GET', '/getAllBookmarks', function() use ($bookmarkController) {
 $router->map('GET', '/getBookmarksTV', function() use ($bookmarkController) {
     $bookmarkController->getBookmarksTV();
 });
+// Add Bookmark TV Show
+$router->map('GET', '/addBookmarkTV/[i:id]', function($id) use ($bookmarkController) {
+    $bookmarkController->addBookmarkTV($id);
+});
+// Remove Bookmark TV Show
+$router->map('GET', '/removeBookmarkTV/[i:id]', function($id) use ($bookmarkController) {
+    $bookmarkController->removeBookmarkTV($id);
+});
 // Modification bookmark
 $router->map('POST', '/editBookmark/[i:id]', function($id) use ($bookmarkController) {
     $bookmarkController->editBookmark($id);

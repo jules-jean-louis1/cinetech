@@ -1,4 +1,5 @@
 import {formatDate, getPosterPath, headerMenu, LoginRegister, profilHeader} from './function/function.js';
+import {displayMessageToast} from './function/function.js';
 
 const btnHeaderloginRegister = document.querySelector('#btnHeaderLoginRegister');
 const btnHeaderLogout = document.querySelector('#btnHeaderLogout');
@@ -133,53 +134,7 @@ function generateSlug(title) {
     return slug;
 }
 
-/*function displayMovies(movies) {
-    const containerSeries = document.querySelector('#containerSeries');
-    let movieHTML = '';
-    for (const movie of movies) {
-        movieHTML += `
-            <div data-genre="${movie.genre_ids.join(',')}">
-                <div class="flex flex-col pl-5 gap-2">
-                    <a href="/cinetech/series/${movie.id}-${generateSlug(movie.name)}">
-                        <img src="${getPosterPath(movie.poster_path)}" class="w-[150px] h-[225px] shadow-sm rounded-md" alt="${movie.name}">
-                        <div class="flex flex-col px-3 w-[150px]">
-                            <h2 class="text-sm font-bold text-center">${movie.name}</h2>
-                            <p class="text-xs text-center">${formatDate(movie.first_air_date)}</p>
-                        </div>
-                    </a>
-                    <div id="containerBtnBookmark"></div>
-                    <button type="button" class="btnAddToWatchlist" data-id="${movie.id}">Ajouter à ma watchlist</button>
-                </div>
-            </div>
-        `;
-    }
-    containerSeries.innerHTML = movieHTML;
-}*/
 function displayMovies(movies) {
-    const bookmarkedMovies = getBookmarkedMovies();
-    bookmarkedMovies.then(data => {
-        const bookmarkedMovieIds = data.map(movie => movie.movie_id);
-
-        const containerBtnBookmark = document.getElementById('containerBtnBookmark');
-        for (const movie of movies) {
-            const isBookmarked = bookmarkedMovieIds.includes(movie.id);
-            const bookmarkButton = document.createElement('button');
-            bookmarkButton.type = 'button';
-            bookmarkButton.classList.add('btnBookmark');
-            bookmarkButton.dataset.id = movie.id;
-
-            if (isBookmarked) {
-                bookmarkButton.textContent = 'Retirer des favoris';
-                bookmarkButton.addEventListener('click', removeFromBookmarks);
-            } else {
-                bookmarkButton.textContent = 'Ajouter aux favoris';
-                bookmarkButton.addEventListener('click', addToBookmarks);
-            }
-
-            containerBtnBookmark.appendChild(bookmarkButton);
-        }
-    });
-
     const containerSeries = document.querySelector('#containerSeries');
     let movieHTML = '';
     for (const movie of movies) {
@@ -193,13 +148,77 @@ function displayMovies(movies) {
               <p class="text-xs text-center">${formatDate(movie.first_air_date)}</p>
             </div>
           </a>
-          <div id="containerBtnBookmark"></div>
-          <button type="button" class="btnAddToWatchlist" data-id="${movie.id}">Ajouter à ma watchlist</button>
+          <div id="containerBtnBookmark">
+            <button type="button" id="btnAddToWatchlist" data-id="${movie.id}">Ajouter à ma watchlist</button>
+          </div>
         </div>
       </div>
     `;
     }
     containerSeries.innerHTML = movieHTML;
+
+    async function bookmarkedTVshow() {
+        const btnAddToWatchlistList = document.querySelectorAll('#btnAddToWatchlist');
+        const containerBtnBookmarkList = document.querySelectorAll('#containerBtnBookmark');
+
+        await fetch(`${window.location.origin}/cinetech/getBookmarksTV`)
+            .then(response => response.json())
+            .then(data => {
+                for (const show of data) {
+                    for (let i = 0; i < btnAddToWatchlistList.length; i++) {
+                        const btnAddToWatchlist = btnAddToWatchlistList[i];
+                        const containerBtnBookmark = containerBtnBookmarkList[i];
+                        if (btnAddToWatchlist.dataset.id === show.movie_id.toString()) {
+                            containerBtnBookmark.innerHTML = `
+                <button type="button" id="btnRemoveFromWatchlist" data-id="${show.movie_id}">Retirer de ma watchlist</button>
+            `;
+                        }
+                    }
+                }
+            });
+        for (const movie of movies) {
+            const btnAddToWatchlist = document.querySelector(`#btnAddToWatchlist[data-id="${movie.id}"]`);
+            if (btnAddToWatchlist){
+                btnAddToWatchlist.addEventListener('click', async (event) => {
+                    event.preventDefault();
+                    await fetch(`${window.location.origin}/cinetech/addBookmarkTV/${movie.id}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                const containerBtnBookmark = btnAddToWatchlist.parentElement;
+                                containerBtnBookmark.innerHTML = `
+                    <button type="button" id="btnRemoveFromWatchlist" data-id="${movie.id}">Retirer de ma watchlist</button>
+                `;
+                                displayMessageToast(containerModalDialog,'Série ajoutée à votre watchlist', 'success');
+                                bookmarkedTVshow();
+                            }
+                        });
+                });
+            }
+        }
+        for (const movie of movies) {
+            const btnRemoveFromWatchlist = document.querySelector(`#btnRemoveFromWatchlist[data-id="${movie.id}"]`);
+            if (btnRemoveFromWatchlist){
+                btnRemoveFromWatchlist.addEventListener('click', async (event) => {
+                    event.preventDefault();
+                    await fetch(`${window.location.origin}/cinetech/removeBookmarkTV/${movie.id}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                const containerBtnBookmark = btnRemoveFromWatchlist.parentElement;
+                                containerBtnBookmark.innerHTML = `
+                    <button type="button" id="btnAddToWatchlist" data-id="${movie.id}">Ajouter à ma watchlist</button>
+                `;
+                                displayMessageToast(containerModalDialog,'Série retirée de votre watchlist', 'success');
+                                bookmarkedTVshow();
+                            }
+                        });
+                });
+            }
+        }
+    }
+    bookmarkedTVshow();
+
 }
 
 
@@ -213,8 +232,21 @@ function removeMoviesByGenres(genreIds) {
     }
 }
 async function getBookmarkedMovies() {
-    const response = await fetch(`${window.location.origin}/cinetech/getBookmarksTV`);
-    return await response.json();
+    await fetch(`${window.location.origin}/cinetech/getBookmarksTV`)
+    .then(response => response.json())
+    .then(data => {
+        const btnAddToWatchlist = document.querySelector('.btnAddToWatchlist');
+        const containerBtnBookmark = document.querySelector('#containerBtnBookmark');
+        for (const show of data) {
+            // console.log(show.movie_id);
+            if (btnAddToWatchlist.dataset.id === show.movie_id) {
+                containerBtnBookmark.innerHTML = `
+                    <button type="button" class="btnRemoveFromWatchlist" data-id="${show.id}">Retirer de ma watchlist</button>
+                `;
+            }
+        }
+    });
+
 }
 
 
