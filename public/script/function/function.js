@@ -291,7 +291,11 @@ function formatDate(timestamp) {
     const day = date.getDate();
     return `${day} ${month} ${year}`;
 }
-
+function yearsFormat(timestamp) {
+    const date = new Date(timestamp);
+    const year = date.getFullYear();
+    return `${year}`;
+}
 const successMessageToast = (modalAppend, message) => {
     const dialogElement = document.createElement('div');
     dialogElement.setAttribute('class', 'fixed z-10 inset-0 bg-[#05a763] rounded-lg open h-fit w-fit');
@@ -352,4 +356,4 @@ const getPosterPath = (posterPath) => {
     return `https://www.themoviedb.org/t/p/w220_and_h330_face${posterPath}`;
 };
 
-export { createDialog, LoginRegister, profilHeader, formatDate, headerMenu, getPosterPath, successMessageToast, displayMessageToast};
+export { createDialog, LoginRegister, profilHeader, formatDate, yearsFormat, headerMenu, getPosterPath, successMessageToast, displayMessageToast};
