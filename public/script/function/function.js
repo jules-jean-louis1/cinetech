@@ -356,5 +356,115 @@ function headerMenu() {
         }
     });
 }
+function generateSlug(title) {
+    let slug = title.toLowerCase(); // Convertit le titre en minuscules
+    slug = slug.replace(/[^a-z0-9]+/g, '-'); // Remplace les caractères non alphabétiques et non numériques par des tirets
+    slug = slug.replace(/^-+|-+$/g, ''); // Supprime les tirets en début et en fin de chaîne
+    return slug;
+}
+function searchBarHeader() {
+    const searchBar = document.querySelector('#search');
+    const displayResult = document.querySelector('#displayResultSearch');
+    const formSearch = document.querySelector('#searchBarHeader');
+    const btnSearch = document.querySelector('#submitBtnSearch');
+    const erraseSearch = document.querySelector('#eraseSearches');
+    formSearch.addEventListener('keyup', async (e) => {
+        e.preventDefault();
+        const query = searchBar.value;
+        if (query.length > 0) {
+            erraseSearch.classList.remove('hidden');
+            await fetch(`http://api.themoviedb.org/3/search/multi?api_key=336f5174afdbef18cdcc2f6d25e36288&language=fr-FR&query=${query}&page=1&include_adult=false`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    displayResult.innerHTML = '';
+                    let result = data.results;
+                    if (result.length > 0) {
+                        displayResult.classList.add('py-2', 'px-4');
+                        const maxResults = 8; // Limite le nombre de résultats affichés
+                        for (let i = 0; i < Math.min(result.length, maxResults); i++) {
+                            const element = result[i];
+                            if (element.media_type === 'movie') {
+                                element.media_type = 'Film';
+                                displayResult.innerHTML += `
+                                <a href="${window.location.origin}/cinetech/movie/${element.id}-${generateSlug(element.title)}" class="text-white text-center flex p-1">
+                                    <li class="text-white text-center flex">
+                                        <div id="containerImageSearch">
+                                            <img src="${getPosterPath(element.poster_path)}" alt="${element.poster_path}" class="w-12">
+                                        </div>
+                                        <div>
+                                            <div id="title_search_bar">
+                                                <h2 class="text-white">${element.title}</h2>
+                                            </div>
+                                            <div id="containerDate_Typesearch" class="flex">
+                                                <div id="containerDateSearch">
+                                                    <p class="text-white">${yearsFormat(element.release_date)}</p>
+                                                </div>
+                                                <div id="containerTypeMediaSearch">
+                                                    <p class="text-white">${element.media_type}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </a>
+                                `;
+                            } else if (element.media_type === 'tv') {
+                                element.media_type = 'Série';
+                                displayResult.innerHTML += `
+                                <a href="${window.location.origin}/cinetech/series/${element.id}-${generateSlug(element.name)}" class="text-white text-center flex">
+                                    <li class="text-white text-center flex">
+                                        <div id="containerImageSearch">
+                                            <img src="${getPosterPath(element.poster_path)}" alt="${element.poster_path}" class="w-12">
+                                        </div>
+                                        <div class="flex">
+                                            <div id="title_search_bar">
+                                                <h2 class="text-white">${element.name}</h2>
+                                            </div>
+                                            <div id="containerDateSearch">
+                                                <p class="text-white text-sm">${yearsFormat(element.first_air_date)}</p>
+                                            </div>
+                                            <p class="text-white">${element.media_type}</p>
+                                        </div>
+                                    </li>
+                                </a>
+                                `;
+                            }
+                        }
+                        if (result.length > maxResults) {
+                            displayResult.innerHTML += `
+                        <a href="${window.location.origin}/cinetech/search?query=${encodeURIComponent(query)}" class="text-white text-center flex p-1">
+                            <li class="text-white text-center flex">
+                                <div class="more-results">
+                                    Voir tous les résultats (${result.length})
+                                </div>
+                            </li>
+                        </a>
+                        `;
+                        }
+                    }
+                });
+        } else {
+            erraseSearch.classList.add('hidden');
+            displayResult.classList.remove('py-2', 'px-4');
+            displayResult.innerHTML = '';
+        }
+        if (erraseSearch) {
+            erraseSearch.addEventListener('click', () => {
+                searchBar.value = '';
+                erraseSearch.classList.add('hidden');
+                displayResult.classList.remove('py-2', 'px-4');
+                displayResult.innerHTML = '';
+            });
+        }
+    });
+    formSearch.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const query = searchBar.value;
+        if (query.length > 0) {
+            window.location.href = `${window.location.origin}/cinetech/search?query=${encodeURIComponent(query)}`;
+        }
+    });
+}
 
 export { createDialog, LoginRegister, profilHeader, formatDate, yearsFormat, headerMenu, getPosterPath, successMessageToast, displayMessageToast};
+export { searchBarHeader }

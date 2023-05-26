@@ -10,6 +10,7 @@ use App\Controller\{
     CommentController,
     ProfilController,
     BookmarkController,
+    SearchController,
 };
 
 $authController = new AuthController();
@@ -19,6 +20,7 @@ $seriesController = new SeriesController();
 $commentController = new CommentController();
 $profilController = new ProfilController();
 $bookmarkController = new BookmarkController();
+$searchController = new SearchController();
 $router = new AltoRouter();
 
 $router->setBasePath('/cinetech');
@@ -153,6 +155,11 @@ $router->map('GET', '/logout', function() use ($authController) {
     $authController->logout();
 }, 'logout');
 
+// Gestionnaire des recherches
+// Page affichage des résultats de recherche
+$router->map('GET', '/search', function() use ($searchController) {
+    $searchController->showSearchPage();
+}, 'search');
 
 
 $match = $router->match();
