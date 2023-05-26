@@ -8,19 +8,32 @@
                     <li><a href="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . '/cinetech/series';?>">Series</a></li>
                 </ul>
             </div>
-            <div class="flex flex-col" id="containerSearchBar">
-                <form action="" method="post" id="searchBarHeader" class="flex items-center">
-                    <input type="text" name="search" id="search" placeholder="Rechercher un film ou une serie" class="rounded-lg px-2 py-1 bg-[#362431]">
-                    <button type="submit" class="bg-[#fffe3e] text-black rounded-lg px-2 py-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                            <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"/>
-                            <path d="M21 21l-6 -6"/>
-                        </svg>
-                    </button>
-
-                </form>
-                <div id="containerResultSearch" class="absolute bg-[#362431] mt-2 rounded-lg shadow-lg">
+            <div class="flex flex-col w-1/2" id="containerSearchBar">
+                <div id="background_color" class="bg-[#362431] px-2 py-1 rounded">
+                    <form action="" method="post" id="searchBarHeader" class="flex items-center">
+                        <input type="text" name="search" id="search" placeholder="Rechercher un film ou une serie"
+                               class="rounded-lg px-2 py-1 bg-[#362431] w-full">
+                        <div id="eraseSearches" class="hidden">
+                            <button type="button" name="supprSearch" id="supprSearch">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#fff" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M18 6l-12 12"/>
+                                    <path d="M6 6l12 12"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <button type="submit" id="submitBtnSearch" class="bg-transparent px-2 py-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search"
+                                 width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                 fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"/>
+                                <path d="M21 21l-6 -6"/>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+                <div id="containerResultSearch" class="absolute bg-[#362431] mt-8 rounded-lg shadow-lg w-1/2">
                     <ul id="displayResultSearch"></ul>
                 </div>
             </div>
