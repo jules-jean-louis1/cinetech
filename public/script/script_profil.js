@@ -1,9 +1,8 @@
-import {LoginRegister, yearsFormat} from './function/function.js';
+import {headerMenu, LoginRegister, yearsFormat} from './function/function.js';
 import { profilHeader } from "./function/function.js";
 import { formatDate } from "./function/function.js";
 import { getPosterPath } from "./function/function.js";
 import { successMessageToast } from './function/function.js';
-import { headerMenu} from "./function/function.js";
 
 const btnHeaderloginRegister = document.querySelector('#btnHeaderLoginRegister');
 const btnHeaderLogout = document.querySelector('#btnHeaderLogout');

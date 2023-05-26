@@ -277,7 +277,7 @@ async function profilHeader(container) {
                 container.innerHTML =
                     `<div class="flex items-center justify-center w-full h-full">
                         <img src="${window.location.origin}/cinetech/public/images/avatars/${data.avatar}" alt="${data.avatar}" class="h-6 w-6 rounded-full">
-                        <p class="ml-2 font-bold text-black">${data.login}</p>
+                        <p class="ml-2 font-bold text-white">${data.login}</p>
                     </div>
                     `;
             }
@@ -334,26 +334,27 @@ const successMessageToast = (modalAppend, message) => {
         dialogElement.remove();
     });
 }
+const getPosterPath = (posterPath) => {
+    return `https://www.themoviedb.org/t/p/w220_and_h330_face${posterPath}`;
+};
 function headerMenu() {
-    const btnHeaderProfile = document.getElementById('btnHeaderProfile');
-    const menuProfilHeader = document.getElementById('menuProfilHeader');
+    const btnHeaderProfile = document.querySelector('#btnHeaderProfile');
+    const menuProfilHeader = document.querySelector('#menuProfilHeader');
 
+    // Afficher ou masquer le menu au clic sur le bouton
     btnHeaderProfile.addEventListener('click', () => {
         menuProfilHeader.classList.toggle('hidden');
     });
 
-// Fermer le menu lorsque l'utilisateur clique en dehors de celui-ci
+    // Fermer le menu lorsque l'utilisateur clique en dehors du menu
     document.addEventListener('click', (event) => {
         const targetElement = event.target;
-        const isMenuOpen = !menuProfilHeader.classList.contains('hidden');
 
-        if (isMenuOpen && !targetElement.closest('#menuProfilHeader') && targetElement !== btnHeaderProfile) {
+        // Vérifier si l'élément cliqué est en dehors du menu
+        if (!menuProfilHeader.contains(targetElement) && !btnHeaderProfile.contains(targetElement)) {
             menuProfilHeader.classList.add('hidden');
         }
     });
 }
-const getPosterPath = (posterPath) => {
-    return `https://www.themoviedb.org/t/p/w220_and_h330_face${posterPath}`;
-};
 
 export { createDialog, LoginRegister, profilHeader, formatDate, yearsFormat, headerMenu, getPosterPath, successMessageToast, displayMessageToast};

@@ -40,17 +40,31 @@
             <div>
                 <?php if (isset($_SESSION['id'])) :?>
                     <div class="relative">
-                        <button id="btnHeaderProfile" type="button" class="bg-[#fffe3e] text-black rounded-lg px-2 py-1">Profil</button>
-                        <ul id="menuProfilHeader" class="absolute right-0 w-36 mt-0.5  bg-[#1C1F26] rounded-lg border-[1px] border-[#a8b3cf33] shadow-lg z-10 hidden ">
+                        <button id="btnHeaderProfile" type="button" class="bg-[#9c4ef4] hover:bg-[#8241cc] text-white rounded-lg px-2 py-1">Profil</button>
+                        <ul id="menuProfilHeader" class="absolute right-0 w-36 mt-0.5  bg-[#9c4ef4] rounded-lg border-[1px] border-[#a8b3cf33] shadow-lg z-10 hidden ">
                             <li>
-                                <button id="btnHeaderProfile" type="button" class="bg-[#fffe3e] text-black rounded-lg px-2">
+                                <button id="btnHeaderProfile" type="button" class="bg-[#9c4ef4] hover:bg-[#8241cc] text-white rounded-lg px-2 w-full">
+                                    <a href="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . '/cinetech/profil';?>" class="flex items-center justify-between">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user-circle" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                        <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/>
+                                        <path d="M12 10m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/>
+                                        <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855"/>
+                                    </svg>
                                     Profil
+                                    </a>
                                 </button>
                             </li>
                             <li>
-                                <button id="btnHeaderLogou" type="button" class="bg-[#fffe3e] text-black rounded-lg px-2">
-                                    <a href="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . '/cinetech/logout';?>">
-                                    Deconnexion
+                                <button id="btnHeaderLogou" type="button" class="bg-[#9c4ef4] hover:bg-[#8241cc] text-white px-2 w-full">
+                                    <a href="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . '/cinetech/logout';?>" class="flex items-center justify-between">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-logout" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                            <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"/>
+                                            <path d="M9 12h12l-3 -3"/>
+                                            <path d="M18 15l3 -3"/>
+                                        </svg>
+                                        Deconnexion
                                     </a>
                                 </button>
                             </li>
