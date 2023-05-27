@@ -21,8 +21,8 @@
             <div id="filterPlusMinus" class="rounded text-white p-2 bg-[#2a1825] border border-[#362431]">
                 <form id="sort-form">
                     <label for="sort-by">Trier par :</label>
-                    <select name="sort-by" id="sort-by" class="bg-transparent p-2 rounded  border border-[#362431]">
-                        <option value="popularity.desc">Plus populaire</option>
+                    <select name="sort-by" id="sort-by" class="bg-[#2a1825] p-2 rounded  border border-[#362431]">
+                        <option value="popularity.desc" class="bg-transparent">Plus populaire</option>
                         <option value="popularity.asc">Moins populaire</option>
                         <option value="vote_average.desc">Mieux noté</option>
                         <option value="vote_average.asc">Moins bien noté</option>
@@ -33,7 +33,7 @@
                     </select>
                 </form>
             </div>
-            <div id="containerGenres" class="flex flex-wrap gap-2 rounded text-white p-2 bg-[#2a1825] border border-[#362431]"></div>
+<!--            <div id="containerGenres" class="flex flex-wrap gap-2 rounded text-white p-2 bg-[#2a1825] border border-[#362431]"></div>-->
         </div>
         <div class="w-11/12">
             <div id="containerSeries" class="flex flex-wrap gap-5 overflow-x-scroll py-5 px-10 w-full h-[90vh]"></div>

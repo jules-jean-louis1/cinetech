@@ -71,6 +71,7 @@ function displayMovies(movies) {
             <div class="flex flex-col items-center justify-between gap-2 h-full rounded text-white p-2 bg-[#2a1825] border border-[#9c4ef4]">
                 <a href="/cinetech/series/${movie.id}-${generateSlug(movie.name)}">
                 <img src="${getPosterPath(movie.poster_path)}" class="w-[150px] h-[225px] shadow-sm rounded-md" alt="${movie.name}">
+                ${createVoteCircle(movie.vote_average)}
                 <div class="flex flex-col px-3 w-[150px]">
                     <h2 class="text-sm font-bold text-center">${movie.name}</h2>
                     <p class="text-xs text-center">${yearsFormat(movie.first_air_date)}</p>
@@ -173,15 +174,49 @@ function displayMovies(movies) {
         }
     }
     bookmarkedTVshow();
-
 }
-async function displayResult() {
+function createVoteCircle(voteAverage) {
+    const percentage = (voteAverage / 10) * 100;
+    const aroundPercentage = Math.round(percentage / 10) * 10;
+    const hue = (1 - percentage / 100) * 120;
+    const color = `hsl(${hue}, 100%, 50%)`;
+
+    const circleHTML = `
+    <div class="vote-circle" style="background-color: ${color};">
+      <span class="flex items-start">${aroundPercentage}
+        <span class="text-xs">%</span>
+      </span>
+    </div>
+  `;
+
+    return circleHTML;
+}
+
+async function displayResult(page, sortOption) {
     const urlParams = new URLSearchParams(window.location.search);
     const searchQuery = urlParams.get('query');
-
-    const response = await fetch(`http://api.themoviedb.org/3/search/multi?api_key=336f5174afdbef18cdcc2f6d25e36288&language=fr-FR&query=${searchQuery}&page=1&include_adult=false`);
+    const formSort = document.querySelector('#sort-form');
+    const response = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=336f5174afdbef18cdcc2f6d25e36288&language=fr-FR&query=${searchQuery}&page=${page}&include_adult=false&sort_by=${sortOption}`);
     const data = await response.json();
     displayMovies(data.results);
+    const previousPageButton = document.getElementById('previousPageButton');
+    const nextPageButton = document.getElementById('nextPageButton');
+    previousPageButton.addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--;
+            displayResult(currentPage);
+        }
+    });
+
+    nextPageButton.addEventListener('click', () => {
+        currentPage++;
+        displayResult(currentPage);
+    });
+    formSort.addEventListener('change', (event) => {
+        event.preventDefault();
+        const sortOption = document.querySelector('#sort-by').value;
+        displayResult(currentPage, sortOption);
+    });
 }
 function titlePage() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -194,5 +229,6 @@ function titlePage() {
         Résultat de recherche pour : ${searchQuery}
     </h2>`;
 }
-displayResult();
+const sort = 'popularity.desc';
+displayResult(currentPage, sort);
 titlePage();
