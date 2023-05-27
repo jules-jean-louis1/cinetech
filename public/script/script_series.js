@@ -139,16 +139,16 @@ function displayMovies(movies) {
     let movieHTML = '';
     for (const movie of movies) {
         movieHTML += `
-      <div data-genre="${movie.genre_ids.join(',')}">
+        <div data-genre="${movie.genre_ids.join(',')}">
         <div class="flex flex-col items-center gap-2 rounded text-white p-2 bg-[#2a1825] border border-[#362431]">
-          <a href="/cinetech/series/${movie.id}-${generateSlug(movie.name)}">
+            <a href="/cinetech/series/${movie.id}-${generateSlug(movie.name)}">
             <img src="${getPosterPath(movie.poster_path)}" class="w-[150px] h-[225px] shadow-sm rounded-md" alt="${movie.name}">
             <div class="flex flex-col px-3 w-[150px]">
-              <h2 class="text-sm font-bold text-center">${movie.name}</h2>
-              <p class="text-xs text-center">${formatDate(movie.first_air_date)}</p>
+                <h2 class="text-sm font-bold text-center">${movie.name}</h2>
+                <p class="text-xs text-center">${formatDate(movie.first_air_date)}</p>
             </div>
-          </a>
-          <div id="containerBtnBookmark">
+            </a>
+            <div id="containerBtnBookmark">
             <button type="button" id="btnAddToWatchlist" class="flex items-center gap-2" data-id="${movie.id}">
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-star" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#fffe3e" fill="none" stroke-linecap="round" stroke-linejoin="round">
                     <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
@@ -156,7 +156,7 @@ function displayMovies(movies) {
                 </svg>
                 Favoris
             </button>
-          </div>
+            </div>
         </div>
       </div>
     `;
@@ -193,7 +193,7 @@ function displayMovies(movies) {
             if (btnAddToWatchlist){
                 btnAddToWatchlist.addEventListener('click', async (event) => {
                     event.preventDefault();
-                    await fetch(`${window.location.origin}/cinetech/addBookmarkTV/${movie.id}`)
+                    await fetch(`${window.location.origin}/cinetech/addBookmarks/${movie.id}/${movie.media_type}`)
                         .then(response => response.json())
                         .then(data => {
                             if (data.success) {
@@ -219,7 +219,7 @@ function displayMovies(movies) {
             if (btnRemoveFromWatchlist){
                 btnRemoveFromWatchlist.addEventListener('click', async (event) => {
                     event.preventDefault();
-                    await fetch(`${window.location.origin}/cinetech/removeBookmarkTV/${movie.id}`)
+                    await fetch(`${window.location.origin}/cinetech/removeBookmarks/${movie.id}`)
                         .then(response => response.json())
                         .then(data => {
                             if (data.success) {

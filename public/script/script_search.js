@@ -41,13 +41,12 @@ function generateSlug(title) {
 function displayMovies(movies) {
     const containerSeries = document.querySelector('#containerSeries');
     let movieHTML = '';
-    console.log(movies);
     for (const movie of movies) {
         if (movie.media_type === 'movie') {
             movieHTML += `
         <div data-genre="${movie.genre_ids.join(',')}">
             <div class="flex flex-col items-center gap-2 justify-between h-full rounded text-white p-2 bg-[#2a1825] border border-[#fffe3e]">
-                <a href="/cinetech/series/${movie.id}-${generateSlug(movie.title)}">
+                <a href="/cinetech/movie/${movie.id}-${generateSlug(movie.title)}">
                 <img src="${getPosterPath(movie.poster_path)}" class="w-[150px] h-[225px] shadow-sm rounded-md" alt="${movie.name}">
                 <div class="flex flex-col px-3 w-[150px]">
                     <h2 class="text-sm font-bold text-center">${movie.title}</h2>
@@ -98,11 +97,10 @@ function displayMovies(movies) {
         const btnAddToWatchlistList = document.querySelectorAll('#btnAddToWatchlist');
         const containerBtnBookmarkList = document.querySelectorAll('#containerBtnBookmark');
 
-        await fetch(`${window.location.origin}/cinetech/getBookmarksTV`)
+        await fetch(`${window.location.origin}/cinetech/getAllBookmarks`)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
-                for (const show of data) {
+                for (let show of data) {
                     for (let i = 0; i < btnAddToWatchlistList.length; i++) {
                         const btnAddToWatchlist = btnAddToWatchlistList[i];
                         const containerBtnBookmark = containerBtnBookmarkList[i];
@@ -125,7 +123,8 @@ function displayMovies(movies) {
             if (btnAddToWatchlist){
                 btnAddToWatchlist.addEventListener('click', async (event) => {
                     event.preventDefault();
-                    await fetch(`${window.location.origin}/cinetech/addBookmarkTV/${movie.id}`)
+                    console.log(movie.media_type);
+                    await fetch(`${window.location.origin}/cinetech/addBookmarks/${movie.id}/${movie.media_type}`)
                         .then(response => response.json())
                         .then(data => {
                             if (data.success) {
@@ -157,7 +156,13 @@ function displayMovies(movies) {
                             if (data.success) {
                                 const containerBtnBookmark = btnRemoveFromWatchlist.parentElement;
                                 containerBtnBookmark.innerHTML = `
-                    <button type="button" id="btnAddToWatchlist" data-id="${movie.id}">Ajouter à ma watchlist</button>
+                    <button type="button" id="btnAddToWatchlist" class="flex items-center gap-2" data-id="${movie.id}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-star" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#fffe3e" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z"/>
+                        </svg>
+                        Favoris
+                    </button>
                 `;
                                 displayMessageToast(containerModalDialog,'Série retirée de votre watchlist', 'success');
                                 bookmarkedTVshow();
