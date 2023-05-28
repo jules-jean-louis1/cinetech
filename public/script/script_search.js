@@ -183,12 +183,11 @@ function createVoteCircle(voteAverage) {
 
     const circleHTML = `
     <div class="vote-circle" style="background-color: ${color};">
-      <span class="flex items-start">${aroundPercentage}
-        <span class="text-xs">%</span>
-      </span>
+        <span class="flex items-start">${aroundPercentage}
+            <span class="text-xs">%</span>
+        </span>
     </div>
-  `;
-
+    `;
     return circleHTML;
 }
 
