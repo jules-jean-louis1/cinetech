@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . '/cinetech/public/style/style_index.css';?>">
     <title>Home</title>
 </head>
-<body>
+<body class="bg-[#1f0c19]">
 <?php require_once __DIR__ . '/elements/header.php'; ?>
 <div id="containerModalDialog"></div>
 <div class="containerMoviesDetailPage">

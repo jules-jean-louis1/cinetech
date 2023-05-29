@@ -67,12 +67,17 @@ async function getSeries(UrlId){
             const ContainerMovie = document.createElement('div');
             ContainerMovie.className = 'flex flex-col items-center gap-4';
             ContainerMovie.innerHTML = `
-                <div class="flex flex-row w-10/12">
-                    <img src="${getPosterPath(data.poster_path)}" alt="${data.title}" class="w-96 h-fit">
-                    <div class="flex flex-col gap-2">
+                <div class="flex flex-row gap-4 w-10/12 text-white bg-[#2a1825] p-2 rounded">
+                    <div class="flex flex-col items-center">
+                        <img src="${getPosterPath(data.poster_path)}" alt="${data.title}" class="w-96 h-fit">
+                        <div id="status" class="flex space-x-2">
+                            <p class="text-sm" id="para_status">${data.status}</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col justify-around w-10/12">
                         <h1 class="text-3xl font-bold">${data.name}</h1>
-                            <div id="original_title">
-                                <h3 class="">Titre original:</h3>
+                            <div id="original_title" class="flex gap-2 items-center">
+                                <h3 class="text-sm opacity-50">Titre original:</h3>
                                 <p class="text-sm">${data.original_name}(${data.original_language})</p>
                             </div>
                         <h2 class="text-2xl">${data.tagline}</h2>
@@ -89,6 +94,9 @@ async function getSeries(UrlId){
                                 <p class="text-sm font-light">${data.vote_count} votes</p>
                             </div>
                         </div>
+                        <div id="overview" class="flex space-x-2">
+                            <p class="text-sm"><b class="opacity-50">Synopsis :</b> ${data.overview}</p>
+                        </div>
                         <div id="containerBtnAddBookmarks"></div>
                         <div id="episode_season" class="flex gap-2">
                             <div class="flex flex-col gap-2 items-center">
@@ -99,12 +107,6 @@ async function getSeries(UrlId){
                                 <h3 class="text-xl">${data.number_of_episodes}</h3>
                                 <p class="text-sm uppercase font-bold">Episodes</p>
                             </div>
-                        </div>
-                        <div id="status" class="flex space-x-2">
-                            <p class="text-sm" id="para_status">${data.status}</p>
-                        </div>
-                        <div id="overview" class="flex space-x-2">
-                            <p class="text-sm">${data.overview}</p>
                         </div>
                     </div>
                 </div>
@@ -138,10 +140,10 @@ async function getSeriesCast(UrlId){
         .then((data) => {
             console.log(data);
             const ContainerMovieCast = document.createElement('div');
-            ContainerMovieCast.className = 'flex flex-col gap-4';
+            ContainerMovieCast.className = 'flex flex-col gap-4 w-10/12';
             ContainerMovieCast.innerHTML = `
-                <h1 class="text-3xl font-bold">Acteurs</h1>
-                <div id="containerMovieCast" class="flex flex-row gap-4 overscroll-x-auto"></div>
+                <h1 class="text-2xl font-bold text-white">Acteurs et actrices</h1>
+                <div id="containerMovieCast" class="flex flex-row justify-between overscroll-x-auto"></div>
             `;
             containerCast.appendChild(ContainerMovieCast);
             for (let i = 0; i < 10; i++) {
@@ -149,10 +151,10 @@ async function getSeriesCast(UrlId){
                 if (cast && cast.profile_path && cast.name && cast.character) {
                     const displayMovieCast = document.querySelector('#containerMovieCast');
                     displayMovieCast.innerHTML += `
-                    <div class="flex flex-col gap-2 border border-slate-200 rounded">
-                        <a href="${window.location.origin}/cinetech/actor/${cast.id}-${generateSlug(cast.name)}" class="text-center text-sm font-bold text-slate-500">
+                    <div class="flex flex-col items-center gap-2 bg-[#2A1825] p-1 rounded">
+                        <a href="${window.location.origin}/cinetech/actor/${cast.id}-${generateSlug(cast.name)}" class="text-center flex flex-col items-center">
                             <img src="${getPosterPath(cast.profile_path)}" alt="${cast.name}" class="w-36 h-fit">
-                            <p class="text-sm">${cast.name}</p>
+                            <p class="text-sm text-white">${cast.name}</p>
                             <p class="text-sm text-slate-500">${cast.character}</p>
                         </a>
                     </div>`;
@@ -167,17 +169,27 @@ async function getSimilarSeries(UrlId){
             const ContainerSimilarMovie = document.createElement('div');
             ContainerSimilarMovie.className = 'flex flex-col gap-4';
             ContainerSimilarMovie.innerHTML = `
-                <h1 class="text-3xl font-bold">Recommandations</h1>
+                <h1 class="flex items-center space-x-2 text-2xl font-bold text-white">
+                    <span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trending-up" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M3 17l6 -6l4 4l8 -8"/>
+                            <path d="M14 7l7 0l0 7"/>
+                        </svg>
+                    </span>
+                    <span>
+                        Séries Populaires
+                    </span>
+                </h1>
                 <div id="containerSimilarMovie" class="flex flex-row gap-4 overscroll-x-auto"></div>
             `;
             containerSimilarMovies.appendChild(ContainerSimilarMovie);
             for (let i = 0; i < 10; i++) {
                 const displaySimilarMovie = document.querySelector('#containerSimilarMovie');
                 displaySimilarMovie.innerHTML += `
-                    <div class="flex flex-col gap-2 border border-slate-200 rounded">
+                    <div class="flex flex-col gap-2 rounded">
                         <a href="${window.location.origin}/cinetech/series/${data.results[i].id}-${data.results[i].name.replace(/ /g, "-")}">
                             <img src="${getPosterPath(data.results[i].poster_path)}" alt="${data.results[i].name}" class="w-36 h-fit">
-                            <p class="text-sm">${data.results[i].name}</p>
                         </a>
                     </div>
                 `;
@@ -235,26 +247,28 @@ async function addComment(UrlId){
     function createFormComment() {
         const formComment = document.createElement('div');
         formComment.innerHTML = `
-            <form id="formComment" class="flex flex-col gap-4" method="post">
+        <div>
+            <h1 class="font-semibold text-white p-2">Ajouter un commentaire</h1>
+            <form id="formComment" class="flex flex-col gap-4 text-white" method="post">
                 <input type="hidden" name="id_movie" value="${UrlId}">
                 <div class="flex flex-col">
                     <label for="title" class="text-xl">Titre</label>
-                    <input type="text" id="title" name="title" class="border border-slate-200 rounded">
+                    <input type="text" id="title" name="title" class="bg-[#292226] p-2 border border-slate-200 rounded">
                     <small class="text-red-500 h-5" id="titleError"></small>
                 </div>
                 <div class="flex flex-col">
                     <label for="comment" class="text-xl">Commentaire</label>
-                    <textarea id="comment" name="comment" class="border border-slate-200 rounded"></textarea>
+                    <textarea id="comment" name="comment" class="bg-[#292226] p-2 border border-slate-200 rounded"></textarea>
                     <small class="text-red-500 h-5" id="commentError"></small>
                 </div>
                 <div id="errorsMessage" class="h-[45px]">
                     <div id="message"></div>
                 </div>
                 <div id="formCommentSubmit">
-                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Envoyer</button>
+                    <button type="submit" class="bg-[#9c4ef4] hover:bg-[#8241cc] text-white font-bold py-2 px-4 rounded">Poster</button>
                 </div>
             </form>
-            `;
+        </div>`;
         containerCommentsForm.appendChild(formComment);
     }
     createFormComment();
