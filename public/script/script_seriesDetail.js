@@ -540,7 +540,10 @@ async function getComment(UrlId){
                             displayComments(commentsData);
                         } else {
                             containerComment.innerHTML = `
-                    <p class="text-red-500">Aucun commentaire pour cette series</p>
+<div class="w-full p-2 bg-[#2a1825] h-12 rounded my-6">
+    <p class="text-white">Aucun commentaire pour cette series</p>
+</div>
+                    
                 `;
                         }
                     });
