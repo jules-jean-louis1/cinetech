@@ -160,7 +160,10 @@ $router->map('GET', '/logout', function() use ($authController) {
 $router->map('GET', '/search', function() use ($searchController) {
     $searchController->showSearchPage();
 }, 'search');
-
+// Actor Page
+$router->map('GET', '/actor/[i:id]-[*:slug]', function($id, $slug) use ($searchController) {
+    $searchController->showActorPage($id, $slug);
+}, 'actor');
 
 $match = $router->match();
 

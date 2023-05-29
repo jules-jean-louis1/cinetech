@@ -8,6 +8,7 @@ import {
 } from './function/function.js';
 import {displayMessageToast} from './function/function.js';
 import {yearsFormat} from './function/function.js';
+import {generateSlug} from './function/function.js';
 
 const btnHeaderloginRegister = document.querySelector('#btnHeaderLoginRegister');
 const btnHeaderLogout = document.querySelector('#btnHeaderLogout');
@@ -135,6 +136,7 @@ async function getSeriesCast(UrlId){
     await fetch(`https://api.themoviedb.org/3/tv/${UrlId}/credits?api_key=${apiKey}&language=${language}`)
         .then((response) => response.json())
         .then((data) => {
+            console.log(data);
             const ContainerMovieCast = document.createElement('div');
             ContainerMovieCast.className = 'flex flex-col gap-4';
             ContainerMovieCast.innerHTML = `
@@ -148,9 +150,11 @@ async function getSeriesCast(UrlId){
                     const displayMovieCast = document.querySelector('#containerMovieCast');
                     displayMovieCast.innerHTML += `
                     <div class="flex flex-col gap-2 border border-slate-200 rounded">
-                        <img src="${getPosterPath(cast.profile_path)}" alt="${cast.name}" class="w-36 h-fit">
-                        <p class="text-sm">${cast.name}</p>
-                        <p class="text-sm text-slate-500">${cast.character}</p>
+                        <a href="${window.location.origin}/cinetech/actor/${cast.id}-${generateSlug(cast.name)}" class="text-center text-sm font-bold text-slate-500">
+                            <img src="${getPosterPath(cast.profile_path)}" alt="${cast.name}" class="w-36 h-fit">
+                            <p class="text-sm">${cast.name}</p>
+                            <p class="text-sm text-slate-500">${cast.character}</p>
+                        </a>
                     </div>`;
                 }
             }

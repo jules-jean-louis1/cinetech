@@ -467,4 +467,4 @@ function searchBarHeader() {
 }
 
 export { createDialog, LoginRegister, profilHeader, formatDate, yearsFormat, headerMenu, getPosterPath, successMessageToast, displayMessageToast};
-export { searchBarHeader }
+export { searchBarHeader, generateSlug }
