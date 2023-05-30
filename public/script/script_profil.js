@@ -87,8 +87,6 @@ async function matchFavorite() {
                     favoriteMovie.innerHTML += `
                         <div class="bg-[#251821] hover:bg-[#362431] rounded-lg p-2 w-1/5 flex flex-col items-center">
                             <img src="${getPosterPath(data.poster_path)}" alt="${data.poster_path}" class="h-fit w-36">
-                            <p class="text-white">${data.title}</p>
-                            <p class="text-white text-sm">Sortie : ${formatDate(data.release_date)}</p>
                             <p class="text-white text-sm">Ajouter : ${formatDate(element.created_at)}</p>
                             <form action="" method="post" id="formView_${element.id}">
                                 <input type="hidden" id="movie_form" name="movie_form" value="${data.id}">
@@ -104,9 +102,7 @@ async function matchFavorite() {
                     favoriteTv.innerHTML += `
                         <div class="bg-[#251821] hover:bg-[#362431] rounded-lg p-2 w-1/5 flex flex-col items-center">
                             <img src="${getPosterPath(data.poster_path)}" alt="${data.poster_path}" class="h-fit w-36">
-                            <p class="text-white">${data.name}</p>
-                            <p class="text-white">${formatDate(data.first_air_date)}</p>
-                            <p class="text-white">${formatDate(element.created_at)}</p>
+                            <p class="text-white text-sm">Ajouter : ${formatDate(element.created_at)}</p>
                             <form action="" method="post" id="formView_${element.id}">
                                 <input type="hidden" id="movie_form" name="movie_form" value="${data.id}">
                                 <select name="status" id="status" class="bg-[#4c3d47] text-white rounded-lg p-1">
@@ -114,8 +110,7 @@ async function matchFavorite() {
                                 </select>
                             </form>
                             <button id="btnDeleteBookmark_${element.id}" data-id="${element.id}" class="text-white">Supprimer</button>
-                        </div>
-                    `;
+                        </div>`;
                 }
             }
             for (const element of favoriteData) {
@@ -153,7 +148,73 @@ async function matchFavorite() {
         console.error(error);
     }
 }
-async function editProfil(){
-
+function formUserProfil(user){
+    const profilForm = document.querySelector('#profilForm');
+    profilForm.innerHTML = `
+        <div class="flex flex-col items-center gap-4 w-8/10">
+            <div class="flex items-center space-x-4">
+                <div class="flex flex-col">
+                    <label for="email" class="text-white">Email</label>
+                    <input type="email" name="email" id="email" class="bg-[#4c3d47] text-white rounded-lg p-2 border border-slate-100" value="${user.email}">
+                    <small class="text-red-500 h-5" id="emailError"></small>
+                </div>
+                <div class="flex flex-col">
+                    <label for="login" class="text-white">Nom d'utilisateur</label>
+                    <input type="text" name="login" id="login" class="bg-[#4c3d47] text-white rounded-lg p-2 border border-slate-100" value="${user.login}">
+                    <small class="text-red-500 h-5" id="loginError"></small>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">     
+                <div class="flex flex-col">
+                    <label for="password" class="text-white">Mot de passe</label>
+                    <input type="password" name="password" id="password" class="bg-[#4c3d47] text-white rounded-lg p-2 border border-slate-100">
+                    <small class="text-red-500 h-5" id="passwordError"></small>
+                </div>
+                <div class="flex flex-col">
+                    <label for="password_confirm" class="text-white">Confirmation du mot de passe</label>
+                    <input type="password" name="password_confirm" id="password_confirm" class="bg-[#4c3d47] text-white rounded-lg p-2 border border-slate-100">
+                    <small class="text-red-500 h-5" id="passwordConfirmError"></small>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4"> 
+                <div class="flex flex-col">
+                    <label for="firstname" class="text-white">Prénom</label>
+                    <input type="text" name="firstname" id="firstname" class="bg-[#4c3d47] text-white rounded-lg p-2 border border-slate-100" value="${user.prenom ? user.prenom : ''}" placeholder="Votre prénom">
+                    <small class="text-red-500 h-5" id="firstnameError"></small>
+                </div>
+                <div class="flex flex-col">
+                    <label for="lastname" class="text-white">Nom</label>
+                    <input type="text" name="lastname" id="lastname" class="bg-[#4c3d47] text-white rounded-lg p-2 border border-slate-100" value="${user.nom ? user.nom : ''}" placeholder="Votre nom">
+                    <small class="text-red-500 h-5" id="lastnameError"></small>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div id="errorMessages" class="h-[45px]"></div>
+            </div>
+            <div>
+                <button type="submit" id="btnEditProfil" class="bg-[#4c3d47] text-white rounded-lg p-2">Modifier</button>
+            </div>
+        </div>`;
 }
+async function editProfil(){
+    await fetch(`${window.location.origin}/cinetech/getUserProfil`)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            formUserProfil(data);
+        });
+}
+editProfil();
 matchFavorite();
+
+btnFavorite.addEventListener('click', async (e) => {
+    e.preventDefault();
+    const displayFavorite = document.querySelector('#displayFavorite');
+    if (displayFavorite.classList.contains('hidden')) {
+        displayFavorite.classList.remove('hidden');
+        btnFavorite.textContent = 'Cacher mes favoris';
+    } else {
+        displayFavorite.classList.add('hidden');
+        btnFavorite.textContent = 'Afficher mes favoris';
+    }
+});

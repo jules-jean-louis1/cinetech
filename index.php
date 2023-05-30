@@ -66,6 +66,10 @@ $router->map('GET', '/series/[i:id]-[*:slug]', function($id, $slug) use ($series
 $router->map('GET', '/profil', function() use ($profilController) {
     $profilController->showProfil();
 }, 'profil');
+// Get user info
+$router->map('GET', '/getUserProfil', function() use ($profilController) {
+    $profilController->getUserInfo();
+});
 // Favorites of user
 $router->map('GET', '/getLast6', function() use ($profilController) {
     $profilController->getLast6();

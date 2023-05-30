@@ -95,4 +95,24 @@ class UserManager extends AbstractDatabase
             ':id' => $id
         ]);
     }
+
+    public function infoUser(int $id) : array
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare('SELECT login, email, avatar, nom, prenom FROM utilisateurs WHERE id = :id');
+        $req->execute([
+            ':id' => $id
+        ]);
+        $user = $req->fetch(\PDO::FETCH_ASSOC);
+        return $user;
+    }
+    public function updateField(string $field, string $value, int $id)
+    {
+        $bdd = $this->getBdd();
+        $req = $bdd->prepare('UPDATE utilisateurs SET ' . $field . ' = :value WHERE id = :id');
+        $req->execute([
+            ':value' => $value,
+            ':id' => $id
+        ]);
+    }
 }
