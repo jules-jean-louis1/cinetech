@@ -1,8 +1,8 @@
 <header class="bg-[#1f0c19] text-white">
     <div id="containerHeader" class="py-3">
-        <nav class="flex justify-between items-center px-4">
+        <nav class="flex justify-between items-center px-6">
             <div>
-                <ul class="flex space-x-4">
+                <ul class="flex items-center space-x-4">
                     <li>
                         <a href="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . '/cinetech/';?>">
                             <svg width="52" height="28" viewBox="0 0 84 28" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -13,8 +13,8 @@
                             </svg>
                         </a>
                     </li>
-                    <li><a href="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . '/cinetech/movie';?>">Film</a></li>
-                    <li><a href="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . '/cinetech/series';?>">Series</a></li>
+                    <li><a href="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . '/cinetech/movie';?>" class="uppercase">Film</a></li>
+                    <li><a href="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . '/cinetech/series';?>" class="uppercase">Series</a></li>
                 </ul>
             </div>
             <div class="flex flex-col w-1/2" id="containerSearchBar">

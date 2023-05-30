@@ -109,7 +109,7 @@ class UserManager extends AbstractDatabase
     public function updateField(string $field, string $value, int $id)
     {
         $bdd = $this->getBdd();
-        $req = $bdd->prepare('UPDATE utilisateurs SET ' . $field . ' = :value WHERE id = :id');
+        $req = $bdd->prepare('UPDATE utilisateurs SET ' . $field . ' = :value, updated_at = NOW() WHERE id = :id');
         $req->execute([
             ':value' => $value,
             ':id' => $id

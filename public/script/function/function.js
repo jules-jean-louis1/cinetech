@@ -33,7 +33,7 @@ const displayMessageToast = (modalAppend, message, state) => {
     } else if (state === 'warning') {
         container.setAttribute('class', 'flex items-center justify-between gap-2 bg-[#ffd53d] rounded-lg');
     } else if (state === 'info') {
-        container.setAttribute('class', 'flex items-center justify-between gap-2 bg-[#ffd53d] rounded-lg');
+        container.setAttribute('class', 'flex items-center justify-between gap-2 bg-[#0148d2] rounded-lg');
     } else if (state === 'default') {
         container.setAttribute('class', 'flex items-center justify-between gap-2 bg-[#3d3d3d] rounded-lg');
     }

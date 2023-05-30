@@ -70,6 +70,10 @@ $router->map('GET', '/profil', function() use ($profilController) {
 $router->map('GET', '/getUserProfil', function() use ($profilController) {
     $profilController->getUserInfo();
 });
+// edit user info
+$router->map('POST', '/editProfil', function() use ($profilController) {
+    $profilController->editProfil();
+});
 // Favorites of user
 $router->map('GET', '/getLast6', function() use ($profilController) {
     $profilController->getLast6();
