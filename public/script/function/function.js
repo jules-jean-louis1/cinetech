@@ -217,6 +217,7 @@ async function LoginRegister(btnLogin) {
                                         smallEmail.textContent = '';
                                         message.textContent ='';
                                         message.textContent = data.success;
+
                                     }
                                 });
                         });

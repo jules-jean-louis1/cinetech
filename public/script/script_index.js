@@ -1,19 +1,25 @@
-import { LoginRegister } from './function/function.js';
+import {headerMenu, LoginRegister, yearsFormat} from './function/function.js';
 import { profilHeader } from "./function/function.js";
 import { formatDate } from "./function/function.js";
-import { headerMenu} from "./function/function.js";
+import { getPosterPath } from "./function/function.js";
+import { successMessageToast } from './function/function.js';
+import { searchBarHeader } from "./function/function.js";
 
 const btnHeaderloginRegister = document.querySelector('#btnHeaderLoginRegister');
 const btnHeaderLogout = document.querySelector('#btnHeaderLogout');
 const btnHeaderProfile = document.querySelector('#btnHeaderProfile');
+const containerModalDialog = document.querySelector('#containerModalDialog');
+const containerSearchBar = document.querySelector('#containerSearchBar');
 
 if (btnHeaderloginRegister) {
     LoginRegister(btnHeaderloginRegister);
 }
 if (btnHeaderProfile) {
-    profilHeader(btnHeaderProfile);
-    headerMenu();
+    await profilHeader(btnHeaderProfile);
+    await headerMenu();
 }
+searchBarHeader();
+
 
 // INDEX PAGE
 
@@ -23,25 +29,44 @@ const btnTrendingWeek = document.querySelector('#btnTrendingWeek');
 const btnTrendingDay = document.querySelector('#btnTrendingDay');
 
 // Creation d'un barre de recherche
-const getPosterPath = (posterPath) => {
-    return `https://www.themoviedb.org/t/p/w220_and_h330_face${posterPath}`;
-};
 // Recupération des données de l'API Films populaires
+function generateSlug(title) {
+    let slug = title.toLowerCase(); // Convertit le titre en minuscules
+    slug = slug.replace(/[^a-z0-9]+/g, '-'); // Remplace les caractères non alphabétiques et non numériques par des tirets
+    slug = slug.replace(/^-+|-+$/g, ''); // Supprime les tirets en début et en fin de chaîne
+    return slug;
+}
 function displayMovies(data) {
     if (data.results) {
         const displayCard = document.createElement('div');
         displayCard.id = 'moviesCard';
         displayCard.classList.add('flex', 'flex-row', 'gap-5', 'overflow-x-scroll', 'py-5', 'px-10', 'w-full', 'h-[350px]');
         data.results.forEach((movie) => {
+            if (movie.title) {
             displayCard.innerHTML += `
-                <div class="flex flex-col pl-5 gap-2">
-                    <img src="${getPosterPath(movie.poster_path)}" class="w-[150px] h-[225px] shadow-sm rounded-md">
-                    <div class="flex flex-col px-3 w-[150px]">
-                        <h2 class="text-sm font-bold text-center">${movie.title}</h2>
-                        <p class="text-xs text-center">${formatDate(movie.release_date)}</p>
-                    </div>
+                <div class="flex flex-col pl-5 gap-2 text-white">
+                    <a href="${window.location.origin}/cinetech/movie/${movie.id}-${generateSlug(movie.title)}">
+                        <img src="${getPosterPath(movie.poster_path)}" class="w-[150px] h-[225px] shadow-sm rounded-md">
+                        <div class="flex flex-col px-3 w-[150px]">
+                            <h2 class="text-sm font-bold text-center">${movie.title}</h2>
+                            <p class="text-xs text-center">${formatDate(movie.release_date)}</p>
+                        </div>
+                    </a>
                 </div>
             `;
+            } else {
+                displayCard.innerHTML += `
+                <div class="flex flex-col pl-5 gap-2 text-white">
+                    <a href="${window.location.origin}/cinetech/series/${movie.id}-${generateSlug(movie.name)}">
+                        <img src="${getPosterPath(movie.poster_path)}" class="w-[150px] h-[225px] shadow-sm rounded-md">
+                        <div class="flex flex-col px-3 w-[150px]">
+                            <h2 class="text-sm font-bold text-center">${movie.name}</h2>
+                            <p class="text-xs text-center">${formatDate(movie.first_air_date)}</p>
+                        </div>
+                    </a>
+                </div>
+            `;
+            }
         });
         containerMoviesWeekOrDay.appendChild(displayCard);
     }
@@ -71,12 +96,14 @@ async function getPopularMovies () {
                 moviesCard.classList.add('flex', 'flex-row', 'gap-5', 'overflow-x-scroll', 'py-5', 'px-10', 'w-full', 'h-[350px]');
                 data.results.forEach((movie) => {
                     moviesCard.innerHTML += `
-                        <div class="flex flex-col pl-5 gap-2">
-                        <img src="${getPosterPath(movie.poster_path)}" class="w-[150px] h-[225px] shadow-sm rounded-md">
-                            <div class="flex flex-col px-3 w-[150px]">
-                                <h2 class="text-sm font-bold text-center">${movie.title}</h2>
-                                <p class="text-xs text-center">${formatDate(movie.release_date)}</p>
-                            </div>
+                        <div class="flex flex-col pl-5 gap-2 text-white">
+                            <a href="${window.location.origin}/cinetech/movie/${movie.id}-${generateSlug(movie.title)}">
+                            <img src="${getPosterPath(movie.poster_path)}" class="w-[150px] h-[225px] shadow-sm rounded-md">
+                                <div class="flex flex-col px-3 w-[150px]">
+                                    <h2 class="text-sm font-bold text-center">${movie.title}</h2>
+                                    <p class="text-xs text-center">${formatDate(movie.release_date)}</p>
+                                </div>
+                            </a>
                         </div>
                     `;
                 });
@@ -98,11 +125,13 @@ async function getPopularSeries () {
                 data.results.forEach((serie) => {
                     seriesCard.innerHTML += `
                         <div class="flex flex-col pl-5 gap-2">
-                        <img src="${getPosterPath(serie.poster_path)}" class="w-[150px] h-[225px] shadow-sm rounded-md">
-                            <div class="flex flex-col px-3 w-[150px]">
-                                <h2 class="text-sm font-bold text-center">${serie.name}</h2>
-                                <p class="text-xs text-center">${formatDate(serie.first_air_date)}</p>
-                            </div>
+                            <a href="${window.location.origin}/cinetech/series/${serie.id}-${generateSlug(serie.name)}">
+                            <img src="${getPosterPath(serie.poster_path)}" class="w-[150px] h-[225px] shadow-sm rounded-md">
+                                <div class="flex flex-col px-3 w-[150px]">
+                                    <h2 class="text-sm font-bold text-center">${serie.name}</h2>
+                                    <p class="text-xs text-center">${formatDate(serie.first_air_date)}</p>
+                                </div>
+                            </a>
                         </div>
                     `;
                 });

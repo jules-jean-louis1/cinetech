@@ -4,6 +4,7 @@ import { formatDate } from "./function/function.js";
 import { getPosterPath } from "./function/function.js";
 import { successMessageToast } from './function/function.js';
 import { headerMenu} from "./function/function.js";
+import {generateSlug } from "./function/function.js";
 
 const btnHeaderloginRegister = document.querySelector('#btnHeaderLoginRegister');
 const btnHeaderLogout = document.querySelector('#btnHeaderLogout');
@@ -166,10 +167,12 @@ async function getMovieCast(UrlId){
             for (let i = 0; i < 10; i++) {
                 const displayMovieCast = document.querySelector('#containerMovieCast');
                 displayMovieCast.innerHTML += `
-                    <div class="flex flex-col gap-2 border border-slate-200 rounded">
-                        <img src="${getPosterPath(data.cast[i].profile_path)}" alt="${data.cast[i].name}" class="w-36 h-fit">
-                        <p class="text-sm">${data.cast[i].name}</p>
-                        <p class="text-sm text-slate-500">${data.cast[i].character}</p>
+                    <div class="flex flex-col items-center gap-2 bg-[#2A1825] p-1 rounded">
+                        <a href="${window.location.origin}/cinetech/actor/${data.cast[i].id}-${generateSlug(data.cast[i].name)}" class="text-center flex flex-col items-center">
+                            <img src="${getPosterPath(data.cast[i].profile_path)}" alt="${data.cast[i].name}" class="w-36 h-fit">
+                            <p class="text-sm text-white">${data.cast[i].name}</p>
+                            <p class="text-sm text-slate-500">${data.cast[i].character}</p>
+                        </a>
                     </div>
                 `;
             }
@@ -184,16 +187,17 @@ async function getSimilarMovie(UrlId){
             const ContainerSimilarMovie = document.createElement('div');
             ContainerSimilarMovie.className = 'flex flex-col gap-4';
             ContainerSimilarMovie.innerHTML = `
-                <h1 class="text-3xl font-bold">Films similaires</h1>
+                <h1 class="text-3xl font-bold">Rocomendations</h1>
                 <div id="containerSimilarMovie" class="flex flex-row gap-4 overscroll-x-auto"></div>
             `;
             containerSimilarMovies.appendChild(ContainerSimilarMovie);
             for (let i = 0; i < 10; i++) {
                 const displaySimilarMovie = document.querySelector('#containerSimilarMovie');
                 displaySimilarMovie.innerHTML += `
-                    <div class="flex flex-col gap-2 border border-slate-200 rounded">
+                    <div class="flex flex-col gap-2 rounded">
+                        <a href="${window.location.origin}/cinetech/movie/${data.results[i].id}-${generateSlug(data.results[i].title)}" class="w-36 h-fit">
                         <img src="${getPosterPath(data.results[i].poster_path)}" alt="${data.results[i].title}" class="w-36 h-fit">
-                        <p class="text-sm">${data.results[i].title}</p>
+                        </a>
                     </div>
                 `;
             }
@@ -509,8 +513,9 @@ async function getComment(UrlId){
                             displayComments(commentsData);
                         } else {
                             containerComment.innerHTML = `
-                    <p class="text-red-500">${data.message}</p>
-                `;
+                                <div class="w-full p-2 bg-[#2a1825] h-12 rounded my-6">
+                                    <p class="text-white">Aucun commentaire pour ce film</p>
+                                </div>`;
                         }
                     });
             } else {
