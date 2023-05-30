@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer type="module" src="<?php __DIR__?>./public/script/script_search.js"></script>
     <link rel="stylesheet" href="<?php __DIR__ ?>./public/style/style_index.css">
+    <link rel="icon" href="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . '/cinetech/public/images/icon/logo.svg';?>">
     <title>Resultat</title>
 </head>
 <body class="bg-[#1f0c19]">
