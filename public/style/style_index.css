@@ -41,3 +41,6 @@
 .hidden-toast {
     display: none;
 }
+#test {
+    background: rgba(31, 12, 25, 0.68);
+}

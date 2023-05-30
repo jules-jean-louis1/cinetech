@@ -37,52 +37,66 @@ const containerSimilarMovies = document.querySelector('#containerSimilarMovies')
 const apiKey = '336f5174afdbef18cdcc2f6d25e36288';
 const language = 'fr-FR';
 let genreMovie = '';
+function generateStarIcons(voteAverage) {
+    const maxStars = 5; // Nombre maximum d'étoiles
+    const filledStars = Math.round(voteAverage / 2); // Nombre d'étoiles remplies (arrondi à la valeur entière la plus proche)
+
+    let starIcons = '';
+    for (let i = 1; i <= maxStars; i++) {
+        if (i <= filledStars) {
+            // Ajouter une étoile remplie
+            starIcons += '<i class="fas fa-star"></i>';
+        } else {
+            // Ajouter une étoile vide
+            starIcons += '<i class="far fa-star"></i>';
+        }
+    }
+
+    return starIcons;
+}
 async function getMovie(UrlId){
     await fetch(`https://api.themoviedb.org/3/movie/${UrlId}?api_key=${apiKey}&language=${language}`)
         .then((response) => response.json())
         .then((data) => {
+            console.log(data);
+            let original_img_url = 'https://image.tmdb.org/t/p/original';
             const titlePage = document.querySelector('title');
             titlePage.innerHTML = `${data.title} - MovieDB`;
             const ContainerMovie = document.createElement('div');
-            ContainerMovie.className = 'flex flex-col gap-4';
+            ContainerMovie.className = 'flex flex-col items-center gap-4';
             ContainerMovie.innerHTML = `
-                <div class="flex flex-row w-8/12">
-                    <img src="${getPosterPath(data.poster_path)}" alt="${data.title}" class="w-96 h-fit">
-                    <div class="flex flex-col gap-2">
-                        <h1 class="text-3xl font-bold">${data.title}</h1>
-                        <h2 class="text-2xl">${data.tagline}</h2>
-                        <div id="realease_date" class="flex space-x-2">
-                            <h3 class="text-xl">Date de sortie:</h3>
-                            <p class="text-sm">${formatDate(data.release_date)}</p>
+                <div class="relative p-4">
+                    <img src="${original_img_url}${data.backdrop_path}" alt="Background Image" class="w-full h-full object-cover absolute inset-0 z-[-10]" id="backdropMovie">
+                    <div class="absolute inset-0 bg-[#1F0C19AD]"></div>
+                    <div class="flex flex-row gap-4 w-8/12 text-white p-2 rounded mx-auto relative">
+                        <div class="flex-shrink-0">
+                            <img src="${getPosterPath(data.poster_path)}" alt="${data.title}" class="w-80 h-fit">
                         </div>
-                        <div id="runtime" class="flex space-x-2">
-                            <h3 class="text-xl">Durée:</h3>
-                            <p class="text-sm">${data.runtime} min</p>
-                        </div>
-                        <div id="vote_average" class="flex space-x-2">
-                            <h3 class="text-xl">Note:</h3>
-                            <p class="text-sm">${data.vote_average}/10</p>
-                        </div>
-                        <div id="vote_count" class="flex space-x-2">
-                            <h3 class="text-xl">Nombre de votes:</h3>
-                            <p class="text-sm">${data.vote_count}</p>
-                        </div>
-                        <div class="flex flex-row gap-2">
-                            <h3 class="text-sm">Genres:</h3>
-                            <div id="containerGenres" class="flex space-x-2"></div>
-                        </div>
-                        <div id="status" class="flex space-x-2">
-                            <h3 class="text-xl">Status:</h3>
-                            <p class="text-sm">${data.status}</p>
-                        </div>
-                        <div id="overview" class="flex space-x-2">
-                            <p class="text-sm">${data.overview}</p>
+                        <div class="flex flex-col gap-2">
+                            <h1 class="text-3xl font-bold">${data.title}</h1>
+                            <h2 class="text-lg">${data.tagline}</h2>
+                            <div id="realease_date" class="flex space-x-2">
+                                <p class="text-sm">${formatDate(data.release_date)} / ${data.runtime} min</p>
+                            </div>
+                            <div id="vote_average" class="flex flex-col space-y-2">
+                                <div class="flex">
+                                    ${generateStarIcons(data.vote_average)}
+                                </div>
+                                <div id="vote_count" class="flex space-x-2">
+                                    <p class="text-sm font-light">${data.vote_count} votes</p>
+                                </div>
+                            </div>
+                            <div class="flex flex-row gap-2">
+                                <h3 class="text-sm">Genres:</h3>
+                                <div id="containerGenres" class="flex space-x-2"></div>
+                            </div>
+                            <div id="overview" class="flex space-x-2">
+                                <p class="text-sm"><b class="opacity-50">Synopsis :</b> ${data.overview.substring(0,200) + '...'}</p>
+                            </div>
+                            <div id="containerBtnAddBookmarks"></div>
                         </div>
                     </div>
-                    <div id="containerBtnAddBookmarks">
-                    </div>
-                </div>
-            `;
+                </div>`;
             detailMovie.appendChild(ContainerMovie);
             for (let i = 0; i < data.genres.length; i++) {
                 const displayGenres = document.querySelector('#containerGenres');
@@ -122,7 +136,15 @@ async function checkBookmarkMovie(UrlId) {
         .then((response) => response.json())
         .then(async (data) => {
             if (data) {
-                containerBookmarks.innerHTML = `<button id="btnAddBookmarks" class="w-36 h-12 bg-slate-500 text-white rounded">Retirer des favoris</button>`;
+                containerBookmarks.innerHTML = `
+                    <button id="btnAddBookmarks" class="flex items-center gap-2 p-2 w-48 h-12 bg-slate-500/60 hover:bg-slate-500/40 text-white rounded">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-minus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                      <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/>
+                      <path d="M9 12l6 0"/>
+                    </svg>
+                    Retirer des favoris
+                    </button>`;
                 const btnAddBookmarks = document.querySelector('#btnAddBookmarks');
                 btnAddBookmarks.addEventListener('click', async (e) => {
                     e.preventDefault();
@@ -134,7 +156,16 @@ async function checkBookmarkMovie(UrlId) {
                         });
                 });
             } else {
-                containerBookmarks.innerHTML = `<button id="btnAddBookmarks" class="w-36 h-12 bg-slate-500 text-white rounded">Ajouter aux favoris</button>`;
+                containerBookmarks.innerHTML = `
+                    <button id="btnAddBookmarks" class="flex items-center gap-2 p-2 w-48 h-12 bg-slate-500/60 hover:bg-slate-500/40 text-white rounded">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                          <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/>
+                          <path d="M9 12l6 0"/>
+                          <path d="M12 9l0 6"/>
+                        </svg>
+                        Ajouter aux favoris
+                    </button>`;
                 const contentType = await movieType(UrlId);
                 if (contentType === 'movie' || contentType === 'tv') {
                     const btnAddBookmarks = document.querySelector('#btnAddBookmarks');
@@ -158,9 +189,9 @@ async function getMovieCast(UrlId){
         .then((response) => response.json())
         .then((data) => {
             const ContainerMovieCast = document.createElement('div');
-            ContainerMovieCast.className = 'flex flex-col gap-4';
+            ContainerMovieCast.className = 'flex flex-col gap-4 my-4';
             ContainerMovieCast.innerHTML = `
-                <h1 class="text-3xl font-bold">Acteurs</h1>
+                <h1 class="text-2xl font-bold text-white">Acteurs</h1>
                 <div id="containerMovieCast" class="flex flex-row gap-4 overscroll-x-auto"></div>
             `;
             containerCast.appendChild(ContainerMovieCast);
@@ -185,9 +216,9 @@ async function getSimilarMovie(UrlId){
         .then((response) => response.json())
         .then((data) => {
             const ContainerSimilarMovie = document.createElement('div');
-            ContainerSimilarMovie.className = 'flex flex-col gap-4';
+            ContainerSimilarMovie.className = 'flex flex-col gap-4 my-4';
             ContainerSimilarMovie.innerHTML = `
-                <h1 class="text-3xl font-bold">Rocomendations</h1>
+                <h1 class="text-2xl font-bold text-white">Recommandations</h1>
                 <div id="containerSimilarMovie" class="flex flex-row gap-4 overscroll-x-auto"></div>
             `;
             containerSimilarMovies.appendChild(ContainerSimilarMovie);
@@ -465,7 +496,7 @@ async function getComment(UrlId){
                                         const repliesHTML = generateNestedRepliesHTML(comments, comment.id);
 
                                         commentsContainer.innerHTML += `
-                                        <div class="comment-container p-2 bg-slate-100 m-2">
+                                        <div class="comment-container p-2 bg-[#251821] rounded text-white m-2">
                                             ${commentHTML}
                                             <div id="replies-container" class="pl-2">
                                             ${repliesHTML}
