@@ -150,8 +150,8 @@ function createDialog() {
     containerModal.appendChild(dialog);
 }
 async function LoginRegister(btnLogin) {
-    createDialog();
     const dialog = document.getElementById("dialog");
+    createDialog();
     const containerDiv = document.getElementById("containerDiv");
     btnLogin.addEventListener('click', async (ev) => {
         dialog.showModal();

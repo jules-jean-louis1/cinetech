@@ -686,11 +686,9 @@ async function getComment(UrlId){
                                 });
                                 comments.forEach(comment => {
                                     const repliesButton = commentsContainer.querySelector(`#reply_${comment.id}`);
-                                    repliesButton.addEventListener('click', (e) => {
-                                        e.preventDefault();
-                                        if (btnHeaderloginRegister) {
-                                            LoginRegister(btnHeaderloginRegister);
-                                        }
+                                    repliesButton.addEventListener('mousedown', (e) => {
+                                        e.preventDefault(); // Empêche la sélection de texte lors du clic
+                                        LoginRegister(repliesButton);
                                     });
                                 });
                             }
