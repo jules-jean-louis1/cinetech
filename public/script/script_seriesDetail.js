@@ -5,6 +5,7 @@ import {
     LoginRegister,
     profilHeader,
     successMessageToast,
+    searchBarHeader,
 } from './function/function.js';
 import {displayMessageToast} from './function/function.js';
 import {yearsFormat} from './function/function.js';
@@ -22,6 +23,7 @@ if (btnHeaderProfile) {
     await headerMenu();
     await profilHeader(btnHeaderProfile);
 }
+searchBarHeader();
 // MOVIE SERIES PAGE
 // Récupérer l'URL actuelle
 const url = window.location.href;
@@ -62,20 +64,24 @@ async function getSeries(UrlId){
         .then((response) => response.json())
         .then((data) => {
             console.log(data);
+            let original_img_url = 'https://image.tmdb.org/t/p/original';
             const titlePage = document.querySelector('title');
-            titlePage.innerHTML = `${data.name} - Movie`;
+            titlePage.innerHTML = `${data.name} - WatchManager`;
             const ContainerMovie = document.createElement('div');
             ContainerMovie.className = 'flex flex-col items-center gap-4';
             ContainerMovie.innerHTML = `
-                <div class="flex flex-row gap-4 w-10/12 text-white bg-[#2a1825] p-2 rounded">
-                    <div class="flex flex-col items-center">
-                        <img src="${getPosterPath(data.poster_path)}" alt="${data.title}" class="w-96 h-fit">
-                        <div id="status" class="flex space-x-2">
-                            <p class="text-sm" id="para_status">${data.status}</p>
+                <div class="relative p-4">
+                    <img src="${original_img_url}${data.backdrop_path}" alt="Background Image" class="w-full h-full object-cover absolute inset-0 z-[-10]" id="backdropMovie">
+                    <div class="absolute inset-0 bg-[#1F0C19AD]"></div>
+                    <div class="flex flex-row gap-4 w-8/12 text-white p-2 rounded mx-auto relative">
+                        <div class="flex-shrink-0">
+                            <img src="${getPosterPath(data.poster_path)}" alt="${data.name}" class="w-80 h-fit">
+                            <div id="status" class="flex space-x-2">
+                                <p class="text-sm" id="para_status">${data.status}</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="flex flex-col justify-around w-10/12">
-                        <h1 class="text-3xl font-bold">${data.name}</h1>
+                        <div class="flex flex-col gap-2">
+                            <h1 class="text-3xl font-bold">${data.name}</h1>
                             <div id="original_title" class="flex gap-2 items-center">
                                 <h3 class="text-sm opacity-50">Titre original:</h3>
                                 <p class="text-sm">${data.original_name}(${data.original_language})</p>
@@ -108,9 +114,10 @@ async function getSeries(UrlId){
                                 <p class="text-sm uppercase font-bold">Episodes</p>
                             </div>
                         </div>
+                        </div>
                     </div>
-                </div>
-            `;
+                </div>`;
+
             detailMovie.appendChild(ContainerMovie);
             for (let i = 0; i < data.genres.length; i++) {
                 const displayGenres = document.querySelector('#containerGenres');
@@ -124,13 +131,16 @@ async function getSeries(UrlId){
                     genreMovie += ',';
                 }
             }
-            const paraStatus = document.querySelector('#para_status');
+            const paraStatus = document.querySelector('#status');
             if (data.status === 'Returning Series'){
-                paraStatus.innerHTML = 'En cours';
+                paraStatus.innerHTML = `
+                    <p class="text-sm w-full text-white text-center bg-green-500 font-bold p-0.5">En cours</p>
+                    `;
                 paraStatus.classList.add('text-green-500');
             } else if (data.status === 'Ended'){
-                paraStatus.innerHTML = 'Terminé';
-                paraStatus.classList.add('text-red-500');
+                paraStatus.innerHTML = `
+                    <p class="text-sm w-full text-center bg-red-500 font-bold p-0.5">Terminé</p>
+                `;
             }
         });
 }
@@ -546,7 +556,120 @@ async function getComment(UrlId){
                         }
                     });
             } else {
-                console.log("Vous n'êtes pas connecté");
+                fetch(`${window.location.origin}/cinetech/getComment/${UrlId}`)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        console.log(data);
+                        const commentsData = data.comments;
+                        if (data.status !== 'errors') {
+                            function addReplyToComment() {
+                                LoginRegister(btnHeaderloginRegister);
+                            }
+                            function generateCommentHTML(comment) {
+                                const commentId = `comment_${comment.id}`;
+                                let commentHTML = '';
+                                let callToActionHTML = '';
+                                commentHTML = `
+                                    <div class="comment" id="${commentId}">
+                                        <div class="flex space-x-2">
+                                            <div class="flex justify-between items-center w-full"> 
+                                                <div class="flex items-center gap-2">   
+                                                    <img src="${window.location.origin}/cinetech/public/images/avatars/${comment.avatar}" alt="avatar" class="w-8 h-8 rounded-full">
+                                                    <p>${comment.login}</p>
+                                                </div>
+                                                <p>${formatDate(comment.created_at)}</p>
+                                            </div>
+                                        </div>
+                                        <h3>${comment.title_comment}</h3>
+                                        <p class="ml-10 font-light">${comment.content}</p>
+                                        <div class="flex space-x-2 ml-10">
+                                            <button class="p-2 text-[#bebabd] flex items-center gap-2 hover:bg-[#1ddc6f3d] hover:text-[#39e58c]" id="reply_${comment.id}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message-circle" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                    <path d="M3 20l1.3 -3.9c-2.324 -3.437 -1.426 -7.872 2.1 -10.374c3.526 -2.501 8.59 -2.296 11.845 .48c3.255 2.777 3.695 7.266 1.029 10.501c-2.666 3.235 -7.615 4.215 -11.574 2.293l-4.7 1"/>
+                                                </svg>
+                                            Répondre
+                                            </button>
+                                            <div id="callToAction_${comment.id}" class="flex gap-2">${callToActionHTML}</div>
+                                        </div>
+                                    </div>
+                                `;
+                                return commentHTML;
+                            }
+                            // Fonction récursive pour générer le HTML des réponses imbriquées
+                            function generateNestedRepliesHTML(comments, parentId) {
+                                const replies = comments.filter(comment => comment.parent_id === parentId);
+
+                                if (replies.length === 0) {
+                                    return '';
+                                }
+                                let repliesHTML = '';
+                                replies.forEach(reply => {
+                                    const replyId = `${reply.id}`;
+                                    const callToActionId = `callToAction_${reply.id}`;
+                                    let callToActionHTML = '';
+                                    repliesHTML += `
+                                    <div class="reply my-2 rounded" id="container_${replyId}">
+                                        <div class="flex space-x-2">
+                                            <div class="flex justify-between items-center w-full"> 
+                                                <div class="flex items-center gap-2">   
+                                                    <img src="${window.location.origin}/cinetech/public/images/avatars/${reply.avatar}" alt="avatar" class="w-8 h-8 rounded-full">
+                                                    <p>${reply.login}</p>
+                                                </div>
+                                                <p>${formatDate(reply.created_at)}</p>
+                                            </div>
+                                        </div>
+                                        <p class="ml-10 font-light">${reply.content}</p>
+                                        <div class="flex space-x-2 ml-10">
+                                            <button class="p-2 text-[#bebabd] flex items-center gap-2 hover:bg-[#1ddc6f3d] hover:text-[#39e58c]" id="reply_${replyId}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message-circle" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                    <path d="M3 20l1.3 -3.9c-2.324 -3.437 -1.426 -7.872 2.1 -10.374c3.526 -2.501 8.59 -2.296 11.845 .48c3.255 2.777 3.695 7.266 1.029 10.501c-2.666 3.235 -7.615 4.215 -11.574 2.293l-4.7 1"/>
+                                                </svg>
+                                            Répondre
+                                            </button>
+                                            <div id="${callToActionId}" class="flex gap-2">${callToActionHTML}</div>
+                                        </div>
+                                        ${generateNestedRepliesHTML(comments, reply.id)}
+                                    </div>
+                                `;
+                                });
+                                return repliesHTML;
+                            }
+                            function displayComments(comments) {
+                                const commentsContainer = document.getElementById('commentsContainer');
+                                comments.forEach(comment => {
+                                    if (comment.parent_id === null) {
+                                        const commentHTML = generateCommentHTML(comment);
+                                        const repliesHTML = generateNestedRepliesHTML(comments, comment.id);
+
+                                        commentsContainer.innerHTML += `
+                                        <div class="comment-container p-2 bg-[#4c3745] rounded text-white m-2">
+                                            ${commentHTML}
+                                            <div id="replies-container" class="pl-2">
+                                            ${repliesHTML}
+                                            </div>
+                                        </div>
+                                        `;
+                                    }
+                                });
+                                comments.forEach(comment => {
+                                    const repliesButton = commentsContainer.querySelector(`#reply_${comment.id}`);
+                                    repliesButton.addEventListener('mousedown', (e) => {
+                                        e.preventDefault(); // Empêche la sélection de texte lors du clic
+                                        LoginRegister(repliesButton);
+                                    });
+                                });
+                            }
+                            // Appel de la fonction pour afficher les commentaires
+                            displayComments(commentsData);
+                        } else {
+                            containerComment.innerHTML = `
+                                <div class="w-full p-2 bg-[#2a1825] h-12 rounded my-6">
+                                    <p class="text-white">Aucun commentaire pour ce film</p>
+                                </div>`;
+                        }
+                    });
             }
         });
 

@@ -60,7 +60,7 @@ async function getMovie(UrlId){
         .then((data) => {
             let original_img_url = 'https://image.tmdb.org/t/p/original';
             const titlePage = document.querySelector('title');
-            titlePage.innerHTML = `${data.title} - MovieDB`;
+            titlePage.innerHTML = `${data.title} - WatchManager`;
             const ContainerMovie = document.createElement('div');
             ContainerMovie.className = 'flex flex-col items-center gap-4';
             ContainerMovie.innerHTML = `
