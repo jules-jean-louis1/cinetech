@@ -48,6 +48,23 @@ function getPopularTVShows(page, sortOption, genreIds) {
         })
         .catch(error => console.log(error));
 }
+function createVoteCircle(voteAverage) {
+    const percentage = (voteAverage / 10) * 100;
+    const aroundPercentage = Math.round(percentage / 10) * 10;
+    const hue = (1 - percentage / 100) * 120;
+    const color = `hsl(${hue}, 100%, 50%)`;
+
+    const circleHTML = `
+    <div class="flex justify-end w-full vote-circle absolute">
+        <div class="flex items-center justify-center p-1 m-2 rounded bg-gray-800/40">
+            <span class="flex items-start">${aroundPercentage}
+                <span class="text-xs">%</span>
+            </span>
+        </div>
+    </div>
+    `;
+    return circleHTML;
+}
 
 const previousPageButton = document.getElementById('previousPageButton');
 const nextPageButton = document.getElementById('nextPageButton');
@@ -150,8 +167,11 @@ function displayMovies(movies) {
     for (const movie of movies) {
         movieHTML += `
         <div data-genre="${movie.genre_ids.join(',')}">
-        <div class="flex flex-col items-center gap-2 rounded text-white p-2 bg-[#2a1825] border border-[#362431]">
+        <div class="flex flex-col items-center justify-around gap-2 rounded text-white p-2 bg-[#2a1825] border border-[#362431] h-full w-1/10">
             <a href="/cinetech/series/${movie.id}-${generateSlug(movie.title)}">
+            <div class="relative">
+                ${createVoteCircle(movie.vote_average)}
+            </div>
             <img src="${getPosterPath(movie.poster_path)}" class="w-[150px] h-[225px] shadow-sm rounded-md" alt="${movie.title}">
             <div class="flex flex-col px-3 w-[150px]">
                 <h2 class="text-sm font-bold text-center">${movie.title}</h2>
@@ -177,23 +197,32 @@ function displayMovies(movies) {
         const btnAddToWatchlistList = document.querySelectorAll('#btnAddToWatchlist');
         const containerBtnBookmarkList = document.querySelectorAll('#containerBtnBookmark');
 
-        await fetch(`${window.location.origin}/cinetech/getBookmarksTV`)
+        await fetch(`${window.location.origin}/cinetech/getBookmarksMovies`)
             .then(response => response.json())
             .then(data => {
-                for (const show of data) {
-                    for (let i = 0; i < btnAddToWatchlistList.length; i++) {
-                        const btnAddToWatchlist = btnAddToWatchlistList[i];
-                        const containerBtnBookmark = containerBtnBookmarkList[i];
-                        if (btnAddToWatchlist.dataset.id === show.movie_id.toString()) {
-                            containerBtnBookmark.innerHTML = `
+                console.log(data);
+                if (data.error) {
+                    const btnAddToWatchlist = document.querySelectorAll('#btnAddToWatchlist');
+                    btnAddToWatchlist.forEach(btn => {
+                        btn.addEventListener('mousedown', () => {
+                            LoginRegister(btn);
+                        });
+                    });
+                } else {
+                    for (const show of data) {
+                        for (let i = 0; i < btnAddToWatchlistList.length; i++) {
+                            const btnAddToWatchlist = btnAddToWatchlistList[i];
+                            const containerBtnBookmark = containerBtnBookmarkList[i];
+                            if (btnAddToWatchlist.dataset.id === show.movie_id.toString()) {
+                                containerBtnBookmark.innerHTML = `
                 <button type="button" id="btnRemoveFromWatchlist" class="flex items-center gap-2" data-id="${show.movie_id}">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-star-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#fffe3e" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                         <path d="M8.243 7.34l-6.38 .925l-.113 .023a1 1 0 0 0 -.44 1.684l4.622 4.499l-1.09 6.355l-.013 .11a1 1 0 0 0 1.464 .944l5.706 -3l5.693 3l.1 .046a1 1 0 0 0 1.352 -1.1l-1.091 -6.355l4.624 -4.5l.078 -.085a1 1 0 0 0 -.633 -1.62l-6.38 -.926l-2.852 -5.78a1 1 0 0 0 -1.794 0l-2.853 5.78z" stroke-width="0" fill="currentColor"/>
                     </svg>
                     Favoris
-                </button>
-            `;
+                </button>`;
+                            }
                         }
                     }
                 }
@@ -209,13 +238,13 @@ function displayMovies(movies) {
                             if (data.success) {
                                 const containerBtnBookmark = btnAddToWatchlist.parentElement;
                                 containerBtnBookmark.innerHTML = `
-                    <button type="button" id="btnRemoveFromWatchlist" class="flex items-center gap-2" data-id="${show.movie_id}">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-star-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#fffe3e" fill="#fffe3e" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                        <path d="M8.243 7.34l-6.38 .925l-.113 .023a1 1 0 0 0 -.44 1.684l4.622 4.499l-1.09 6.355l-.013 .11a1 1 0 0 0 1.464 .944l5.706 -3l5.693 3l.1 .046a1 1 0 0 0 1.352 -1.1l-1.091 -6.355l4.624 -4.5l.078 -.085a1 1 0 0 0 -.633 -1.62l-6.38 -.926l-2.852 -5.78a1 1 0 0 0 -1.794 0l-2.853 5.78z" stroke-width="0" fill="currentColor"/>
-                    </svg>
-                    Favoris
-                </button>
+                                    <button type="button" id="btnRemoveFromWatchlist" class="flex items-center gap-2" data-id="${show.movie_id}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-star-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#fffe3e" fill="#fffe3e" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                        <path d="M8.243 7.34l-6.38 .925l-.113 .023a1 1 0 0 0 -.44 1.684l4.622 4.499l-1.09 6.355l-.013 .11a1 1 0 0 0 1.464 .944l5.706 -3l5.693 3l.1 .046a1 1 0 0 0 1.352 -1.1l-1.091 -6.355l4.624 -4.5l.078 -.085a1 1 0 0 0 -.633 -1.62l-6.38 -.926l-2.852 -5.78a1 1 0 0 0 -1.794 0l-2.853 5.78z" stroke-width="0" fill="currentColor"/>
+                                    </svg>
+                                    Favoris
+                                </button>
                             `;
                                 displayMessageToast(containerModalDialog,'Série ajoutée à votre watchlist', 'success');
                                 bookmarkedTVshow();
@@ -245,7 +274,7 @@ function displayMovies(movies) {
             }
         }
     }
-    //bookmarkedTVshow();
+    bookmarkedTVshow();
 
 }
 
@@ -260,7 +289,7 @@ function removeMoviesByGenres(genreIds) {
     }
 }
 async function getBookmarkedMovies() {
-    await fetch(`${window.location.origin}/cinetech/getBookmarksTV`)
+    await fetch(`${window.location.origin}/cinetech/getBookmarksMovies`)
         .then(response => response.json())
         .then(data => {
             const btnAddToWatchlist = document.querySelector('.btnAddToWatchlist');

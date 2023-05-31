@@ -86,6 +86,10 @@ $router->map('GET', '/getAllBookmarks', function() use ($bookmarkController) {
 $router->map('GET', '/getBookmarksTV', function() use ($bookmarkController) {
     $bookmarkController->getBookmarksTV();
 });
+// Bookmarks Movies of user
+$router->map('GET', '/getBookmarksMovies', function() use ($bookmarkController) {
+    $bookmarkController->getBookmarksMovies();
+});
 // Add Bookmark TV Show
 $router->map('GET', '/addBookmarkTV/[i:id]', function($id) use ($bookmarkController) {
     $bookmarkController->addBookmarkTV($id);

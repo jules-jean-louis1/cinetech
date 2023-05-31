@@ -115,4 +115,15 @@ class BookmarkManager extends AbstractDatabase
             'id_movie' => $id_movie
         ]);
     }
+
+    public function getAllBookmarksMovie(int $id_users)
+    {
+        $bdd = $this->getBdd();
+        $query = $bdd->prepare("SELECT * FROM bookmark WHERE utilisateurs_id = :id_user AND type = 'movie' ORDER BY created_at DESC");
+        $query->execute([
+            'id_user' => $id_users
+        ]);
+        $bookmarks = $query->fetchAll(\PDO::FETCH_ASSOC);
+        return $bookmarks;
+    }
 }
