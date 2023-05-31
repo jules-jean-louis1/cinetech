@@ -81,7 +81,7 @@
                     </div>
                 <?php else :?>
                 <div>
-                    <button id="btnHeaderLoginRegister" type="button">Connexion</button>
+                    <button id="btnHeaderLoginRegister" type="button" class="bg-[#9c4ef4] hover:bg-[#8241cc] text-white rounded-lg px-2 py-1">Connexion</button>
                 </div>
                 <?php endif; ?>
             </div>
