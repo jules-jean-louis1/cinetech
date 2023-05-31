@@ -85,23 +85,34 @@ async function matchFavorite() {
                 if (element.type === 'movie') {
                     data = await getMovie(element.movie_id);
                     favoriteMovie.innerHTML += `
-                        <div class="bg-[#251821] hover:bg-[#362431] rounded-lg p-2 w-1/5 flex flex-col items-center">
-                            <img src="${getPosterPath(data.poster_path)}" alt="${data.poster_path}" class="h-fit w-36">
-                            <p class="text-white text-sm">Ajouter : ${formatDate(element.created_at)}</p>
+                        <div class="bg-[#251821] hover:bg-[#362431] rounded-lg p-2 w-1/8 flex flex-col items-center">
+                            <a href="${window.location.origin}/cinetech/films/${data.id}-${generateSlug(data.title)}">
+                                <img src="${getPosterPath(data.poster_path)}" alt="${data.poster_path}" class="h-fit w-36">
+                                <p class="text-white text-sm">Ajouter : ${formatDate(element.created_at)}</p>
+                            </a>
                             <form action="" method="post" id="formView_${element.id}">
                                 <input type="hidden" id="movie_form" name="movie_form" value="${data.id}">
                                 <select name="status" id="status" class="bg-[#4c3d47] text-white rounded-lg p-1">
                                     ${optionHTML}
                                 </select>
                             </form>
-                            <button id="btnDeleteBookmark_${element.id}" data-id="${element.id}" class="text-white">Supprimer</button>
+                            <button id="btnDeleteBookmark_${element.id}" data-id="${element.id}" class="flex items-center text-white hover:text-red-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-minus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                  <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/>
+                                  <path d="M9 12l6 0"/>
+                                </svg>
+                                Supprimer
+                            </button>
                         </div>
                     `;
                 } else if (element.type === 'tv') {
                     data = await getTv(element.movie_id);
                     favoriteTv.innerHTML += `
-                        <div class="bg-[#251821] hover:bg-[#362431] rounded-lg p-2 w-1/5 flex flex-col items-center">
+                        <div class="bg-[#251821] hover:bg-[#362431] rounded-lg p-2 w-1/8 flex flex-col items-center">
+                            <a href="${window.location.origin}/cinetech/series/${data.id}-${generateSlug(data.name)}">
                             <img src="${getPosterPath(data.poster_path)}" alt="${data.poster_path}" class="h-fit w-36">
+                            </a>
                             <p class="text-white text-sm">Ajouter : ${formatDate(element.created_at)}</p>
                             <form action="" method="post" id="formView_${element.id}">
                                 <input type="hidden" id="movie_form" name="movie_form" value="${data.id}">
@@ -109,7 +120,14 @@ async function matchFavorite() {
                                     ${optionHTML}
                                 </select>
                             </form>
-                            <button id="btnDeleteBookmark_${element.id}" data-id="${element.id}" class="text-white">Supprimer</button>
+                            <button id="btnDeleteBookmark_${element.id}" data-id="${element.id}" class="flex items-center text-white hover:text-red-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-minus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                  <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/>
+                                  <path d="M9 12l6 0"/>
+                                </svg>
+                                Supprimer
+                            </button>
                         </div>`;
                 }
             }

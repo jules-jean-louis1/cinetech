@@ -10,7 +10,7 @@
     <link rel="icon" href="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . '/cinetech/public/images/icon/logo.svg';?>">
     <title>Profil</title>
 </head>
-<body class="bg-[#1f0c19] h-screen">
+<body class="bg-[#1f0c19]">
 <?php require_once __DIR__ . '/elements/header.php'; ?>
 <div id="containerModalDialog"></div>
 <div class="containerProfilPage h-screen">
