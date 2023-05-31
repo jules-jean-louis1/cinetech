@@ -22,6 +22,7 @@ function updateField(data, fieldName, fieldInput, smallField) {
     }
 }
 const displayMessageToast = (modalAppend, message, state) => {
+    modalAppend.innerHTML = '';
     const dialogElement = document.createElement('div');
     dialogElement.setAttribute('class', 'fixed z-10 inset-0 bg-[#05a763] rounded-lg open h-fit w-fit');
     dialogElement.setAttribute('id', 'ToastSuccess');
@@ -101,18 +102,23 @@ const displayMessageToast = (modalAppend, message, state) => {
         dialogElement.classList.remove('open');
         dialogElement.remove();
     });
+    setTimeout(() => {
+        dialogElement.classList.remove('open');
+        dialogElement.remove();
+        modalAppend.innerHTML = '';
+    }, 3000);
 }
 
 function createDialog() {
     const containerModal = document.querySelector('#containerModalDialog');
     const dialog = document.createElement("dialog");
     dialog.setAttribute("id", "dialog");
-    dialog.setAttribute("class", "w-[26.25rem] h-[55%] bg-slate-200 border-[1px] border-[#a8b3cf33] rounded-[14px] shadow-lg");
+    dialog.setAttribute("class", "w-[26.25rem] h-[55%] border-[1px] border-[#251821] bg-[#251821] rounded shadow-lg");
     dialog.innerHTML = '';
 
     const divBottom = document.createElement("div");
     divBottom.setAttribute("id", "divBottom");
-    divBottom.setAttribute("class", "w-full flex items-center justify-center bg-[#202225] border-t-[1px] border-t-[#a8b3cf33] text-white");
+    divBottom.setAttribute("class", "w-full flex items-center justify-center bg-[#251821] border-t-[1px] border-t-[#a8b3cf33] text-white");
     divBottom.innerHTML = `
             <div class="w-full flex items-center justify-center">
                 <p class="text-sm" id="TextchangeLogin">Vous n'avez pas de compte ?</p>
@@ -121,7 +127,7 @@ function createDialog() {
         `;
     const Div = document.createElement("div");
     Div.setAttribute("id", "DivModifyText");
-    Div.setAttribute("class", "py-2 px-4 w-full flex items-center justify-between bg-[#202225] border-b-[1px] border-b-[#a8b3cf33] text-white font-semibold text-lg");
+    Div.setAttribute("class", "py-2 px-4 w-full flex items-center justify-between bg-[#251821] border-b-[1px] border-b-[#a8b3cf33] text-white font-semibold text-lg");
     const Para = document.createElement("p")
     Para.setAttribute("id", "ParaModifyText");
     Para.textContent = "Se connecter sur Game+";
@@ -153,8 +159,10 @@ async function LoginRegister(btnLogin) {
     createDialog();
     const dialog = document.getElementById("dialog");
     const containerDiv = document.getElementById("containerDiv");
+    const background = document.getElementById("containerModalDialog");
     btnLogin.addEventListener('click', async (ev) => {
         dialog.showModal();
+        background.classList.add('bg-overlay-quaternary-onion');
         const buttonLogin = document.getElementById("buttonLogin");
         const ParaModifyText = document.getElementById("ParaModifyText");
         await fetch(`${window.location.origin}/cinetech/login`)
@@ -177,7 +185,7 @@ async function LoginRegister(btnLogin) {
         buttonLogin.addEventListener('click', async (ev) => {
             if (buttonLogin.textContent === "Connexion") {
                 buttonLogin.textContent = "S'inscrire";
-                ParaModifyText.textContent = "Se connecter sur Game+";
+                ParaModifyText.textContent = "Se connecter sur WatchManager";
                 await fetch(`${window.location.origin}/cinetech/login`)
                     .then(response => response.text())
                     .then(data => {
@@ -216,15 +224,17 @@ async function LoginRegister(btnLogin) {
                                         smallPassword.textContent = '';
                                         smallEmail.textContent = '';
                                         message.textContent ='';
-                                        message.textContent = data.success;
-
+                                        message.textContent = 'Connexion réussie';
+                                        setTimeout(() => {
+                                            window.location.reload();
+                                        });
                                     }
                                 });
                         });
                     });
             } else {
                 buttonLogin.textContent = "Connexion";
-                ParaModifyText.textContent = "S'inscrire sur Game+";
+                ParaModifyText.textContent = "S'inscrire sur WatchManager";
                 await fetch(`${window.location.origin}/cinetech/register`)
                     .then(response => response.text())
                     .then(data => {
@@ -265,6 +275,7 @@ async function LoginRegister(btnLogin) {
         const buttonClose = document.getElementById("buttonClose");
         buttonClose.addEventListener("click", () => {
             dialog.close();
+            background.classList.remove('bg-overlay-quaternary-onion');
         });
     });
 }
@@ -388,21 +399,21 @@ function searchBarHeader() {
                             if (element.media_type === 'movie') {
                                 element.media_type = 'Film';
                                 displayResult.innerHTML += `
-                                <a href="${window.location.origin}/cinetech/movie/${element.id}-${generateSlug(element.title)}" class="text-white text-center flex p-1">
-                                    <li class="text-white text-center flex">
+                                <a href="${window.location.origin}/cinetech/movie/${element.id}-${generateSlug(element.title)}" class="text-white text-center flex p-1 hover:bg-[#251821]">
+                                    <li class="text-white flex gap-3">
                                         <div id="containerImageSearch">
                                             <img src="${getPosterPath(element.poster_path)}" alt="${element.poster_path}" class="w-12">
                                         </div>
-                                        <div>
+                                        <div class="flex flex-col justify-around ml-2">
                                             <div id="title_search_bar">
                                                 <h2 class="text-white">${element.title}</h2>
                                             </div>
-                                            <div id="containerDate_Typesearch" class="flex">
+                                            <div id="containerDate_Typesearch" class="flex space-x-4">
                                                 <div id="containerDateSearch">
-                                                    <p class="text-white">${yearsFormat(element.release_date)}</p>
+                                                    <p class="text-white/60 text-sm"><b>Année : </b>${formatDate(element.release_date)}</p>
                                                 </div>
                                                 <div id="containerTypeMediaSearch">
-                                                    <p class="text-white">${element.media_type}</p>
+                                                    <p class="text-white/60 text-sm"><b>Type : </b>${element.media_type}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -412,19 +423,23 @@ function searchBarHeader() {
                             } else if (element.media_type === 'tv') {
                                 element.media_type = 'Série';
                                 displayResult.innerHTML += `
-                                <a href="${window.location.origin}/cinetech/series/${element.id}-${generateSlug(element.name)}" class="text-white text-center flex">
+                                <a href="${window.location.origin}/cinetech/series/${element.id}-${generateSlug(element.name)}" class="text-white text-center flex p-1 hover:bg-[#251821]">
                                     <li class="text-white text-center flex">
                                         <div id="containerImageSearch">
                                             <img src="${getPosterPath(element.poster_path)}" alt="${element.poster_path}" class="w-12">
                                         </div>
-                                        <div class="flex">
+                                        <div class="flex flex-col justify-around ml-2">
                                             <div id="title_search_bar">
                                                 <h2 class="text-white">${element.name}</h2>
                                             </div>
-                                            <div id="containerDateSearch">
-                                                <p class="text-white text-sm">${yearsFormat(element.first_air_date)}</p>
+                                            <div id="containerDate_Typesearch" class="flex space-x-4">
+                                                <div id="containerDateSearch">
+                                                    <p class="text-white/60 text-sm"><b>Année : </b>${yearsFormat(element.first_air_date)}</p>
+                                                </div>
+                                                <div id="containerTypeMediaSearch">
+                                                    <p class="text-white/60 text-sm"><b>Type : </b>${element.media_type}</p>
+                                                </div>
                                             </div>
-                                            <p class="text-white">${element.media_type}</p>
                                         </div>
                                     </li>
                                 </a>

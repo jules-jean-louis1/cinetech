@@ -361,8 +361,7 @@ async function getComment(UrlId){
                                             </div>
                                         </form>
                                     </div>
-                                </div>
-                                        `;
+                                </div>`;
                                 const textArea = document.querySelector('#content');
                                 if (action === 'reply') {
                                     textArea.placeholder = `@${comment.login}`;
@@ -416,6 +415,7 @@ async function getComment(UrlId){
                                 let callToActionHTML = '';
                                 if (comment.utilisateur_id === UserId) {
                                     callToActionHTML = `
+                                    <div class="flex">
                                     <button class="flex items-center gap-2 p-2 text-[#bebabd] hover:bg-[#ff2b2b3d] hover:text-[ff3b3b]" id="delete_${comment.id}">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-minus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
@@ -433,6 +433,7 @@ async function getComment(UrlId){
                                         </svg>
                                         Modifier
                                     </button>
+                                    </div>
                                 `;
                                 }
                                 commentHTML = `
@@ -447,7 +448,7 @@ async function getComment(UrlId){
                                             </div>
                                         </div>
                                         <h3>${comment.title_comment}</h3>
-                                        <p>${comment.content}</p>
+                                        <p class="ml-6 font-light">${comment.content}</p>
                                         <div class="flex space-x-2">
                                             <button class="p-2 text-[#bebabd] flex items-center gap-2 hover:bg-[#1ddc6f3d] hover:text-[#39e58c]" id="reply_${comment.id}">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message-circle" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -456,7 +457,7 @@ async function getComment(UrlId){
                                                 </svg>
                                             Répondre
                                             </button>
-                                            <div id="callToAction_${comment.id}">${callToActionHTML}</div>
+                                            <div id="callToAction_${comment.id}" class="ml-6">${callToActionHTML}</div>
                                         </div>
                                     </div>
                                 `;
@@ -517,7 +518,7 @@ async function getComment(UrlId){
                                                 </svg>
                                             Répondre
                                             </button>
-                                            <div id="${callToActionId}">${callToActionHTML}</div>
+                                            <div id="${callToActionId}" class="flex gap-2">${callToActionHTML}</div>
                                         </div>
                                         ${generateNestedRepliesHTML(comments, reply.id)}
                                     </div>
@@ -621,7 +622,7 @@ async function getComment(UrlId){
                                                 </svg>
                                             Répondre
                                             </button>
-                                            <div id="callToAction_${comment.id}">${callToActionHTML}</div>
+                                            <div id="callToAction_${comment.id}" class="flex gap-2">${callToActionHTML}</div>
                                         </div>
                                     </div>
                                 `;
@@ -659,7 +660,7 @@ async function getComment(UrlId){
                                                 </svg>
                                             Répondre
                                             </button>
-                                            <div id="${callToActionId}">${callToActionHTML}</div>
+                                            <div id="${callToActionId}" class="flex gap-2">${callToActionHTML}</div>
                                         </div>
                                         ${generateNestedRepliesHTML(comments, reply.id)}
                                     </div>

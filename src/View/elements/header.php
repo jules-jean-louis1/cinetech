@@ -42,8 +42,8 @@
                         </button>
                     </form>
                 </div>
-                <div id="containerResultSearch" class="absolute bg-[#362431] mt-8 rounded-lg shadow-lg w-1/2">
-                    <ul id="displayResultSearch"></ul>
+                <div id="containerResultSearch" class="absolute bg-[#362431] mt-8 rounded-lg shadow-lg xl:w-[46.5vw] md:w-[44.5vw]">
+                    <ul id="displayResultSearch" class="z-10"></ul>
                 </div>
             </div>
             <div>
