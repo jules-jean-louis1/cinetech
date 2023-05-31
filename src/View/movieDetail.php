@@ -17,8 +17,12 @@
 <div class="containerMoviesDetailPage">
     <div id="containerMovies">
         <div id="detailMovie"></div>
-        <div id="containerCast"></div>
-        <div id="containerSimilarMovies"></div>
+        <div class="flex justify-center items-center">
+            <div id="containerCast"></div>
+        </div>
+        <div class="flex justify-center items-center">
+            <div id="containerSimilarMovies"></div>
+        </div>
     </div>
     <div class="flex flex-col items-center">
         <div id="containerComments" class="w-10/12">

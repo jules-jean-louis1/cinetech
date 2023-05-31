@@ -58,7 +58,6 @@ async function getMovie(UrlId){
     await fetch(`https://api.themoviedb.org/3/movie/${UrlId}?api_key=${apiKey}&language=${language}`)
         .then((response) => response.json())
         .then((data) => {
-            console.log(data);
             let original_img_url = 'https://image.tmdb.org/t/p/original';
             const titlePage = document.querySelector('title');
             titlePage.innerHTML = `${data.title} - MovieDB`;
@@ -106,7 +105,6 @@ async function getMovie(UrlId){
             }
             for (let i = 0; i < data.genres.length; i++) {
                 genreMovie += data.genres[i].id;
-                console.log(genreMovie);
                 if (i < data.genres.length - 1) {
                     genreMovie += ',';
                 }
@@ -151,7 +149,6 @@ async function checkBookmarkMovie(UrlId) {
                     await fetch(`${window.location.origin}/cinetech/removeBookmarks/${UrlId}`)
                         .then((response) => response.json())
                         .then((data) => {
-                            console.log(data);
                             checkBookmarkMovie(UrlId);
                         });
                 });
@@ -174,7 +171,6 @@ async function checkBookmarkMovie(UrlId) {
                         await fetch(`${window.location.origin}/cinetech/addBookmarks/${UrlId}/${contentType}`)
                             .then((response) => response.json())
                             .then((data) => {
-                                console.log(data);
                                 checkBookmarkMovie(UrlId);
                                 successMessageToast(containerModalDialog, 'Ajouté aux favoris')
                             });
@@ -207,7 +203,6 @@ async function getMovieCast(UrlId){
                     </div>
                 `;
             }
-            console.log(data);
         });
 }
 
@@ -238,7 +233,6 @@ async function getMovieTrailer(UrlId){
     await fetch(`https://api.themoviedb.org/3/movie/${UrlId}/videos?api_key=${apiKey}&language=${language}`)
         .then((response) => response.json())
         .then((data) => {
-            console.log(data);
         });
 }
 
@@ -246,7 +240,6 @@ async function getMovieImages(UrlId){
     await fetch(`https://api.themoviedb.org/3/movie/${UrlId}/images?api_key=${apiKey}&language=${language}`)
         .then((response) => response.json())
         .then((data) => {
-            console.log(data);
         });
 }
 async function addComment(UrlId){
@@ -254,25 +247,28 @@ async function addComment(UrlId){
     function createFormComment() {
         const formComment = document.createElement('div');
         formComment.innerHTML = `
-            <form id="formComment" class="flex flex-col gap-4" method="post">
+        <div>
+            <h1 class="font-semibold text-white p-2">Ajouter un commentaire</h1>
+            <form id="formComment" class="flex flex-col gap-4 text-white" method="post">
                 <input type="hidden" name="id_movie" value="${UrlId}">
                 <div class="flex flex-col">
                     <label for="title" class="text-xl">Titre</label>
-                    <input type="text" id="title" name="title" class="border border-slate-200 rounded">
+                    <input type="text" id="title" name="title" class="bg-[#292226] p-2 border border-slate-200 rounded">
                     <small class="text-red-500 h-5" id="titleError"></small>
                 </div>
                 <div class="flex flex-col">
                     <label for="comment" class="text-xl">Commentaire</label>
-                    <textarea id="comment" name="comment" class="border border-slate-200 rounded"></textarea>
+                    <textarea id="comment" name="comment" class="bg-[#292226] p-2 border border-slate-200 rounded"></textarea>
                     <small class="text-red-500 h-5" id="commentError"></small>
                 </div>
                 <div id="errorsMessage" class="h-[45px]">
                     <div id="message"></div>
                 </div>
                 <div id="formCommentSubmit">
-                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Envoyer</button>
+                    <button type="submit" class="bg-[#9c4ef4] hover:bg-[#8241cc] text-white font-bold py-2 px-4 rounded">Poster</button>
                 </div>
             </form>
+        </div>
             `;
         containerCommentsForm.appendChild(formComment);
     }
@@ -286,7 +282,6 @@ async function addComment(UrlId){
         })
             .then((response) => response.json())
             .then((data) => {
-                console.log(data);
                 const titleError = document.querySelector('#titleError');
                 const commentError = document.querySelector('#commentError');
                 const message = document.querySelector('#message');
@@ -323,7 +318,7 @@ async function getComment(UrlId){
                 fetch(`${window.location.origin}/cinetech/getComment/${UrlId}`)
                     .then((response) => response.json())
                     .then((data) => {
-                        console.log(data);
+                        // console.log(data);
                         if (data.status === 'success') {
                             let commentsData = data.comments;
                             function addReplyToComment(comment, action, UrlId) {
@@ -421,8 +416,23 @@ async function getComment(UrlId){
                                 let callToActionHTML = '';
                                 if (comment.utilisateur_id === UserId) {
                                     callToActionHTML = `
-                                    <button class="border-2 border-black" id="delete_${comment.id}">Supprimer</button>
-                                    <button class="border-2 border-black" id="edit_${comment.id}">Modifier</button>
+                                    <button class="flex items-center gap-2 p-2 text-[#bebabd] hover:bg-[#ff2b2b3d] hover:text-[ff3b3b]" id="delete_${comment.id}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-minus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                            <path d="M9 12h6"/>
+                                            <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z"/>
+                                        </svg>
+                                    Supprimer
+                                    </button>
+                                    <button class="flex items-center gap-2 p-2 text-[#bebabd] hover:bg-[#0dcfdc3d] hover:text-[#2cdce6]" id="edit_${comment.id}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                            <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"/>
+                                            <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"/>
+                                            <path d="M16 5l3 3"/>
+                                        </svg>
+                                        Modifier
+                                    </button>
                                 `;
                                 }
                                 commentHTML = `
@@ -439,7 +449,13 @@ async function getComment(UrlId){
                                         <h3>${comment.title_comment}</h3>
                                         <p>${comment.content}</p>
                                         <div class="flex space-x-2">
-                                            <button class="border-2 border-black" id="reply_${comment.id}">Répondre</button>
+                                            <button class="p-2 text-[#bebabd] flex items-center gap-2 hover:bg-[#1ddc6f3d] hover:text-[#39e58c]" id="reply_${comment.id}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message-circle" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                    <path d="M3 20l1.3 -3.9c-2.324 -3.437 -1.426 -7.872 2.1 -10.374c3.526 -2.501 8.59 -2.296 11.845 .48c3.255 2.777 3.695 7.266 1.029 10.501c-2.666 3.235 -7.615 4.215 -11.574 2.293l-4.7 1"/>
+                                                </svg>
+                                            Répondre
+                                            </button>
                                             <div id="callToAction_${comment.id}">${callToActionHTML}</div>
                                         </div>
                                     </div>
@@ -462,12 +478,27 @@ async function getComment(UrlId){
 
                                     if (reply.utilisateur_id === UserId) {
                                         callToActionHTML = `
-                                        <button class="border-2 border-black" id="delete_${reply.id}">Supprimer</button>
-                                        <button class="border-2 border-black" id="edit_${reply.id}">Modifier</button>
+                                        <button class="flex items-center gap-2 p-2 text-[#bebabd] hover:bg-[#ff2b2b3d] hover:text-[ff3b3b]" id="delete_${reply.id}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-minus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                            <path d="M9 12h6"/>
+                                            <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z"/>
+                                        </svg>
+                                        Supprimer
+                                        </button>
+                                        <button class="flex items-center gap-2 p-2 text-[#bebabd] hover:bg-[#0dcfdc3d] hover:text-[#2cdce6]" id="edit_${reply.id}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                            <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"/>
+                                            <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"/>
+                                            <path d="M16 5l3 3"/>
+                                        </svg>
+                                        Modifier
+                                        </button>
                                     `;
                                     }
                                     repliesHTML += `
-                                    <div class="reply" id="container_${replyId}">
+                                    <div class="reply my-2 rounded" id="container_${replyId}">
                                         <div class="flex space-x-2">
                                             <div class="flex justify-between items-center w-full"> 
                                                 <div class="flex items-center gap-2">   
@@ -477,9 +508,15 @@ async function getComment(UrlId){
                                                 <p>${formatDate(reply.created_at)}</p>
                                             </div>
                                         </div>
-                                        <h3>${reply.content}</h3>
-                                        <div class="flex space-x-2">
-                                            <button class="border-2 border-black" id="reply_${replyId}">Répondre</button>
+                                        <p class="ml-10 font-light">${reply.content}</p>
+                                        <div class="flex space-x-2 ml-10">
+                                            <button class="p-2 text-[#bebabd] flex items-center gap-2 hover:bg-[#1ddc6f3d] hover:text-[#39e58c]" id="reply_${replyId}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message-circle" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                    <path d="M3 20l1.3 -3.9c-2.324 -3.437 -1.426 -7.872 2.1 -10.374c3.526 -2.501 8.59 -2.296 11.845 .48c3.255 2.777 3.695 7.266 1.029 10.501c-2.666 3.235 -7.615 4.215 -11.574 2.293l-4.7 1"/>
+                                                </svg>
+                                            Répondre
+                                            </button>
                                             <div id="${callToActionId}">${callToActionHTML}</div>
                                         </div>
                                         ${generateNestedRepliesHTML(comments, reply.id)}
@@ -496,7 +533,7 @@ async function getComment(UrlId){
                                         const repliesHTML = generateNestedRepliesHTML(comments, comment.id);
 
                                         commentsContainer.innerHTML += `
-                                        <div class="comment-container p-2 bg-[#251821] rounded text-white m-2">
+                                        <div class="comment-container p-2 bg-[#4c3745] rounded text-white m-2">
                                             ${commentHTML}
                                             <div id="replies-container" class="pl-2">
                                             ${repliesHTML}
@@ -550,10 +587,124 @@ async function getComment(UrlId){
                         }
                     });
             } else {
-                console.log("Vous n'êtes pas connecté");
+                fetch(`${window.location.origin}/cinetech/getComment/${UrlId}`)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        console.log(data);
+                        const commentsData = data.comments;
+                        if (data.status !== 'errors') {
+                            function addReplyToComment() {
+                                LoginRegister(btnHeaderloginRegister);
+                            }
+                            function generateCommentHTML(comment) {
+                                const commentId = `comment_${comment.id}`;
+                                let commentHTML = '';
+                                let callToActionHTML = '';
+                                commentHTML = `
+                                    <div class="comment" id="${commentId}">
+                                        <div class="flex space-x-2">
+                                            <div class="flex justify-between items-center w-full"> 
+                                                <div class="flex items-center gap-2">   
+                                                    <img src="${window.location.origin}/cinetech/public/images/avatars/${comment.avatar}" alt="avatar" class="w-8 h-8 rounded-full">
+                                                    <p>${comment.login}</p>
+                                                </div>
+                                                <p>${formatDate(comment.created_at)}</p>
+                                            </div>
+                                        </div>
+                                        <h3>${comment.title_comment}</h3>
+                                        <p class="ml-10 font-light">${comment.content}</p>
+                                        <div class="flex space-x-2 ml-10">
+                                            <button class="p-2 text-[#bebabd] flex items-center gap-2 hover:bg-[#1ddc6f3d] hover:text-[#39e58c]" id="reply_${comment.id}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message-circle" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                    <path d="M3 20l1.3 -3.9c-2.324 -3.437 -1.426 -7.872 2.1 -10.374c3.526 -2.501 8.59 -2.296 11.845 .48c3.255 2.777 3.695 7.266 1.029 10.501c-2.666 3.235 -7.615 4.215 -11.574 2.293l-4.7 1"/>
+                                                </svg>
+                                            Répondre
+                                            </button>
+                                            <div id="callToAction_${comment.id}">${callToActionHTML}</div>
+                                        </div>
+                                    </div>
+                                `;
+                                return commentHTML;
+                            }
+                            // Fonction récursive pour générer le HTML des réponses imbriquées
+                            function generateNestedRepliesHTML(comments, parentId) {
+                                const replies = comments.filter(comment => comment.parent_id === parentId);
+
+                                if (replies.length === 0) {
+                                    return '';
+                                }
+                                let repliesHTML = '';
+                                replies.forEach(reply => {
+                                    const replyId = `${reply.id}`;
+                                    const callToActionId = `callToAction_${reply.id}`;
+                                    let callToActionHTML = '';
+                                    repliesHTML += `
+                                    <div class="reply my-2 rounded" id="container_${replyId}">
+                                        <div class="flex space-x-2">
+                                            <div class="flex justify-between items-center w-full"> 
+                                                <div class="flex items-center gap-2">   
+                                                    <img src="${window.location.origin}/cinetech/public/images/avatars/${reply.avatar}" alt="avatar" class="w-8 h-8 rounded-full">
+                                                    <p>${reply.login}</p>
+                                                </div>
+                                                <p>${formatDate(reply.created_at)}</p>
+                                            </div>
+                                        </div>
+                                        <p class="ml-10 font-light">${reply.content}</p>
+                                        <div class="flex space-x-2 ml-10">
+                                            <button class="p-2 text-[#bebabd] flex items-center gap-2 hover:bg-[#1ddc6f3d] hover:text-[#39e58c]" id="reply_${replyId}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message-circle" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                    <path d="M3 20l1.3 -3.9c-2.324 -3.437 -1.426 -7.872 2.1 -10.374c3.526 -2.501 8.59 -2.296 11.845 .48c3.255 2.777 3.695 7.266 1.029 10.501c-2.666 3.235 -7.615 4.215 -11.574 2.293l-4.7 1"/>
+                                                </svg>
+                                            Répondre
+                                            </button>
+                                            <div id="${callToActionId}">${callToActionHTML}</div>
+                                        </div>
+                                        ${generateNestedRepliesHTML(comments, reply.id)}
+                                    </div>
+                                `;
+                                });
+                                return repliesHTML;
+                            }
+                            function displayComments(comments) {
+                                const commentsContainer = document.getElementById('commentsContainer');
+                                comments.forEach(comment => {
+                                    if (comment.parent_id === null) {
+                                        const commentHTML = generateCommentHTML(comment);
+                                        const repliesHTML = generateNestedRepliesHTML(comments, comment.id);
+
+                                        commentsContainer.innerHTML += `
+                                        <div class="comment-container p-2 bg-[#4c3745] rounded text-white m-2">
+                                            ${commentHTML}
+                                            <div id="replies-container" class="pl-2">
+                                            ${repliesHTML}
+                                            </div>
+                                        </div>
+                                        `;
+                                    }
+                                });
+                                comments.forEach(comment => {
+                                    const repliesButton = commentsContainer.querySelector(`#reply_${comment.id}`);
+                                    repliesButton.addEventListener('click', (e) => {
+                                        e.preventDefault();
+                                        if (btnHeaderloginRegister) {
+                                            LoginRegister(btnHeaderloginRegister);
+                                        }
+                                    });
+                                });
+                            }
+                            // Appel de la fonction pour afficher les commentaires
+                            displayComments(commentsData);
+                        } else {
+                            containerComment.innerHTML = `
+                                <div class="w-full p-2 bg-[#2a1825] h-12 rounded my-6">
+                                    <p class="text-white">Aucun commentaire pour ce film</p>
+                                </div>`;
+                        }
+                    });
             }
         });
-
 }
 
 //getMovie(UrlId);

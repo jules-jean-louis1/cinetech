@@ -1,3 +1,4 @@
+<?php if (isset($_SESSION['id'])) { ?>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -59,3 +60,6 @@
 <?php require_once __DIR__ . '/elements/footer.php'; ?>
 </body>
 </html>
+<?php } else {
+    header('Location: /cinetech');
+} ?>

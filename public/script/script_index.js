@@ -173,7 +173,6 @@ async function mostPopularHeader() {
             containerQuickAccessImg.innerHTML = `
                 <img src="${original_img_url}${result.backdrop_path}" alt="Background Image" class="flex items-center justify-center w-full h-[42vh] object-cover absolute inset-0 z-[-10] bg-[#1F0C19AD]" id="backdropMovie">
             `;
-            console.log(data);
         });
 }
 mostPopularHeader();
