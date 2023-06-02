@@ -24,6 +24,28 @@ if (btnHeaderProfile) {
     await profilHeader(btnHeaderProfile);
 }
 searchBarHeader();
+
+function reponsiveMenu() {
+    const btnMenuResponsive = document.querySelector('#btnHeaderMenu');
+    btnMenuResponsive.addEventListener('mousedown', () => {
+        const menuResponsive = document.querySelector('#containerMenuResponsive');
+        menuResponsive.classList.toggle('hidden');
+    });
+    document.addEventListener('click', (event) => {
+        const targetElement = event.target;
+
+        // Vérifier si l'élément cliqué est en dehors du menu
+        if (!menuResponsive.contains(targetElement) && !btnMenuResponsive.contains(targetElement)) {
+            menuResponsive.classList.add('hidden');
+        }
+    });
+}
+reponsiveMenu();
+
+function responsiveBtnSearch(){
+
+}
+reponsiveMenu();
 // MOVIE SERIES PAGE
 // Récupérer l'URL actuelle
 const url = window.location.href;
@@ -259,7 +281,7 @@ async function addComment(UrlId){
         formComment.innerHTML = `
         <div>
             <h1 class="font-semibold text-white p-2">Ajouter un commentaire</h1>
-            <form id="formComment" class="flex flex-col gap-4 text-white" method="post">
+            <form id="formComment" class="flex flex-col gap-4 text-white border border-slate-600" method="post">
                 <input type="hidden" name="id_movie" value="${UrlId}">
                 <div class="flex flex-col">
                     <label for="title" class="text-xl">Titre</label>
@@ -666,7 +688,7 @@ async function getComment(UrlId){
                         } else {
                             containerComment.innerHTML = `
                                 <div class="w-full p-2 bg-[#2a1825] h-12 rounded my-6">
-                                    <p class="text-white">Aucun commentaire pour ce film</p>
+                                    <p class="text-white">Aucun commentaire pour cette series</p>
                                 </div>`;
                         }
                     });
