@@ -79,9 +79,9 @@ async function getMovie(UrlId){
                 <div class="relative p-4">
                     <img src="${original_img_url}${data.backdrop_path}" alt="Background Image" class="w-full h-full object-cover absolute inset-0 z-[-10]" id="backdropMovie">
                     <div class="absolute inset-0 bg-[#1F0C19AD]"></div>
-                    <div class="flex flex-row gap-4 w-8/12 text-white p-2 rounded mx-auto relative">
+                    <div class="flex flex-row gap-4 lg:w-8/12 text-white p-2 rounded m-1 lg:mx-auto relative">
                         <div class="flex-shrink-0">
-                            <img src="${getPosterPath(data.poster_path)}" alt="${data.title}" class="w-80 h-fit">
+                            <img src="${getPosterPath(data.poster_path)}" alt="${data.title}" class="w-40 lg:w-80 h-fit">
                         </div>
                         <div class="flex flex-col gap-2">
                             <h1 class="text-3xl font-bold">${data.title}</h1>
@@ -197,16 +197,16 @@ async function getMovieCast(UrlId){
         .then((response) => response.json())
         .then((data) => {
             const ContainerMovieCast = document.createElement('div');
-            ContainerMovieCast.className = 'flex flex-col gap-4 my-4';
+            ContainerMovieCast.className = 'flex flex-col gap-4 w-11/12 lg:w-10/12';
             ContainerMovieCast.innerHTML = `
                 <h1 class="text-2xl font-bold text-white">Acteurs</h1>
-                <div id="containerMovieCast" class="flex flex-row gap-4 overscroll-x-auto"></div>
+                <div id="containerMovieCast" class="flex flex-row justify-between overflow-x-scroll gap-2"></div>
             `;
             containerCast.appendChild(ContainerMovieCast);
             for (let i = 0; i < 10; i++) {
                 const displayMovieCast = document.querySelector('#containerMovieCast');
                 displayMovieCast.innerHTML += `
-                    <div class="flex flex-col items-center gap-2 bg-[#2A1825] p-1 rounded">
+                    <div class="flex flex-col items-center gap-2 bg-[#2A1825] min-w-[120px] p-1 rounded">
                         <a href="${window.location.origin}/cinetech/actor/${data.cast[i].id}-${generateSlug(data.cast[i].name)}" class="text-center flex flex-col items-center">
                             <img src="${getPosterPath(data.cast[i].profile_path)}" alt="${data.cast[i].name}" class="w-36 h-fit">
                             <p class="text-sm text-white">${data.cast[i].name}</p>
@@ -223,16 +223,16 @@ async function getSimilarMovie(UrlId){
         .then((response) => response.json())
         .then((data) => {
             const ContainerSimilarMovie = document.createElement('div');
-            ContainerSimilarMovie.className = 'flex flex-col gap-4 my-4';
+            ContainerSimilarMovie.className = 'flex flex-col gap-4 w-11/12 lg:w-10/12';
             ContainerSimilarMovie.innerHTML = `
                 <h1 class="text-2xl font-bold text-white">Recommandations</h1>
-                <div id="containerSimilarMovie" class="flex flex-row gap-4 overscroll-x-auto"></div>
+                <div id="containerSimilarMovie" class="flex flex-row justify-between overflow-x-scroll gap-2"></div>
             `;
             containerSimilarMovies.appendChild(ContainerSimilarMovie);
             for (let i = 0; i < 10; i++) {
                 const displaySimilarMovie = document.querySelector('#containerSimilarMovie');
                 displaySimilarMovie.innerHTML += `
-                    <div class="flex flex-col gap-2 rounded">
+                    <div class="flex flex-col gap-2 min-w-[110px] rounded">
                         <a href="${window.location.origin}/cinetech/movie/${data.results[i].id}-${generateSlug(data.results[i].title)}" class="w-36 h-fit">
                         <img src="${getPosterPath(data.results[i].poster_path)}" alt="${data.results[i].title}" class="w-36 h-fit">
                         </a>

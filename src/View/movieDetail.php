@@ -15,14 +15,10 @@
 <?php require_once __DIR__ . '/elements/header.php'; ?>
 <div id="containerModalDialog"></div>
 <div class="containerMoviesDetailPage">
-    <div id="containerMovies">
+    <div id="containerSeries">
         <div id="detailMovie"></div>
-        <div class="flex justify-center items-center">
-            <div id="containerCast"></div>
-        </div>
-        <div class="flex justify-center items-center">
-            <div id="containerSimilarMovies"></div>
-        </div>
+        <div id="containerCast" class="flex justify-center pt-4"></div>
+        <div id="containerSimilarMovies" class="flex justify-center pt-4"></div>
     </div>
     <div class="flex flex-col items-center">
         <div id="containerComments" class="w-10/12">
