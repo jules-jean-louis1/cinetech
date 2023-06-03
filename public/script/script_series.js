@@ -1,18 +1,36 @@
-import {formatDate, getPosterPath, headerMenu, LoginRegister, profilHeader} from './function/function.js';
+import {
+    formatDate,
+    getPosterPath,
+    headerMenu,
+    LoginRegister,
+    profilHeader,
+    successMessageToast,
+    searchBarHeader,
+    reponsiveMenu,
+    responsiveBtnSearch,
+} from './function/function.js';
 import {displayMessageToast} from './function/function.js';
+import {yearsFormat} from './function/function.js';
+import {generateSlug} from './function/function.js';
 
-const btnHeaderloginRegister = document.querySelector('#btnHeaderLoginRegister');
-const btnHeaderLogout = document.querySelector('#btnHeaderLogout');
+const btnHeaderloginRegister = document.querySelector("#btnHeaderLoginRegister");
+const btnHeaderloginMobil = document.querySelector('#btnHeaderloginMobil');
 const btnHeaderProfile = document.querySelector('#btnHeaderProfile');
 const containerModalDialog = document.querySelector('#containerModalDialog');
 
 if (btnHeaderloginRegister) {
     LoginRegister(btnHeaderloginRegister);
 }
+if (btnHeaderloginMobil) {
+    LoginRegister(btnHeaderloginMobil);
+}
 if (btnHeaderProfile) {
     await headerMenu();
     await profilHeader(btnHeaderProfile);
 }
+searchBarHeader();
+reponsiveMenu();
+responsiveBtnSearch();
 
 
 // TV SHOW PAGE
@@ -127,13 +145,6 @@ async function getMoviesByGenres(genreIds, page, sortOption) {
     displayMovies(data.results);
 }
 
-function generateSlug(title) {
-    let slug = title.toLowerCase(); // Convertit le titre en minuscules
-    slug = slug.replace(/[^a-z0-9]+/g, '-'); // Remplace les caractères non alphabétiques et non numériques par des tirets
-    slug = slug.replace(/^-+|-+$/g, ''); // Supprime les tirets en début et en fin de chaîne
-    return slug;
-}
-
 function displayMovies(movies) {
     const containerSeries = document.querySelector('#containerSeries');
     let movieHTML = '';
@@ -167,15 +178,20 @@ function displayMovies(movies) {
         const btnAddToWatchlistList = document.querySelectorAll('#btnAddToWatchlist');
         const containerBtnBookmarkList = document.querySelectorAll('#containerBtnBookmark');
 
-        await fetch(`${window.location.origin}/cinetech/getBookmarksTV`)
+        await fetch(`${window.location.origin}/cinetech/isLogged`)
             .then(response => response.json())
             .then(data => {
-                for (const show of data) {
-                    for (let i = 0; i < btnAddToWatchlistList.length; i++) {
-                        const btnAddToWatchlist = btnAddToWatchlistList[i];
-                        const containerBtnBookmark = containerBtnBookmarkList[i];
-                        if (btnAddToWatchlist.dataset.id === show.movie_id.toString()) {
-                            containerBtnBookmark.innerHTML = `
+                if (data) {
+                    // Si l'utilisateur est connecté, on vérifie si le film est dans ses favoris
+                    fetch(`${window.location.origin}/cinetech/getBookmarksTV`)
+                        .then(response => response.json())
+                        .then(data => {
+                            for (const show of data) {
+                                for (let i = 0; i < btnAddToWatchlistList.length; i++) {
+                                    const btnAddToWatchlist = btnAddToWatchlistList[i];
+                                    const containerBtnBookmark = containerBtnBookmarkList[i];
+                                    if (btnAddToWatchlist.dataset.id === show.movie_id.toString()) {
+                                        containerBtnBookmark.innerHTML = `
                 <button type="button" id="btnRemoveFromWatchlist" class="flex items-center gap-2" data-id="${show.movie_id}">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-star-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#fffe3e" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
@@ -184,21 +200,21 @@ function displayMovies(movies) {
                     Favoris
                 </button>
             `;
-                        }
-                    }
-                }
-            });
-        for (const movie of movies) {
-            const btnAddToWatchlist = document.querySelector(`#btnAddToWatchlist[data-id="${movie.id}"]`);
-            if (btnAddToWatchlist){
-                btnAddToWatchlist.addEventListener('click', async (event) => {
-                    event.preventDefault();
-                    await fetch(`${window.location.origin}/cinetech/addBookmarks/${movie.id}/${movie.media_type}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                const containerBtnBookmark = btnAddToWatchlist.parentElement;
-                                containerBtnBookmark.innerHTML = `
+                                    }
+                                }
+                            }
+                        });
+                    for (const movie of movies) {
+                        const btnAddToWatchlist = document.querySelector(`#btnAddToWatchlist[data-id="${movie.id}"]`);
+                        if (btnAddToWatchlist){
+                            btnAddToWatchlist.addEventListener('click', async (event) => {
+                                event.preventDefault();
+                                await fetch(`${window.location.origin}/cinetech/addBookmarks/${movie.id}/${movie.media_type}`)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if (data.success) {
+                                            const containerBtnBookmark = btnAddToWatchlist.parentElement;
+                                            containerBtnBookmark.innerHTML = `
                     <button type="button" id="btnRemoveFromWatchlist" class="flex items-center gap-2" data-id="${show.movie_id}">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-star-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#fffe3e" fill="#fffe3e" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
@@ -207,33 +223,41 @@ function displayMovies(movies) {
                     Favoris
                 </button>
                             `;
-                                displayMessageToast(containerModalDialog,'Série ajoutée à votre watchlist', 'success');
-                                bookmarkedTVshow();
-                            }
-                        });
-                });
-            }
-        }
-        for (const movie of movies) {
-            const btnRemoveFromWatchlist = document.querySelector(`#btnRemoveFromWatchlist[data-id="${movie.id}"]`);
-            if (btnRemoveFromWatchlist){
-                btnRemoveFromWatchlist.addEventListener('click', async (event) => {
-                    event.preventDefault();
-                    await fetch(`${window.location.origin}/cinetech/removeBookmarks/${movie.id}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                const containerBtnBookmark = btnRemoveFromWatchlist.parentElement;
-                                containerBtnBookmark.innerHTML = `
+                                            displayMessageToast(containerModalDialog,'Série ajoutée à votre watchlist', 'success');
+                                            bookmarkedTVshow();
+                                        }
+                                    });
+                            });
+                        }
+                    }
+                    for (const movie of movies) {
+                        const btnRemoveFromWatchlist = document.querySelector(`#btnRemoveFromWatchlist[data-id="${movie.id}"]`);
+                        if (btnRemoveFromWatchlist){
+                            btnRemoveFromWatchlist.addEventListener('click', async (event) => {
+                                event.preventDefault();
+                                await fetch(`${window.location.origin}/cinetech/removeBookmarks/${movie.id}`)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if (data.success) {
+                                            const containerBtnBookmark = btnRemoveFromWatchlist.parentElement;
+                                            containerBtnBookmark.innerHTML = `
                     <button type="button" id="btnAddToWatchlist" data-id="${movie.id}">Ajouter à ma watchlist</button>
                 `;
-                                displayMessageToast(containerModalDialog,'Série retirée de votre watchlist', 'success');
-                                bookmarkedTVshow();
-                            }
+                                            displayMessageToast(containerModalDialog,'Série retirée de votre watchlist', 'success');
+                                            bookmarkedTVshow();
+                                        }
+                                    });
+                            });
+                        }
+                    }
+                } else {
+                    btnAddToWatchlistList.forEach(btnAddToWatchlist => {
+                        btnAddToWatchlist.addEventListener('click', (event) => {
+                            displayMessageToast(containerModalDialog, 'Vous devez être connecté pour ajouter un film à votre watchlist', 'info');
                         });
-                });
-            }
-        }
+                    });
+                }
+            });
     }
     bookmarkedTVshow();
 
@@ -274,3 +298,8 @@ const defaultSortOption = 'popularity.desc';
 const defaultGenreIds = []; // Ajoutez ici les identifiants des genres par défaut que vous souhaitez utiliser
 
 getPopularTVShows(currentPage, defaultSortOption, defaultGenreIds);
+
+const buttonGenre = document.querySelector('#buttonGenre');
+buttonGenre.addEventListener('click', () => {
+    containerGenres.classList.toggle('hidden');
+});

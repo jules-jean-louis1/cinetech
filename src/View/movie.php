@@ -14,7 +14,7 @@
 <?php require_once __DIR__ . '/elements/header.php'; ?>
 <div id="containerModalDialog"></div>
 <div class="containerMoviesPage mx-4">
-    <div id="titlePage">
+    <div id="titlePage" class="py-2">
         <h2 class="flex items-center space-x-2 text-white text-2xl font-bold text-center lg:text-start">
             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-ticket" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                 <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
@@ -49,7 +49,7 @@
             </div>
         </div>
         <div class="w-full lg:w-11/12">
-            <div id="containerMovies" class="flex flex-wrap justify-between lg:justify-around gap-3 lg:gap-5 mt-2 lg:mt-0 lg:pb-5 lg:px-10 w-full"></div>
+            <div id="containerMovies" class="flex flex-wrap justify-between lg:justify-around gap-3 lg:gap-5 mt-2 lg:mt-0 pb-5 lg:px-10 w-full"></div>
             <div id="paginationMovies" class="flex justify-center gap-5">
                 <button id="previousPageButton" type="button" class="rounded text-white p-2 bg-[#2a1825] border border-[#362431] font-semibold p-2">Précédent</button>
                 <button id="nextPageButton" type="button" class="rounded text-white p-2 bg-[#2a1825] border border-[#362431] font-semibold p-2">Suivant</button>
