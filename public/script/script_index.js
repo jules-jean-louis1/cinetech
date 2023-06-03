@@ -1,24 +1,36 @@
-import {headerMenu, LoginRegister, yearsFormat} from './function/function.js';
-import { profilHeader } from "./function/function.js";
-import { formatDate } from "./function/function.js";
-import { getPosterPath } from "./function/function.js";
-import { successMessageToast } from './function/function.js';
-import { searchBarHeader } from "./function/function.js";
+import {
+    formatDate,
+    getPosterPath,
+    headerMenu,
+    LoginRegister,
+    profilHeader,
+    successMessageToast,
+    searchBarHeader,
+    reponsiveMenu,
+    responsiveBtnSearch,
+} from './function/function.js';
+import {displayMessageToast} from './function/function.js';
+import {yearsFormat} from './function/function.js';
+import {generateSlug} from './function/function.js';
 
-const btnHeaderloginRegister = document.querySelector('#btnHeaderLoginRegister');
-const btnHeaderLogout = document.querySelector('#btnHeaderLogout');
+const btnHeaderloginRegister = document.querySelector("#btnHeaderLoginRegister");
+const btnHeaderloginMobil = document.querySelector('#btnHeaderloginMobil');
 const btnHeaderProfile = document.querySelector('#btnHeaderProfile');
 const containerModalDialog = document.querySelector('#containerModalDialog');
-const containerSearchBar = document.querySelector('#containerSearchBar');
 
 if (btnHeaderloginRegister) {
     LoginRegister(btnHeaderloginRegister);
 }
+if (btnHeaderloginMobil) {
+    LoginRegister(btnHeaderloginMobil);
+}
 if (btnHeaderProfile) {
-    await profilHeader(btnHeaderProfile);
     await headerMenu();
+    await profilHeader(btnHeaderProfile);
 }
 searchBarHeader();
+reponsiveMenu();
+responsiveBtnSearch();
 
 
 // INDEX PAGE
@@ -31,12 +43,6 @@ const containerQuickAccessImg = document.querySelector('#containerQuickAccessImg
 
 // Creation d'un barre de recherche
 // Recupération des données de l'API Films populaires
-function generateSlug(title) {
-    let slug = title.toLowerCase(); // Convertit le titre en minuscules
-    slug = slug.replace(/[^a-z0-9]+/g, '-'); // Remplace les caractères non alphabétiques et non numériques par des tirets
-    slug = slug.replace(/^-+|-+$/g, ''); // Supprime les tirets en début et en fin de chaîne
-    return slug;
-}
 function createVoteCircle(voteAverage) {
     const percentage = (voteAverage / 10) * 100;
     const aroundPercentage = Math.round(percentage / 10) * 10;

@@ -21,10 +21,10 @@
     <div id="containerQuickAccess" class="h-fit py-6">
         <div id="containerQuickAccessImg"></div>
         <div class="flex justify-center">
-            <div class="flex items-center justify-between p-4 h-72 w-9/12 bg-[#1F0C1983] rounded">
-                <div class="flex flex-col justify-around h-full w-1/2">
+            <div class="flex flex-col lg:flex-row items-center justify-between p-4 h-72 w-10/12 xl:w-9/12 bg-[#1F0C1983] rounded">
+                <div class="flex flex-col justify-around h-full w-full lg:w-1/2">
                     <div id="introWebsite" class="text-white">
-                        <h1 class="text-2xl font-bold">Bienvenue sur WatchManager</h1>
+                        <h1 class="text-2xl font-bold hidden lg:block">Bienvenue sur WatchManager</h1>
                         <p class="text-lg h-fit">WatchManager est une plateforme qui vous permet de consulter une vaste sélection de films et de séries. Créez un compte dès maintenant et accédez à une expérience de divertissement personnalisée.</p>
                     </div>
                     <div>
@@ -36,7 +36,7 @@
                         </button>
                     </div>
                 </div>
-                <div class="h-full w-1/2">
+                <div class="hidden lg:block h-full w-1/2">
                     <svg viewBox="0 0 84 28" fill="#BEBABDBD" stroke="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M1.03603 2.7134C0.536115 1.40411 1.50298 0 2.90446 0H13.6228C14.4521 0 15.1954 0.511825 15.4912 1.2866L24.464 24.7866C24.9639 26.0959 23.997 27.5 22.5955 27.5H12.5658C11.3218 27.5 10.2069 26.7323 9.76313 25.5701L1.03603 2.7134Z"/>
                         <path d="M27.036 24.7866C26.5361 26.0959 27.503 27.5 28.9045 27.5H39.6228C40.4521 27.5 41.1954 26.9882 41.4912 26.2134L50.464 2.7134C50.9639 1.40411 49.997 0 48.5955 0L38.5658 0C37.3218 0 36.2069 0.767737 35.7631 1.9299L27.036 24.7866Z"/>
