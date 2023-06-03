@@ -128,7 +128,7 @@ class AuthController
         $foregroundColor = imagecolorallocate($canvas, 255, 255, 255); // Blanc
 
         // Centrer le texte dans le canvas
-        $fontSize = 100.0;
+        $fontSize = intval(100.0);
         $fontPath = 'public/font/Rajdhani-SemiBold.ttf'; // Chemin vers le dossier des polices de caractères
         $textBoundingBox = imageftbbox($fontSize, 0, $fontPath, $text);
         $textWidth = $textBoundingBox[2] - $textBoundingBox[0];
