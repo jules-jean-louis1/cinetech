@@ -1,6 +1,6 @@
 <footer class="bg-[#251821] mt-10">
     <div class="h-48 w-full">
-        <nav class="flex  flex-col gape-2 items-center justify-center px-36 h-full">
+        <nav class="flex flex-col gape-2 items-center justify-center px-1 lg:px-36 h-full">
             <ul class="flex justify-around items-center text-[#bebabd] font-bold text-lg w-full p-2 border-b border-[#bebabd] uppercase">
                 <li><a href="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . '/cinetech/';?>">
                         <svg width="48" height="28" viewBox="0 0 84 28" fill="none" xmlns="http://www.w3.org/2000/svg">

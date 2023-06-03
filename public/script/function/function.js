@@ -481,6 +481,31 @@ function searchBarHeader() {
         }
     });
 }
+function reponsiveMenu() {
+    const btnMenuResponsive = document.querySelector('#btnHeaderMenu');
+    const menuResponsive = document.querySelector('#containerMenuResponsive');
+    btnMenuResponsive.addEventListener('mousedown', () => {
+        menuResponsive.classList.toggle('hidden');
+        menuResponsive.classList.toggle('bg-[#9c4ef4]');
+    });
+    document.addEventListener('click', (event) => {
+        const targetElement = event.target;
+
+        // Vérifier si l'élément cliqué est en dehors du menu
+        if (!menuResponsive.contains(targetElement) && !btnMenuResponsive.contains(targetElement)) {
+            menuResponsive.classList.add('hidden');
+        }
+    });
+}
+function responsiveBtnSearch(){
+    const btnSearchResponsive = document.querySelector('#btnDisplaySearch');
+    btnSearchResponsive.addEventListener('mousedown', () => {
+        const searchBar = document.querySelector('#containerSearchBarResponsive');
+        searchBar.classList.toggle('hidden');
+    });
+}
+
 
 export { createDialog, LoginRegister, profilHeader, formatDate, yearsFormat, headerMenu, getPosterPath, successMessageToast, displayMessageToast};
 export { searchBarHeader, generateSlug }
+export { reponsiveMenu, responsiveBtnSearch }

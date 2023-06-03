@@ -21,7 +21,7 @@
         <div id="containerSimilarSeries" class="flex justify-center pt-4"></div>
     </div>
     <div class="flex flex-col items-center mt-8">
-        <div id="containerComments" class="w-8/12">
+        <div id="containerComments" class="w-11/12 lg:w-8/12">
             <h2 class="flex items-center text-white text-2xl font-bold py-2">
                 <span class="text-white">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-message-circle" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">

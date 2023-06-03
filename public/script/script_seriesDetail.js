@@ -6,47 +6,34 @@ import {
     profilHeader,
     successMessageToast,
     searchBarHeader,
+    reponsiveMenu,
+    responsiveBtnSearch,
 } from './function/function.js';
 import {displayMessageToast} from './function/function.js';
 import {yearsFormat} from './function/function.js';
 import {generateSlug} from './function/function.js';
 
-const btnHeaderloginRegister = document.querySelector('#btnHeaderLoginRegister');
-const btnHeaderLogout = document.querySelector('#btnHeaderLogout');
+const btnHeaderloginRegister = document.querySelector("#btnHeaderLoginRegister");
+const btnHeaderloginMobil = document.querySelector('#btnHeaderloginMobil');
 const btnHeaderProfile = document.querySelector('#btnHeaderProfile');
 const containerModalDialog = document.querySelector('#containerModalDialog');
 
 if (btnHeaderloginRegister) {
     LoginRegister(btnHeaderloginRegister);
 }
+if (btnHeaderloginMobil) {
+    LoginRegister(btnHeaderloginMobil);
+}
 if (btnHeaderProfile) {
     await headerMenu();
     await profilHeader(btnHeaderProfile);
 }
 searchBarHeader();
-
-function reponsiveMenu() {
-    const btnMenuResponsive = document.querySelector('#btnHeaderMenu');
-    btnMenuResponsive.addEventListener('mousedown', () => {
-        const menuResponsive = document.querySelector('#containerMenuResponsive');
-        menuResponsive.classList.toggle('hidden');
-    });
-    document.addEventListener('click', (event) => {
-        const targetElement = event.target;
-
-        // Vérifier si l'élément cliqué est en dehors du menu
-        if (!menuResponsive.contains(targetElement) && !btnMenuResponsive.contains(targetElement)) {
-            menuResponsive.classList.add('hidden');
-        }
-    });
-}
 reponsiveMenu();
-
-function responsiveBtnSearch(){
-
-}
-reponsiveMenu();
+responsiveBtnSearch();
 // MOVIE SERIES PAGE
+
+
 // Récupérer l'URL actuelle
 const url = window.location.href;
 const segments = url.split('/');
@@ -95,9 +82,9 @@ async function getSeries(UrlId){
                 <div class="relative p-4">
                     <img src="${original_img_url}${data.backdrop_path}" alt="Background Image" class="w-full h-full object-cover absolute inset-0 z-[-10]" id="backdropMovie">
                     <div class="absolute inset-0 bg-[#1F0C19AD]"></div>
-                    <div class="flex flex-row gap-4 w-8/12 text-white p-2 rounded mx-auto relative">
+                    <div class="flex flex-row gap-4 lg:w-8/12 text-white p-2 rounded m-1 lg:mx-auto relative">
                         <div class="flex-shrink-0">
-                            <img src="${getPosterPath(data.poster_path)}" alt="${data.name}" class="w-80 h-fit">
+                            <img src="${getPosterPath(data.poster_path)}" alt="${data.name}" class="w-40 lg:w-80 h-fit">
                             <div id="status" class="flex space-x-2">
                                 <p class="text-sm" id="para_status">${data.status}</p>
                             </div>
@@ -172,10 +159,10 @@ async function getSeriesCast(UrlId){
         .then((data) => {
             console.log(data);
             const ContainerMovieCast = document.createElement('div');
-            ContainerMovieCast.className = 'flex flex-col gap-4 w-10/12';
+            ContainerMovieCast.className = 'flex flex-col gap-4 w-11/12 lg:w-10/12';
             ContainerMovieCast.innerHTML = `
                 <h1 class="text-2xl font-bold text-white">Acteurs et actrices</h1>
-                <div id="containerMovieCast" class="flex flex-row justify-between overscroll-x-auto"></div>
+                <div id="containerMovieCast" class="flex flex-row justify-between overflow-x-scroll gap-2"></div>
             `;
             containerCast.appendChild(ContainerMovieCast);
             for (let i = 0; i < 10; i++) {
@@ -183,7 +170,7 @@ async function getSeriesCast(UrlId){
                 if (cast && cast.profile_path && cast.name && cast.character) {
                     const displayMovieCast = document.querySelector('#containerMovieCast');
                     displayMovieCast.innerHTML += `
-                    <div class="flex flex-col items-center gap-2 bg-[#2A1825] p-1 rounded">
+                    <div class="flex flex-col items-center gap-2 bg-[#2A1825] min-w-[120px] p-1 rounded">
                         <a href="${window.location.origin}/cinetech/actor/${cast.id}-${generateSlug(cast.name)}" class="text-center flex flex-col items-center">
                             <img src="${getPosterPath(cast.profile_path)}" alt="${cast.name}" class="w-36 h-fit">
                             <p class="text-sm text-white">${cast.name}</p>
@@ -199,7 +186,7 @@ async function getSimilarSeries(UrlId){
         .then((response) => response.json())
         .then((data) => {
             const ContainerSimilarMovie = document.createElement('div');
-            ContainerSimilarMovie.className = 'flex flex-col gap-4';
+            ContainerSimilarMovie.className = 'flex flex-col gap-4 w-11/12 lg:w-10/12';
             ContainerSimilarMovie.innerHTML = `
                 <h1 class="flex items-center space-x-2 text-2xl font-bold text-white">
                     <span>
@@ -213,13 +200,13 @@ async function getSimilarSeries(UrlId){
                         Séries Populaires
                     </span>
                 </h1>
-                <div id="containerSimilarMovie" class="flex flex-row gap-4 overscroll-x-auto"></div>
+                <div id="containerSimilarMovie" class="flex flex-row justify-between overflow-x-scroll gap-2"></div>
             `;
             containerSimilarMovies.appendChild(ContainerSimilarMovie);
             for (let i = 0; i < 10; i++) {
                 const displaySimilarMovie = document.querySelector('#containerSimilarMovie');
                 displaySimilarMovie.innerHTML += `
-                    <div class="flex flex-col gap-2 rounded">
+                    <div class="flex flex-col gap-2 min-w-[110px] rounded">
                         <a href="${window.location.origin}/cinetech/series/${data.results[i].id}-${data.results[i].name.replace(/ /g, "-")}">
                             <img src="${getPosterPath(data.results[i].poster_path)}" alt="${data.results[i].name}" class="w-36 h-fit">
                         </a>
@@ -281,16 +268,14 @@ async function addComment(UrlId){
         formComment.innerHTML = `
         <div>
             <h1 class="font-semibold text-white p-2">Ajouter un commentaire</h1>
-            <form id="formComment" class="flex flex-col gap-4 text-white border border-slate-600" method="post">
+            <form id="formComment" class="flex flex-col gap-4 text-white" method="post">
                 <input type="hidden" name="id_movie" value="${UrlId}">
                 <div class="flex flex-col">
-                    <label for="title" class="text-xl">Titre</label>
-                    <input type="text" id="title" name="title" class="bg-[#292226] p-2 border border-slate-200 rounded">
+                    <input type="text" id="title" name="title" class="bg-[#292226] p-2 border border-slate-200 rounded" placeholder="Ajouter un Titre">
                     <small class="text-red-500 h-5" id="titleError"></small>
                 </div>
                 <div class="flex flex-col">
-                    <label for="comment" class="text-xl">Commentaire</label>
-                    <textarea id="comment" name="comment" class="bg-[#292226] p-2 border border-slate-200 rounded"></textarea>
+                    <textarea id="comment" name="comment" class="bg-[#292226] p-2 border border-slate-200 rounded" placeholder="Votre commentaire"></textarea>
                     <small class="text-red-500 h-5" id="commentError"></small>
                 </div>
                 <div id="errorsMessage" class="h-[45px]">
