@@ -87,7 +87,6 @@
                     Séries populaires
                 </h2>
                 <div id="containerSeriesIndex"></div>
-
             </div>
         </div>
     </div>

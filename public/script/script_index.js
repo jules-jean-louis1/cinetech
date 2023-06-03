@@ -64,7 +64,7 @@ function displayMovies(data) {
     if (data.results) {
         const displayCard = document.createElement('div');
         displayCard.id = 'moviesCard';
-        displayCard.classList.add('flex', 'flex-row', 'gap-5', 'overflow-x-scroll', 'py-5', 'px-10', 'w-full', 'h-[350px]');
+        displayCard.classList.add('flex', 'flex-row', 'gap-5', 'overflow-x-scroll', 'py-5', 'w-full', 'h-[350px]');
         data.results.forEach((movie) => {
             if (movie.title) {
             displayCard.innerHTML += `
@@ -123,7 +123,7 @@ async function getPopularMovies () {
             if (data.results) {
                 const moviesCard = document.createElement('div');
                 moviesCard.id = 'moviesCard';
-                moviesCard.classList.add('flex', 'flex-row', 'gap-5', 'overflow-x-scroll', 'py-5', 'px-10', 'w-full', 'h-[350px]');
+                moviesCard.classList.add('flex', 'flex-row', 'gap-5', 'overflow-x-scroll', 'py-5', 'w-full', 'h-[350px]');
                 data.results.forEach((movie) => {
                     moviesCard.innerHTML += `
                         <div class="flex flex-col pl-5 gap-2 text-white">
@@ -152,7 +152,7 @@ async function getPopularSeries () {
             if (data.results) {
                 const seriesCard = document.createElement('div');
                 seriesCard.setAttribute('id', 'seriesCard')
-                seriesCard.classList.add('flex', 'flex-row', 'gap-5', 'overflow-x-scroll', 'py-5', 'px-10', 'w-full', 'h-[350px]');
+                seriesCard.classList.add('flex', 'flex-row', 'gap-5', 'overflow-x-scroll', 'py-5', 'w-full', 'h-[350px]');
                 data.results.forEach((serie) => {
                     seriesCard.innerHTML += `
                         <div class="flex flex-col pl-5 gap-2">
