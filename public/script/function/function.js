@@ -479,13 +479,16 @@ function searchBarHeader() {
                             const element = result[i];
                             if (element.media_type === 'movie') {
                                 element.media_type = 'Film';
+                                if (element.title.length > 50) {
+                                    element.title = element.title.substring(0, 50) + '...';
+                                }
                                 displayResult.innerHTML += `
                                 <a href="${window.location.origin}/cinetech/movie/${element.id}-${generateSlug(element.title)}" class="text-white text-center flex p-1 hover:bg-[#251821]">
-                                    <li class="text-white flex gap-3">
+                                    <li class="text-white flex ">
                                         <div id="containerImageSearch">
                                             <img src="${getPosterPath(element.poster_path)}" alt="${element.poster_path}" class="w-12">
                                         </div>
-                                        <div class="flex flex-col justify-around ml-2">
+                                        <div class="flex flex-col justify-around items-start ml-2">
                                             <div id="title_search_bar">
                                                 <h2 class="text-white">${element.title}</h2>
                                             </div>
@@ -503,13 +506,16 @@ function searchBarHeader() {
                                 `;
                             } else if (element.media_type === 'tv') {
                                 element.media_type = 'Série';
+                                if (element.name.length > 50) {
+                                    element.name = element.name.substring(0,50) + '...';
+                                }
                                 displayResult.innerHTML += `
                                 <a href="${window.location.origin}/cinetech/series/${element.id}-${generateSlug(element.name)}" class="text-white text-center flex p-1 hover:bg-[#251821]">
                                     <li class="text-white text-center flex">
                                         <div id="containerImageSearch">
                                             <img src="${getPosterPath(element.poster_path)}" alt="${element.poster_path}" class="w-12">
                                         </div>
-                                        <div class="flex flex-col justify-around ml-2">
+                                        <div class="flex flex-col justify-around items-start ml-2">
                                             <div id="title_search_bar">
                                                 <h2 class="text-white">${element.name}</h2>
                                             </div>

@@ -5,20 +5,23 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script defer type="module" src="<?php echo 'https://' . $_SERVER['HTTP_HOST'] . '/cinetech/public/script/script_search.js';?>"></script>
-    <link rel="stylesheet" href="<?php echo 'https://' . $_SERVER['HTTP_HOST'] . '/cinetech//public/style/style_index.css';?>">
-    <link rel="icon" href="<?php echo 'https://' . $_SERVER['HTTP_HOST'] . '/cinetech/public/images/icon/logo.svg';?>">
+    <script defer type="module" src="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . '/cinetech/public/script/script_search.js';?>"></script>
+    <link rel="stylesheet" href="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . '/cinetech//public/style/style_index.css';?>">
+    <link rel="icon" href="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . '/cinetech/public/images/icon/logo.svg';?>">
+<!--    <script defer type="module" src="<?php /*echo 'https://' . $_SERVER['HTTP_HOST'] . '/cinetech/public/script/script_search.js';*/?>"></script>
+    <link rel="stylesheet" href="<?php /*echo 'https://' . $_SERVER['HTTP_HOST'] . '/cinetech//public/style/style_index.css';*/?>">
+    <link rel="icon" href="<?php /*echo 'https://' . $_SERVER['HTTP_HOST'] . '/cinetech/public/images/icon/logo.svg';*/?>">-->
     <title>Resultat</title>
 </head>
 <body class="bg-[#1f0c19]">
 <?php require_once __DIR__ . '/elements/header.php'; ?>
 <div id="containerModalDialog"></div>
 <div class="containerMoviesPage">
-    <div id="titlePage">
-        <h2 class="text-white text-2xl font-bold"></h2>
+    <div id="titlePage" class="p-1 xl:pl-4">
+        <h2 class="text-white text-2xl font-bold "></h2>
     </div>
-    <div class="flex">
-        <div id="containerFilterSeries" class="flex flex-col gap-4 w-60">
+    <div class="flex flex-col items-center lg:items-start lg:flex-row xl:pl-4">
+        <div id="containerFilterSeries" class="flex flex-col items-center gap-4 w-10/12 lg:w-60">
             <div id="filterPlusMinus" class="rounded text-white p-2 bg-[#2a1825] border border-[#362431]">
                 <form id="sort-form">
                     <label for="sort-by">Trier par :</label>
@@ -36,8 +39,8 @@
             </div>
 <!--            <div id="containerGenres" class="flex flex-wrap gap-2 rounded text-white p-2 bg-[#2a1825] border border-[#362431]"></div>-->
         </div>
-        <div class="w-11/12">
-            <div id="containerSeries" class="flex flex-wrap gap-5 overflow-x-scroll py-5 px-10 w-full h-[90vh]"></div>
+        <div class="w-full lg:w-11/12">
+            <div id="containerSeries" class="flex flex-wrap justify-around gap-5 py-2 px-1 lg:py-5 lg:px-10 w-full"></div>
             <div id="paginationMovies" class="flex justify-center gap-5">
                 <button id="previousPageButton" type="button" class="rounded text-white p-2 bg-[#2a1825] border border-[#362431] font-semibold p-2">Précédent</button>
                 <button id="nextPageButton" type="button" class="rounded text-white p-2 bg-[#2a1825] border border-[#362431] font-semibold p-2">Suivant</button>
