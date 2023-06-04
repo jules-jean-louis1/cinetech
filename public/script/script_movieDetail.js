@@ -142,11 +142,15 @@ async function movieType(UrlId){
 
 async function checkBookmarkMovie(UrlId) {
     const containerBookmarks = document.querySelector('#containerBtnAddBookmarks');
-    await fetch(`${window.location.origin}/cinetech/getBookmarks/${UrlId}`)
+    await fetch(`${window.location.origin}/cinetech/isLogged`)
         .then((response) => response.json())
         .then(async (data) => {
             if (data) {
-                containerBookmarks.innerHTML = `
+                await fetch(`${window.location.origin}/cinetech/getBookmarks/${UrlId}`)
+                    .then((response) => response.json())
+                    .then(async (data) => {
+                        if (data) {
+                            containerBookmarks.innerHTML = `
                     <button id="btnAddBookmarks" class="flex items-center gap-2 p-2 w-48 h-12 bg-slate-500/60 hover:bg-slate-500/40 text-white rounded">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-minus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                       <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
@@ -155,17 +159,17 @@ async function checkBookmarkMovie(UrlId) {
                     </svg>
                     Retirer des favoris
                     </button>`;
-                const btnAddBookmarks = document.querySelector('#btnAddBookmarks');
-                btnAddBookmarks.addEventListener('click', async (e) => {
-                    e.preventDefault();
-                    await fetch(`${window.location.origin}/cinetech/removeBookmarks/${UrlId}`)
-                        .then((response) => response.json())
-                        .then((data) => {
-                            checkBookmarkMovie(UrlId);
-                        });
-                });
-            } else {
-                containerBookmarks.innerHTML = `
+                            const btnAddBookmarks = document.querySelector('#btnAddBookmarks');
+                            btnAddBookmarks.addEventListener('click', async (e) => {
+                                e.preventDefault();
+                                await fetch(`${window.location.origin}/cinetech/removeBookmarks/${UrlId}`)
+                                    .then((response) => response.json())
+                                    .then((data) => {
+                                        checkBookmarkMovie(UrlId);
+                                    });
+                            });
+                        } else {
+                            containerBookmarks.innerHTML = `
                     <button id="btnAddBookmarks" class="flex items-center gap-2 p-2 w-48 h-12 bg-slate-500/60 hover:bg-slate-500/40 text-white rounded">
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                           <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
@@ -175,21 +179,38 @@ async function checkBookmarkMovie(UrlId) {
                         </svg>
                         Ajouter aux favoris
                     </button>`;
-                const contentType = await movieType(UrlId);
-                if (contentType === 'movie' || contentType === 'tv') {
-                    const btnAddBookmarks = document.querySelector('#btnAddBookmarks');
-                    btnAddBookmarks.addEventListener('click', async (e) => {
-                        e.preventDefault();
-                        await fetch(`${window.location.origin}/cinetech/addBookmarks/${UrlId}/${contentType}`)
-                            .then((response) => response.json())
-                            .then((data) => {
-                                checkBookmarkMovie(UrlId);
-                                successMessageToast(containerModalDialog, 'Ajouté aux favoris')
-                            });
+                            const contentType = await movieType(UrlId);
+                            if (contentType === 'movie' || contentType === 'tv') {
+                                const btnAddBookmarks = document.querySelector('#btnAddBookmarks');
+                                btnAddBookmarks.addEventListener('click', async (e) => {
+                                    e.preventDefault();
+                                    await fetch(`${window.location.origin}/cinetech/addBookmarks/${UrlId}/${contentType}`)
+                                        .then((response) => response.json())
+                                        .then((data) => {
+                                            checkBookmarkMovie(UrlId);
+                                            successMessageToast(containerModalDialog, 'Ajouté aux favoris')
+                                        });
+                                });
+                            }
+                        }
                     });
-                }
+            } else {
+                containerBookmarks.innerHTML = `<button id="btnAddBookmarks" class="flex items-center gap-2 p-2 w-48 h-12 bg-slate-500/60 hover:bg-slate-500/40 text-white rounded">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                          <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/>
+                          <path d="M9 12l6 0"/>
+                          <path d="M12 9l0 6"/>
+                        </svg>
+                        Ajouter aux favoris
+                    </button>`;
+                const btnAddBookmarks = document.querySelector('#btnAddBookmarks');
+                btnAddBookmarks.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    displayMessageToast(containerModalDialog, 'Vous devez être connecté pour ajouter un favoris', 'info');
+                });
             }
-        });
+    });
 }
 
 async function getMovieCast(UrlId){
@@ -232,9 +253,9 @@ async function getSimilarMovie(UrlId){
             for (let i = 0; i < 10; i++) {
                 const displaySimilarMovie = document.querySelector('#containerSimilarMovie');
                 displaySimilarMovie.innerHTML += `
-                    <div class="flex flex-col gap-2 min-w-[110px] rounded">
-                        <a href="${window.location.origin}/cinetech/movie/${data.results[i].id}-${generateSlug(data.results[i].title)}" class="w-36 h-fit">
-                        <img src="${getPosterPath(data.results[i].poster_path)}" alt="${data.results[i].title}" class="w-36 h-fit">
+                    <div class="flex flex-col px-0.5 w-fit rounded">
+                        <a href="${window.location.origin}/cinetech/movie/${data.results[i].id}-${generateSlug(data.results[i].title)}" class="w-36 h-full">
+                        <img src="${getPosterPath(data.results[i].poster_path)}" alt="${data.results[i].title}" class="w-36 h-full">
                         </a>
                     </div>
                 `;

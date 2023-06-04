@@ -9,6 +9,10 @@
     <link rel="stylesheet" href="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . '/cinetech/public/style/style_index.css';?>">
     <link rel="icon" href="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . '/cinetech/public/images/icon/logo.svg';?>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<!--    <script defer type="module" src="<?php /*echo 'https://' . $_SERVER['HTTP_HOST'] . '/cinetech/public/script/script_movieDetail.js'; */?>"></script>
+    <link rel="stylesheet" href="<?php /*echo 'https://' . $_SERVER['HTTP_HOST'] . '/cinetech/public/style/style_index.css';*/?>">
+    <link rel="icon" href="<?php /*echo 'https://' . $_SERVER['HTTP_HOST'] . '/cinetech/public/images/icon/logo.svg';*/?>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">-->
     <title>Home</title>
 </head>
 <body class="bg-[#1f0c19]">

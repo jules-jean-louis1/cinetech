@@ -18,12 +18,12 @@
     <div class="relative">
         <input type="password" name="passwordConfirm" id="passwordConfirm" placeholder="Confirmer le mot de passe" class="border border-[#FFFFFF7F] px-2.5 pt-4 pb-1 text-white bg-[#292226] rounded textField_border focus:outline-none w-full">
         <label for="passwordConfirm" class="absolute top-0 left-2 px-1 py-px text-xs text-[#a8b3cf]">Confirmer le mot de passe</label>
-        <small id="errorC_Password" class="flex items-center h-4 text-red-500 px-2 my-1"></small>
+        <small id="errorConfirmPassword" class="flex items-center h-4 text-red-500 px-2 my-1"></small>
     </div>
     <div id="containerMessageProfil" class="h-[85px] w-full">
         <div id="errorMsg"></div>
     </div>
     <div id="containerSubmit">
-        <button type="submit" name="submit" id="submit" class="p-2 rounded-[14px] bg-[#a87ee6] font-semibold text-white w-full">Inscription</button>
+        <button type="submit" name="submit" id="submit" class="p-2 rounded bg-[#a87ee6] font-semibold text-white w-full">Inscription</button>
     </div>
 </form>

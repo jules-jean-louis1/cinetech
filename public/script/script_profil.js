@@ -4,7 +4,6 @@ import {
     headerMenu,
     LoginRegister,
     profilHeader,
-    successMessageToast,
     searchBarHeader,
     reponsiveMenu,
     responsiveBtnSearch,
@@ -146,7 +145,7 @@ async function matchFavorite() {
                         body: new FormData(FormEditBook)
                     }) .then(response => response.json())
                         .then(data => {
-                            successMessageToast(containerModalDialog, data.success);
+                            displayMessageToast(containerModalDialog, data.success, 'success')
                             matchFavorite();
                         });
                 })
@@ -159,7 +158,7 @@ async function matchFavorite() {
                     })
                         .then(response => response.json())
                         .then(data => {
-                            successMessageToast(containerModalDialog, data.success);
+                            displayMessageToast(containerModalDialog, data.success, 'success')
                             matchFavorite();
                         });
                 })

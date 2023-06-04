@@ -9,7 +9,7 @@
         <label for="password" class="absolute top-0 left-2 px-1 py-px text-xs text-[#a8b3cf]">Mot de passe</label>
         <small id="errorPassword" class="flex items-center h-4 text-red-500 px-2 my-1 "></small>
     </div>
-    <div id="containerMessageProfil" class="h-[65px] w-full">
+    <div id="containerMessageProfil" class="h-[55px] w-full">
         <div id="errorMsg" class="w-full"></div>
     </div>
     <div id="containerSubmit" class="w-full">

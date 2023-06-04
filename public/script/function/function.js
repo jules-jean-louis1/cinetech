@@ -22,8 +22,8 @@ function updateField(data, fieldName, fieldInput, smallField) {
     }
 }
 const displayMessageToast = (modalAppend, message, state) => {
-    modalAppend.innerHTML = '';
     const dialogElement = document.createElement('div');
+    dialogElement.innerHTML = '';
     dialogElement.setAttribute('class', 'fixed z-10 inset-0 bg-[#05a763] rounded-lg open h-fit w-fit');
     dialogElement.setAttribute('id', 'ToastSuccess');
     const container = document.createElement('div');
@@ -105,7 +105,6 @@ const displayMessageToast = (modalAppend, message, state) => {
     setTimeout(() => {
         dialogElement.classList.remove('open');
         dialogElement.remove();
-        modalAppend.innerHTML = '';
     }, 3000);
 }
 
@@ -130,7 +129,7 @@ function createDialog() {
     Div.setAttribute("class", "py-2 px-4 w-full flex items-center justify-between bg-[#251821] border-b-[1px] border-b-[#a8b3cf33] text-white font-semibold text-lg");
     const Para = document.createElement("p")
     Para.setAttribute("id", "ParaModifyText");
-    Para.textContent = "Se connecter sur Game+";
+    Para.textContent = "Se connecter sur WatchManager";
 
     const buttonClose = document.createElement("button");
     buttonClose.innerHTML = `
@@ -156,6 +155,30 @@ function createDialog() {
     containerModal.appendChild(dialog);
 }
 async function LoginRegister(btnLogin) {
+    function emptyFields(message, text, state) {
+        if (state === 'error') {
+        message.innerHTML = `
+        <p class="flex justify-center items-center py-2 space-x-2 border border-red-500 bg-red-500/30 rounded">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-alert-triangle" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#fff" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z"/>
+                <path d="M12 9v4"/>
+                <path d="M12 17h.01"/>
+            </svg>
+            <span class="ml-2">${text}</span>
+        </p>`;
+        } else if (state === 'success') {
+            message.innerHTML = `
+            <p class="flex justify-center items-center py-2 space-x-2 border border-green-500 bg-green-500/30 rounded">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-check" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#fff" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/>
+            <path d="M9 12l2 2l4 -4"/>
+            </svg>
+            <span class="ml-2">${text}</span>
+        </p>`;
+        }
+    }
     createDialog();
     const dialog = document.getElementById("dialog");
     const containerDiv = document.getElementById("containerDiv");
@@ -169,6 +192,8 @@ async function LoginRegister(btnLogin) {
             .then(response => response.text())
             .then(data => {
                 containerDiv.innerHTML = data;
+                const TextchangeLogin = document.getElementById("TextchangeLogin");
+                TextchangeLogin.textContent = "Vous n'avez pas de compte ?";
                 const formLogin = document.getElementById("login-form");
                 formLogin.addEventListener('submit', async (ev) => {
                     ev.preventDefault();
@@ -178,7 +203,35 @@ async function LoginRegister(btnLogin) {
                     })
                         .then(response => response.json())
                         .then(data => {
-                            console.log(data);
+                            let message = document.getElementById("errorMsg");
+                            //small
+                            const smallEmail = document.getElementById("errorEmail");
+                            const smallPassword = document.getElementById("errorPassword");
+                            // Réinitialiser les contenus des éléments <small>
+                            smallEmail.textContent = '';
+                            smallPassword.textContent = '';
+                            message.textContent = '';
+
+                            if (data.email) {
+                                smallEmail.textContent = 'Le champ email / Login  est requis';
+                                emptyFields(message, 'Les champs email / Login et mot de passe sont requis', 'error');
+                            }
+                            if (data.password) {
+                                smallPassword.textContent = 'Le champ mot de passe est requis';
+                                emptyFields(message, 'Les champs email / Login et mot de passe sont requis', 'error');
+                            }
+                            if (data.email && data.password) {
+                                emptyFields(message, 'Les champs email / Login et mot de passe sont requis', 'error');
+                            }
+                            if (data.error) {
+                                emptyFields(message, 'L\'email / login ou le mot de passe est incorrect', 'error');
+                            }
+                            if (data.success) {
+                                emptyFields(message, 'Connexion réussie', 'success');
+                                dialog.close();
+                                background.classList.remove('bg-overlay-quaternary-onion');
+                                window.location.reload();
+                            }
                         });
                 });
             });
@@ -191,6 +244,8 @@ async function LoginRegister(btnLogin) {
                     .then(data => {
                         containerDiv.innerHTML = '';
                         containerDiv.innerHTML = data;
+                        const TextchangeLogin = document.getElementById("TextchangeLogin");
+                        TextchangeLogin.textContent = "Vous n'avez pas de compte ?";
                         const formLogin = document.getElementById("login-form");
                         formLogin.addEventListener('submit', async (ev) => {
                             ev.preventDefault();
@@ -204,30 +259,30 @@ async function LoginRegister(btnLogin) {
                                     //small
                                     const smallEmail = document.getElementById("errorEmail");
                                     const smallPassword = document.getElementById("errorPassword");
+                                    // Réinitialiser les contenus des éléments <small>
+                                    smallEmail.textContent = '';
+                                    smallPassword.textContent = '';
+                                    message.textContent = '';
+
                                     if (data.email) {
-                                        smallEmail.textContent = '';
-                                        smallEmail.textContent = data.email;
+                                        smallEmail.textContent = 'Le champ email / Login  est requis';
+                                        emptyFields(message, 'Les champs email / Login et mot de passe sont requis', 'error');
                                     }
                                     if (data.password) {
-                                        smallPassword.textContent = '';
-                                        smallPassword.textContent = data.password;
+                                        smallPassword.textContent = 'Le champ mot de passe est requis';
+                                        emptyFields(message, 'Les champs email / Login et mot de passe sont requis', 'error');
                                     }
                                     if (data.email && data.password) {
-                                        message.textContent ='';
-                                        message.textContent = "Veuillez remplir tous les champs";
+                                        emptyFields(message, 'Les champs email / Login et mot de passe sont requis', 'error');
                                     }
                                     if (data.error) {
-                                        message.textContent ='';
-                                        message.textContent = data.error;
+                                        emptyFields(message, 'L\'email / login ou le mot de passe est incorrect', 'error');
                                     }
                                     if (data.success) {
-                                        smallPassword.textContent = '';
-                                        smallEmail.textContent = '';
-                                        message.textContent ='';
-                                        message.textContent = 'Connexion réussie';
-                                        setTimeout(() => {
-                                            window.location.reload();
-                                        });
+                                        emptyFields(message, 'Connexion réussie', 'success');
+                                        dialog.close();
+                                        background.classList.remove('bg-overlay-quaternary-onion');
+                                        window.location.reload();
                                     }
                                 });
                         });
@@ -240,6 +295,8 @@ async function LoginRegister(btnLogin) {
                     .then(data => {
                         containerDiv.innerHTML = '';
                         containerDiv.innerHTML = data;
+                        const TextchangeLogin = document.getElementById("TextchangeLogin");
+                        TextchangeLogin.textContent = "Déjà inscrit ?";
                         const formRegister = document.getElementById("register-form");
                         formRegister.addEventListener('submit', async (ev) => {
                             ev.preventDefault();
@@ -259,13 +316,37 @@ async function LoginRegister(btnLogin) {
                                     const smallLogin = document.getElementById("errorLogin");
                                     const smallEmail = document.getElementById("errorEmail");
                                     const smallPassword = document.getElementById("errorPassword");
-                                    const smallPasswordConfirm = document.getElementById("errorC_Password");
+                                    const smallPasswordConfirm = document.getElementById("errorConfirmPassword");
                                     // Error
+                                    smallEmail.textContent = '';
+                                    smallPassword.textContent = '';
+                                    smallLogin.textContent = '';
+                                    smallPasswordConfirm.textContent = '';
+                                    message.textContent = '';
+
+                                    // Fonction pour mettre en majuscule la première lettre d'une chaîne
+                                    function capitalizeFirstLetter(string) {
+                                        return string.charAt(0).toUpperCase() + string.slice(1);
+                                    }
+                                    // Réinitialiser les erreurs précédentes
+                                    const errorFields = document.querySelectorAll("[id^='error']");
+                                    errorFields.forEach(field => {
+                                        field.textContent = '';
+                                    });
+
+                                    // Parcourir les champs d'erreur dans la réponse
+                                    Object.keys(data).forEach(key => {
+                                        const errorField = document.getElementById(`error${capitalizeFirstLetter(key)}`);
+                                        if (errorField) {
+                                            errorField.textContent = data[key];
+                                        }
+                                    });
                                     if (data.login || data.email || data.password || data.passwordConfirm) {
-                                        message.innerHTML = 'Veuillez remplir tous les champs';
+                                        emptyFields(message, 'Veuillez remplir tous les champs', 'error');
                                     }
                                     if (data.success) {
-                                        message.innerHTML = 'Inscription réussie';
+                                        emptyFields(message, 'Inscription réussie', 'success');
+
                                     }
                                 });
                         });
