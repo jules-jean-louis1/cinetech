@@ -40,8 +40,7 @@ let getGenreIn = [];
 
 function getPopularTVShows(page, sortOption, genreIds) {
     const genreQueryString = genreIds.join(',');
-    const url = `https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&language=${language}&sort_by=${sortOption}&with_genres=${genreQueryString}&page=${page}`;
-
+    const url = `https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&language=${language}&sort_by=${sortOption}&page=${page}&with_watch_providers=8&watch_region=FR&with_genres=${genreQueryString}`;
     if (!sortOption) {
         sortOption = defaultSortOption;
     }
@@ -180,10 +179,10 @@ function displayMovies(movies) {
 
         await fetch(`${window.location.origin}/cinetech/isLogged`)
             .then(response => response.json())
-            .then(data => {
+            .then(async data => {
                 if (data) {
                     // Si l'utilisateur est connecté, on vérifie si le film est dans ses favoris
-                    fetch(`${window.location.origin}/cinetech/getBookmarksTV`)
+                    await fetch(`${window.location.origin}/cinetech/getBookmarksTV`)
                         .then(response => response.json())
                         .then(data => {
                             for (const show of data) {
@@ -209,13 +208,13 @@ function displayMovies(movies) {
                         if (btnAddToWatchlist){
                             btnAddToWatchlist.addEventListener('click', async (event) => {
                                 event.preventDefault();
-                                await fetch(`${window.location.origin}/cinetech/addBookmarks/${movie.id}/${movie.media_type}`)
+                                await fetch(`${window.location.origin}/cinetech/addBookmarkTV/${movie.id}`)
                                     .then(response => response.json())
                                     .then(data => {
                                         if (data.success) {
                                             const containerBtnBookmark = btnAddToWatchlist.parentElement;
                                             containerBtnBookmark.innerHTML = `
-                    <button type="button" id="btnRemoveFromWatchlist" class="flex items-center gap-2" data-id="${show.movie_id}">
+                    <button type="button" id="btnRemoveFromWatchlist" class="flex items-center gap-2" data-id="${movie.id}">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-star-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#fffe3e" fill="#fffe3e" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                         <path d="M8.243 7.34l-6.38 .925l-.113 .023a1 1 0 0 0 -.44 1.684l4.622 4.499l-1.09 6.355l-.013 .11a1 1 0 0 0 1.464 .944l5.706 -3l5.693 3l.1 .046a1 1 0 0 0 1.352 -1.1l-1.091 -6.355l4.624 -4.5l.078 -.085a1 1 0 0 0 -.633 -1.62l-6.38 -.926l-2.852 -5.78a1 1 0 0 0 -1.794 0l-2.853 5.78z" stroke-width="0" fill="currentColor"/>
@@ -241,8 +240,14 @@ function displayMovies(movies) {
                                         if (data.success) {
                                             const containerBtnBookmark = btnRemoveFromWatchlist.parentElement;
                                             containerBtnBookmark.innerHTML = `
-                    <button type="button" id="btnAddToWatchlist" data-id="${movie.id}">Ajouter à ma watchlist</button>
-                `;
+                                            <button type="button" id="btnRemoveFromWatchlist" class="flex items-center gap-2" data-id="${movie.movie_id}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-star-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#fffe3e" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                    <path d="M8.243 7.34l-6.38 .925l-.113 .023a1 1 0 0 0 -.44 1.684l4.622 4.499l-1.09 6.355l-.013 .11a1 1 0 0 0 1.464 .944l5.706 -3l5.693 3l.1 .046a1 1 0 0 0 1.352 -1.1l-1.091 -6.355l4.624 -4.5l.078 -.085a1 1 0 0 0 -.633 -1.62l-6.38 -.926l-2.852 -5.78a1 1 0 0 0 -1.794 0l-2.853 5.78z" stroke-width="0" fill="currentColor"/>
+                                                </svg>
+                                                Favoris
+                                            </button>
+                                        `;
                                             displayMessageToast(containerModalDialog,'Série retirée de votre watchlist', 'success');
                                             bookmarkedTVshow();
                                         }
@@ -273,23 +278,7 @@ function removeMoviesByGenres(genreIds) {
         }
     }
 }
-async function getBookmarkedMovies() {
-    await fetch(`${window.location.origin}/cinetech/getBookmarksTV`)
-    .then(response => response.json())
-    .then(data => {
-        const btnAddToWatchlist = document.querySelector('.btnAddToWatchlist');
-        const containerBtnBookmark = document.querySelector('#containerBtnBookmark');
-        for (const show of data) {
-            // console.log(show.movie_id);
-            if (btnAddToWatchlist.dataset.id === show.movie_id) {
-                containerBtnBookmark.innerHTML = `
-                    <button type="button" class="btnRemoveFromWatchlist" data-id="${show.id}">Retirer de ma watchlist</button>
-                `;
-            }
-        }
-    });
 
-}
 
 
 // Appel de la fonction pour afficher les genres

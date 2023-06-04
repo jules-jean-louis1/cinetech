@@ -60,7 +60,6 @@ async function matchFavorite() {
     const favoriteTv = document.querySelector('#containerFavoriteSeries');
     try {
         const favoriteData = await getFavorite();
-        console.log(favoriteData);
         favoriteMovie.innerHTML = '';
         favoriteTv.innerHTML = '';
         if (favoriteData.length !== 0) {
@@ -164,7 +163,7 @@ async function matchFavorite() {
                 })
             }
         } else {
-            displayFavorite.innerHTML = '<p class="text-center">Vous n\'avez pas de favoris</p>';
+            displayFavorite.innerHTML = '<p class="text-center text-white">Vous n\'avez pas de favoris</p>';
         }
     } catch (error) {
         console.error(error);
@@ -231,7 +230,7 @@ async function editProfil(){
                 })
                     .then(response => response.json())
                     .then(data => {
-                        // smaill
+                        // small
                         const emailError = document.querySelector('#emailError');
                         const loginError = document.querySelector('#loginError');
                         const passwordError = document.querySelector('#passwordError');

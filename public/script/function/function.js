@@ -466,7 +466,7 @@ function searchBarHeader() {
         const query = searchBar.value;
         if (query.length > 0) {
             erraseSearch.classList.remove('hidden');
-            await fetch(`http://api.themoviedb.org/3/search/multi?api_key=336f5174afdbef18cdcc2f6d25e36288&language=fr-FR&query=${query}&page=1&include_adult=false`)
+            await fetch(`https://api.themoviedb.org/3/search/multi?api_key=336f5174afdbef18cdcc2f6d25e36288&language=fr-FR&query=${query}&page=1&include_adult=false`)
                 .then(response => response.json())
                 .then(data => {
                     console.log(data);
