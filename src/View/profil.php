@@ -14,7 +14,7 @@
 <body class="bg-[#1f0c19]">
 <?php require_once __DIR__ . '/elements/header.php'; ?>
 <div id="containerModalDialog"></div>
-<div class="containerProfilPage h-screen">
+<div class="containerProfilPage">
     <div class="flex justify-center pt-4">
         <div id="btnProfilAction" class="w-8/12 flex gap-4">
             <button id="btnProfilBookmark" type="button" class="flex items-center gap-2 text-[#362431] font-bold bg-[#e9e7e8] p-2 rounded">

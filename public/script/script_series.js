@@ -32,7 +32,6 @@ searchBarHeader();
 reponsiveMenu();
 responsiveBtnSearch();
 
-
 // TV SHOW PAGE
 const apiKey = '336f5174afdbef18cdcc2f6d25e36288';
 const language = 'fr-FR';

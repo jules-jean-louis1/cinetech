@@ -58,35 +58,42 @@ async function matchFavorite() {
     const displayFavorite = document.querySelector('#displayFavorite');
     const favoriteMovie = document.querySelector('#containerFavoriteMovie');
     const favoriteTv = document.querySelector('#containerFavoriteSeries');
+
     try {
         const favoriteData = await getFavorite();
         favoriteMovie.innerHTML = '';
         favoriteTv.innerHTML = '';
+
         if (favoriteData.length !== 0) {
             let optionHTML = '';
+
             for (const element of favoriteData) {
-                if (element.status === 0) {
+                console.log(element.status);
+                if (element.status === '0') {
                     optionHTML = `
                         <option value="0" selected>Non vu</option>
                         <option value="1">En cours</option>
                         <option value="2">Vu</option>
                     `;
-                } else if (element.status === 1) {
+                } else if (element.status === '1') {
                     optionHTML = `
                         <option value="0">Non vu</option>
                         <option value="1" selected>En cours</option>
                         <option value="2">Vu</option>
                     `;
-                } else if (element.status === 2) {
+                } else if (element.status === '2') {
                     optionHTML = `
                         <option value="0">Non vu</option>
                         <option value="1">En cours</option>
                         <option value="2" selected>Vu</option>
                     `;
                 }
+
                 let data;
+
                 if (element.type === 'movie') {
                     data = await getMovie(element.movie_id);
+
                     favoriteMovie.innerHTML += `
                         <div class="bg-[#251821] hover:bg-[#362431] rounded-lg p-2 w-1/8 flex flex-col items-center">
                             <a href="${window.location.origin}/cinetech/films/${data.id}-${generateSlug(data.title)}">
@@ -101,9 +108,9 @@ async function matchFavorite() {
                             </form>
                             <button id="btnDeleteBookmark_${element.id}" data-id="${element.id}" class="flex items-center text-white hover:text-red-500">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-minus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                  <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/>
-                                  <path d="M9 12l6 0"/>
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/>
+                                    <path d="M9 12l6 0"/>
                                 </svg>
                                 Supprimer
                             </button>
@@ -111,13 +118,14 @@ async function matchFavorite() {
                     `;
                 } else if (element.type === 'tv') {
                     data = await getTv(element.movie_id);
+
                     favoriteTv.innerHTML += `
                         <div class="bg-[#251821] hover:bg-[#362431] rounded-lg p-2 w-1/8 flex flex-col items-center">
                             <a href="${window.location.origin}/cinetech/series/${data.id}-${generateSlug(data.name)}">
-                            <img src="${getPosterPath(data.poster_path)}" alt="${data.poster_path}" class="h-fit w-36">
+                                <img src="${getPosterPath(data.poster_path)}" alt="${data.poster_path}" class="h-fit w-36">
                             </a>
                             <p class="text-white text-sm">Ajouter : ${formatDate(element.created_at)}</p>
-                            <form action="" method="post" id="formView_${element.id}">
+                            <form method="post" id="formView_${element.id}">
                                 <input type="hidden" id="movie_form" name="movie_form" value="${data.id}">
                                 <select name="status" id="status" class="bg-[#4c3d47] text-white rounded-lg p-1">
                                     ${optionHTML}
@@ -125,42 +133,48 @@ async function matchFavorite() {
                             </form>
                             <button id="btnDeleteBookmark_${element.id}" data-id="${element.id}" class="flex items-center text-white hover:text-red-500">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-minus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                  <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/>
-                                  <path d="M9 12l6 0"/>
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/>
+                                    <path d="M9 12l6 0"/>
                                 </svg>
                                 Supprimer
                             </button>
-                        </div>`;
+                        </div>
+                    `;
                 }
             }
+
+            // Attacher les événements aux formulaires et aux boutons de suppression
             for (const element of favoriteData) {
-                const FormEditBook = document.querySelector(`#formView_${element.id}`);
+                const FormEditBook = document.getElementById(`formView_${element.id}`);
                 FormEditBook.addEventListener('change', async (e) => {
                     e.preventDefault();
                     console.log(e.target.value);
+
                     await fetch(`${window.location.origin}/cinetech/editBookmark/${element.id}`, {
                         method: 'POST',
                         body: new FormData(FormEditBook)
-                    }) .then(response => response.json())
+                    })
+                        .then(response => response.json())
                         .then(data => {
-                            displayMessageToast(containerModalDialog, data.success, 'success')
+                            displayMessageToast(containerModalDialog, data.success, 'success');
                             matchFavorite();
                         });
                 })
                 const btnDeleteBookmark = document.querySelector(`#btnDeleteBookmark_${element.id}`);
                 btnDeleteBookmark.addEventListener('click', async (e) => {
                     e.preventDefault();
+
                     await fetch(`${window.location.origin}/cinetech/deleteBookmarks/${element.id}`, {
                         method: 'DELETE',
                         body: new FormData(FormEditBook)
                     })
                         .then(response => response.json())
                         .then(data => {
-                            displayMessageToast(containerModalDialog, data.success, 'success')
+                            displayMessageToast(containerModalDialog, data.success, 'success');
                             matchFavorite();
                         });
-                })
+                });
             }
         } else {
             displayFavorite.innerHTML = '<p class="text-center text-white">Vous n\'avez pas de favoris</p>';
